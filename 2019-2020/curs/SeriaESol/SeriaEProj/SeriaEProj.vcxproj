@@ -18,6 +18,11 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="03_Masive.cpp" />
+    <ClCompile Include="04_PointeriFunctii.cpp" />
+    <ClCompile Include="05_Functii.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{BCD4D7C6-7F01-44E5-A782-E99D604C6501}</ProjectGuid>
@@ -138,13 +143,6 @@
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="01_MemoriePointeri.cpp" />
-    <ClCompile Include="fImpl.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="headers.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
