@@ -139,11 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="01_MemoriePointeri.cpp" />
-    <ClCompile Include="fImpl.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Headers.h" />
+    <ClCompile Include="03_Functii.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
