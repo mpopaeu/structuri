@@ -139,7 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="03_Masive.cpp" />
+    <ClCompile Include="05_Structuri.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="strings.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
