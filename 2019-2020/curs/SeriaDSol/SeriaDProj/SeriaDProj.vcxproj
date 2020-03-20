@@ -19,8 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="04_PointerFunctie.cpp" />
-    <ClCompile Include="05_Functii.cpp" />
+    <ClCompile Include="07_Functia_main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

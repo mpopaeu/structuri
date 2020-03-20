@@ -16,7 +16,7 @@ void main() {
 	c = sumaValoriDefault();
 	printf("\nSuma apel functie cu parametri default: %lf\n", c);
 	c = sumaValoriDefault(a);
-	printf("\nSuma apel functie cu primul parametru default: %lf\n", c);
-	c = sumaValoriDefault();
-	printf("\nSuma apel functie cu primul parametru default: %lf\n", c);
+	printf("\nSuma apel functie cu al doilea parametru default: %lf\n", c);
+	//c = sumaValoriDefault(,b);
+	//printf("\nSuma apel functie cu primul parametru default: %lf\n", c);
 }

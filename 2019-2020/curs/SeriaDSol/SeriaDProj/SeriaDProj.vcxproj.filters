@@ -15,10 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="04_PointerFunctie.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="05_Functii.cpp">
+    <ClCompile Include="07_Functia_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
