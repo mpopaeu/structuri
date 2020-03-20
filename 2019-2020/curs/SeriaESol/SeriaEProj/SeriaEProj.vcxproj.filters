@@ -15,13 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="03_Masive.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="04_PointeriFunctii.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="05_Functii.cpp">
+    <ClCompile Include="07_Functii_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

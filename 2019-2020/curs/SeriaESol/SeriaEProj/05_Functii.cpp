@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 double sumaValoriDefault(float x = 1.1, float y = 2.21) {
 	double s;
 	s = x + y;
@@ -14,7 +16,7 @@ void main() {
 	c = sumaValoriDefault();
 	printf("\nSuma apel functie cu parametri default: %lf\n", c);
 	c = sumaValoriDefault(a);
-	printf("\nSuma apel functie cu primul parametru default: %lf\n", c);
-	c = sumaValoriDefault();
-	printf("\nSuma apel functie cu primul parametru default: %lf\n", c);
+	printf("\nSuma apel functie cu primul parametru non-default: %lf\n", c);
+	//c = sumaValoriDefault(, b);
+	//printf("\nSuma apel functie cu al doilea parametru non-default: %lf\n", c);
 }
