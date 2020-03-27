@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="05_Structuri.cpp" />
+    <ClCompile Include="06_ListaSimpla.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="strings.txt" />
