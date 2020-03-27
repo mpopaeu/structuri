@@ -23,5 +23,8 @@
     <ClCompile Include="06_Structuri.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="07_ListaSimpla.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
