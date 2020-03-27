@@ -18,6 +18,9 @@
     <ClCompile Include="05_Structuri.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="06_ListaSimpla.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="strings.txt">
