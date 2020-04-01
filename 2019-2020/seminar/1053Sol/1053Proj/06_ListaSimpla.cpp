@@ -52,7 +52,7 @@ void printList(Nod* lst) {
 
 // interschimb de noduri adiacente prin modificarea adreselor de legatura (prin modificare campuri next)
 Nod* interschimbAdiacente(Nod* lst, int poz) { // poz - pozitia nodului 1 din interschimb 
-	Nod *p, *q, *r, *s;
+	Nod *p = NULL, *q = NULL, *r = NULL, *s = NULL;
 	// cazuri particulare
 	// 1. lista contine 0 sau 1 nod -> interschimb ne-efectuat
 	if (lst == NULL || lst->next == NULL)
@@ -73,10 +73,40 @@ Nod* interschimbAdiacente(Nod* lst, int poz) { // poz - pozitia nodului 1 din in
 		// 4. poz > n (n - nr noduri in lista)
 		// caz general; pozitionare pe poz -> interschimb nod de pe poz cu nod de pe poz+1
 		p = lst;
+		int i = 1;
+
+		while (p && i< poz - 1) { // (poz - 1) este pozitia lui p in lista simpla
+			p = p->next;
+			i += 1;
+		}
+
+		if (p) { // daca FALSE -> caz particular nr. 4
+			// exista nod pe (poz-1) -> p
+			if (p->next) { // daca FALSE -> caz particular nr. 4
+				// exista nod pe pozitia poz -> q
+				q = p->next;
+				if (q->next) { // daca FALSE -> caz particular nr. 3
+					// exista nod pe pozitia (poz + 1) -> r
+					r = q->next;
+					s = r->next;
+
+					// p, q, r si s sunt fixate
+					// modificare adrese de legatura caz general
+					p->next = r;
+					r->next = q;
+					q->next = s;
+				}
+			}
+		}
+		
 	}
 
 	return lst;
 }
+
+// interschimb noduri oarecare in lista simpla (poz1, poz2)
+
+// sortare lista simpla (bubble, selectie etc)
 
 void main() {
 	Nod * prim = NULL; 
@@ -107,6 +137,11 @@ void main() {
 
 	printf("Lista dupa creare:\n");
 	printList(prim);
+
+	prim = interschimbAdiacente(prim, 1);
+	printf("Lista dupa interschimb:\n");
+	printList(prim);
+
 
 	fclose(f);
 }
