@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <string.h>
+#include <stdlib.h>
 
-//#define NUME_STUDENT_DEFAULT "Anonim"
-//#define ID_STUDENT_DEFAULT 0
-//#define GRUPA_STUDENT_DEFAULT "----"
+#define LINESIZE 128
 
 struct Student {
 	int id;
@@ -39,7 +38,7 @@ Nod* insertNodeEnd(Nod* lst, Student s) {
 
 // parsare lista simpla
 
-// stergere/deszalocare nod din lista simpla (la inceputul listei)
+// stergere/dezalocare nod din lista simpla (la inceputul listei)
 
 // dezalocare lista simpla
 
@@ -49,11 +48,28 @@ void main() {
 	Nod * prim = NULL; 
 	Student s;
 
-	while (fgets(...)) {
+	FILE * f;
+	f = fopen("Studenti.txt", "r");
+
+	char * token, file_buf[LINESIZE], sep_list[] = ",";
+	while (fgets(file_buf, sizeof(file_buf), f)) {
 
 		// incarcare date student in variabila s
+		token = strtok(file_buf, sep_list);
+		s.id = atoi(token); // conversie ASCII->Binar(int)
+
+		token = strtok(NULL, sep_list);
+		s.nume = (char*)malloc((strlen(token) + 1) * sizeof(char));
+		strcpy(s.nume, token);
+
+		token = strtok(NULL, sep_list);
+		strcpy(s.nrGrupa, token);
 
 		// inserare student in lista simpla (prim)
 		prim = insertNodeEnd(prim, s);
+
+		s.nume = NULL; // evitare partajare zona de memorie aferenta numelui de student
 	}
+
+	fclose(f);
 }
