@@ -37,12 +37,46 @@ Nod* insertNodeEnd(Nod* lst, Student s) {
 }
 
 // parsare lista simpla
+void printList(Nod* lst) {
+	Nod* temp = lst;
+	while (temp) {
+		printf("Student %d, %s, %s\n", temp->stud.id, temp->stud.nume, temp->stud.nrGrupa);
+
+		temp = temp->next;
+	}
+}
 
 // stergere/dezalocare nod din lista simpla (la inceputul listei)
 
 // dezalocare lista simpla
 
 // interschimb de noduri adiacente prin modificarea adreselor de legatura (prin modificare campuri next)
+Nod* interschimbAdiacente(Nod* lst, int poz) { // poz - pozitia nodului 1 din interschimb 
+	Nod *p, *q, *r, *s;
+	// cazuri particulare
+	// 1. lista contine 0 sau 1 nod -> interschimb ne-efectuat
+	if (lst == NULL || lst->next == NULL)
+		return lst;
+	// 2. poz == 1 (interschimba nodul 1 cu nodul 2 in lista) -> un nou inceput de lista simpla
+	if (poz == 1) {
+		q = lst;
+		r = lst->next;
+		s = r->next;
+
+		// modificare adrese de legatura
+		q->next = s;
+		r->next = q;
+		lst = r; // actualizare adresa de inceput lista simpla
+	}
+	else {
+		// 3. poz == n (n - nr de noduri in lista); nodul 1 din interschimb este ultimul din lista -> interschimb ne-efectuat
+		// 4. poz > n (n - nr noduri in lista)
+		// caz general; pozitionare pe poz -> interschimb nod de pe poz cu nod de pe poz+1
+		p = lst;
+	}
+
+	return lst;
+}
 
 void main() {
 	Nod * prim = NULL; 
@@ -70,6 +104,9 @@ void main() {
 
 		s.nume = NULL; // evitare partajare zona de memorie aferenta numelui de student
 	}
+
+	printf("Lista dupa creare:\n");
+	printList(prim);
 
 	fclose(f);
 }
