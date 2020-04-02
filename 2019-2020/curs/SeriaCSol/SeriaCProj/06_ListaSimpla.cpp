@@ -211,8 +211,15 @@ void main() {
 	printf("\nLista Dubla dupa creare:\n");
 	parseListDblInvers(lstStuds);
 
-	stergereStudentDbl(lstStuds);
+	lstStuds = stergereStudentDbl(lstStuds);
 	printf("\nLista Dubla dupa stergere nod la inceput:\n");
+	parseListDblInvers(lstStuds);
+
+	// dezalocare lista dubla
+	while (lstStuds.p) {
+		lstStuds = stergereStudentDbl(lstStuds);
+	}
+	printf("\nLista Dubla dupa dezalocare:\n");
 	parseListDblInvers(lstStuds);
 
 	fclose(f);
