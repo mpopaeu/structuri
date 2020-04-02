@@ -104,9 +104,124 @@ Nod* interschimbAdiacente(Nod* lst, int poz) { // poz - pozitia nodului 1 din in
 	return lst;
 }
 
+int nrNoduri(Nod* lst) {
+	int n = 0;
+	Nod * temp = lst;
+	while (temp) {
+		n += 1;
+		temp = temp->next;
+	}
+
+	return n;
+}
+
 // interschimb noduri oarecare in lista simpla (poz1, poz2)
+// cazuri particulare (lista simpla)
+// 0.1 poz1 > poz2 -> intreschimb poz1 cu poz 2
+// 0.2 poz1 == poz2 -> interschimbul nu are sens
+// 1. lista contine 0 sau 1 nod -> interschimb ne-efectuat
+// 2. poz1 == 1 (interschimba nodul 1 cu nodul poz2 in lista) -> un nou inceput de lista simpla
+// 3. poz1 >= n (n - nr de noduri in lista); nodul 1 din interschimb este ultimul din lista/nu exista in lista -> interschimb ne-efectuat
+// poz2 > n
+// 4. poz2 == poz1 + 1 -> intreschimb de noduri adiacente
+Nod* interschimbOarecare(Nod* lst, int poz1, int poz2) {
+	if (lst == NULL || lst->next == NULL)
+		return lst;
+	if (poz1 == poz2)
+		return lst;
+	if (poz1 > poz2) {
+		int aux = poz1;
+		poz1 = poz2;
+		poz2 = aux;
+	}
+
+	int n = nrNoduri(lst);
+	if (poz1 >= n || poz2 > n)
+		return lst;
+
+	if (poz2 == poz1 + 1)
+	{
+		// caz particular 4
+		lst = interschimbAdiacente(lst, poz1);
+		return lst;
+	}
+
+	// cazul particular 2
+	// cazul general
+	// fixarea/stabilirea celor 6 pointeri pe nodurile implicate in interschimb
+	Nod *p = NULL, *q = NULL, *r = NULL, *s = NULL, *t = NULL, *v = NULL;
+
+	if (poz1 == 1) {
+		// caz particular 2
+		q = lst;
+		r = q->next;
+	}
+	else {
+		// caz general
+		p = lst;
+		int i = 1;
+		while (i < poz1 - 1) {
+			i += 1;
+			p = p->next;
+		} 
+		q = p->next;
+		r = q->next;
+	}
+
+	s = lst;
+	int i = 1;
+	while (i < poz2 - 1) {
+		i += 1;
+		s = s->next;
+	}
+	t = s->next;
+	v = t->next;
+
+	// implementare interschimb propriu-zis
+	t->next = r;
+	s->next = q;
+	q->next = v;
+
+	if (poz1 == 1) {
+		lst = t;
+	}
+	else {
+		p->next = t;
+	}
+
+	return lst;
+}
 
 // sortare lista simpla (bubble, selectie etc)
+Nod* sortareBubble(Nod* lst) {
+	char flag = 1; // 1 - reluare traversare lista in vederea validarii
+
+	int i;
+
+	while (flag == 1) {
+		// trebuie sa reiau traversarea listei incepand cu primul nod
+		Nod* temp = lst;
+		i = 1;
+		flag = 0;
+
+		while (temp->next != NULL) {
+			Nod *temp_next = temp->next;
+			if (temp->stud.id > temp_next->stud.id) {
+				// relatia de ordine este invalida
+				lst = interschimbAdiacente(lst, i);
+				flag = 1;
+				// i += 1;
+			}
+			else {
+				temp = temp->next;
+				// i += 1;
+			}
+			i += 1;
+		}
+	}
+
+	return lst;
+}
 
 void main() {
 	Nod * prim = NULL; 
@@ -135,11 +250,16 @@ void main() {
 		s.nume = NULL; // evitare partajare zona de memorie aferenta numelui de student
 	}
 
-	printf("Lista dupa creare:\n");
+	printf("\nLista dupa creare:\n");
 	printList(prim);
 
-	prim = interschimbAdiacente(prim, 1);
-	printf("Lista dupa interschimb:\n");
+	//prim = sortareBubble(prim);
+	//printf("\nLista dupa sortare Bubble:\n");
+	//printList(prim);
+
+	// prim = interschimbAdiacente(prim, 5);
+	prim = interschimbOarecare(prim, 2, 3);
+	printf("\nLista dupa interschimb:\n");
 	printList(prim);
 
 
