@@ -81,21 +81,77 @@ Nod* interschimbAdiacente(Nod* lst, int idStud) {
 	//		2. primul nod din interschimb este lst (se interschimba nodul 1 cu 2) - are loc interschimb, se returneaza noul inceput de lista
 	if (lst->stud.id == idStud) {
 		// initializam cele 3 noduri implicate in interschimb
-		q = lst;
-		r = lst->next;
-		s = r->next;
+		q = lst; // nodul 1
+		r = lst->next; // nodul 2
+		s = r->next; // nodul 3/NULL
+
+		q->next = s; // q devinde nodul 2
+		r->next = q; // r devine nodul 1
+		return r; // actualizare adresa de inceput de lista in apelator
 	}
 
 	//		3. primul nod din interschimb este ultimul din lista (nu exista nodul 2) - se abandoneaza operatia
-
+	//		4. primul nod din interschimb nu este identificat - nu are sens operatia de interschimb
 	// caz general
+	// traversre lista in vederea identificarii primului nod din interschimb (q)
+	p = lst;
+	while (p->next) {
+		q = p->next;
+		if (q->stud.id == idStud) {
+			// am identificat primul nod din interschimb
+			// caz 3 / caz general
+			if (q->next != NULL) { // daca FALSE -> caz particular 3; q este ultimul nod di lista, nu exista r pt interschimb
+				// caz general
+				r = q->next;
+				s = r->next;
 
+				p->next = r;
+				r->next = q;
+				q->next = s;
+			}
+
+			return lst;
+		}
+
+		p = p->next;
+	} 
+
+	//p->next == NULL -> q == NULL, deci caz particular 4
 	return lst;
 }
 
 // interschimb noduri oarecare in lista simpla (cu modificare de adrese de legatura)
+// sortare cu apel interschimb noduri oarecare
+
+// interschimb noduri adiacente in lista dubla
+// interschimb noduri oarecare in lista dubla
+// sortare noduri lista dubla
 
 // sortarea unei liste simple (cu apel functie/functii de interschimb noduri dezvoltate/implementate mai sus)
+Nod* sortareLista(Nod* lst) {
+	char vb = 1; // vb == 1 reluare comparatii de validare a relatiei de ordine
+
+	if (lst== NULL || lst->next == NULL) // lista are 0 noduri / un singur nod
+		return lst;
+
+	while (vb == 1) {
+		// reluare proces de validare a relatiei de ordine
+		vb = 0; // presupun ca lista este sortata
+		Nod *temp = lst;
+		while (temp->next) { // traversare lista pana pe penultimul nod
+			Nod *n_temp = temp->next;
+			if (temp->stud.id > n_temp->stud.id) {
+				// criteriul de sortare este invalid
+				vb = 1;
+				lst = interschimbAdiacente(lst, temp->stud.id); // temp = temp->next rezulta din operatia de interschimb
+			}
+			else
+				temp = temp->next;
+		}
+	}
+
+	return lst;
+}
 
 void main() {
 	Nod* prim = NULL;
@@ -130,17 +186,36 @@ void main() {
 	printf("Traversare lista simpla dupa creare:\n");
 	Nod* temp = prim;
 	while (temp != NULL) {
-		printf(" Student id: %d, %s, %s", temp->stud.id, temp->stud.nume, temp->stud.nrGrupa); // \n dupa fiecare nr grupa deoarece fgets pune LF (0x0a) in ultimul token de pe fiecare linie
+		printf(" Student id: %d, %s, %s\n", temp->stud.id, temp->stud.nume, temp->stud.nrGrupa); // \n dupa fiecare nr grupa deoarece fgets pune LF (0x0a) in ultimul token de pe fiecare linie
 
 		temp = temp->next;
 	}
 
 	printf("\nNumarul de noduri din lista simpla dupa creare: %d\n", nrNoduri(prim));
 
+
+	prim = interschimbAdiacente(prim, 199);
+	printf("\nTraversare lista simpla dupa interschimb:\n");
+	temp = prim;
+	while (temp != NULL) {
+		printf(" Student id: %d, %s, %s\n", temp->stud.id, temp->stud.nume, temp->stud.nrGrupa);
+
+		temp = temp->next;
+	}
+
+	prim = sortareLista(prim);
+	printf("\nTraversare lista simpla dupa sortare BubbleSort:\n");
+	temp = prim;
+	while (temp != NULL) {
+		printf(" Student id: %d, %s, %s\n", temp->stud.id, temp->stud.nume, temp->stud.nrGrupa);
+
+		temp = temp->next;
+	}
+
+
 	// dezalocare lista simpla
 	while (prim)
 		prim = stergereNodInceput(prim);
-
 	printf("\nTraversare lista simpla dupa dezalocare:\n");
 	temp = prim;
 	while (temp != NULL) {

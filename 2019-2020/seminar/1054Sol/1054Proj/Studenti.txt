@@ -1,5 +1,5 @@
-43,Vasilescu Mihai,1054
-129,Popescu Marian,1053
-13,Georgescu Alexandru,1054
-83,Marinescu George,1052
-99,Vasilescu Mircea,1054
+43,Vasilescu Mihai,1054,
+129,Popescu Marian,1053,
+13,Georgescu Alexandru,1054,
+83,Marinescu George,1052,
+99,Vasilescu Mircea,1054,
