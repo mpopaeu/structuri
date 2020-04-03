@@ -139,11 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="05_Structuri.cpp" />
     <ClCompile Include="06_ListaSimpla.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="strings.txt" />
+    <Text Include="Studenti.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
