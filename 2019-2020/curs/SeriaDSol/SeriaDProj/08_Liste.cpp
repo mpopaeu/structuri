@@ -103,6 +103,26 @@ void parseListDblInvers(ListaDbl lstD) {
 	}
 }
 
+ListaDbl stergereStudentDbl(ListaDbl lstD) {
+	NodD * tmp = lstD.p;
+
+	if (tmp) { // exista cel putin un nod in lista dubla
+		lstD.p = lstD.p->next;
+		if (lstD.p)
+			lstD.p->prev = 0; // NULL
+		else {
+			// exista un singur nod in lista
+			lstD.u = 0;
+		}
+
+		free(tmp->st->nume); // dezalocare nume student
+		free(tmp->st);		// dezalocare student
+		free(tmp); // dezalocare nod
+	}
+
+	return lstD;
+}
+
 void main() {
 
 	/////////////// LISTA SIMPLA
@@ -175,7 +195,17 @@ void main() {
 		lstStuds = inserareNodListaDubla(lstStuds, pStud);
 	}
 
-	printf("Lista dubla dupa creare:\n");
+	printf("\n\nLista dubla dupa creare:\n");
+	parseListDblInvers(lstStuds);
+
+	lstStuds = stergereStudentDbl(lstStuds);
+	printf("\n\nLista dubla dupa stergere nod:\n");
+	parseListDblInvers(lstStuds);
+
+	// dezalocare lista dubla
+	while(lstStuds.p != NULL)
+		lstStuds = stergereStudentDbl(lstStuds);
+	printf("\n\nLista dubla dupa dezalocare lista dubla:\n");
 	parseListDblInvers(lstStuds);
 	
 	fclose(f);
