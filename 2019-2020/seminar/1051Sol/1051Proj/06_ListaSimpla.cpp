@@ -66,6 +66,60 @@ Nod* interschimbNoduriAdiacente(Nod* lst, int idStud)
 
 	// caz part 2
 	// caz general
+	p = lst;
+
+	// traversare lista simpla cu vericare id student
+	// p este nodul predecesor lui q, deci se testeaza id student din p->next
+	while (p->next)
+	{
+		q = p->next;
+		if (q->stud.id == idStud) {
+			// studentul a fost identificat in lista
+			if (q->next != NULL) { // q->next == NULL inseamna q ultimul nod; se termina de traversat lista si se inchide while
+				// cazul general
+				r = q->next;
+				s = r->next;
+
+				p->next = r;
+				q->next = s;
+				r->next = q;
+
+				return lst;
+			}
+		}
+
+		p = p->next;
+	}
+
+	return lst; // caz part 2: q este ultimul nod sau q nu exista in lista simpla
+}
+
+// interschimb noduri oarecare in lista simpla
+// sortare prin selectie etc (interschim noduri oaracare)
+// intreschimb noduri adiacente in lista dubla
+
+Nod* sortareBubble(Nod* lst) {
+	char flag = 1; // semnaleaza reluarea comparatiilor pe lista simpla
+
+	while (flag == 1) {
+		Nod *temp_curent = lst;
+		flag = 0; // lista sortata
+
+		while (temp_curent->next != NULL) {
+			Nod *temp_succ = temp_curent->next;
+			if (temp_curent->stud.id > temp_succ->stud.id) {
+				// nu se respecta criteriul de sortare pt temp_curent si temp_succesor
+				// are loc interschimb intre cele 2 noduri
+				// marchez cu flag interschimbul
+				flag = 1; // lista nu este sortata
+				lst = interschimbNoduriAdiacente(lst, temp_curent->stud.id);
+			}
+
+			temp_curent = temp_curent->next;
+		}
+	}
+
+	return lst;
 }
 
 void main() {
@@ -95,6 +149,25 @@ void main() {
 
 	printf("Traversare lista simpla dupa creare:\n");
 	Nod* temp = prim;
+	while (temp != NULL) {
+		printf("Student %d, %s, %s\n", temp->stud.id, temp->stud.nume, temp->stud.nrGrupa);
+
+		temp = temp->next;
+	}
+
+
+	prim = sortareBubble(prim);
+	printf("\nTraversare lista simpla dupa sortare Bubble:\n");
+	temp = prim;
+	while (temp != NULL) {
+		printf("Student %d, %s, %s\n", temp->stud.id, temp->stud.nume, temp->stud.nrGrupa);
+
+		temp = temp->next;
+	}
+
+	prim = interschimbNoduriAdiacente(prim, 13);
+	printf("\nTraversare lista simpla dupa interschimb:\n");
+	temp = prim;
 	while (temp != NULL) {
 		printf("Student %d, %s, %s\n", temp->stud.id, temp->stud.nume, temp->stud.nrGrupa);
 
