@@ -84,9 +84,38 @@ ListaDbl inserareListaDubla(ListaDbl lstD, Student * pStd) {
 	}
 
 	return lstD;
-
 }
 
+
+void parseListDblInvers(ListaDbl lstD) {
+	NodD *tmp = lstD.u;
+	while (tmp) {
+		printf("%d %s %5.2f\n", tmp->st->id, tmp->st->nume, tmp->st->medie);
+
+		tmp = tmp->prev;
+	}
+}
+
+
+ListaDbl stergereStudentDbl(ListaDbl lstD) {
+	NodD * tmp = lstD.p;
+
+	if (tmp) { // exista cel putin un nod in lista dubla
+		lstD.p = lstD.p->next;
+		if (lstD.p)
+			lstD.p->prev = 0;
+		else {
+			// exista un singur nod in lista
+			lstD.u = 0;
+		}
+
+		free(tmp->st->nume); // dezalocare nume student
+		free(tmp->st);		// dezalocare student
+		free(tmp);		// dezalocare nod lista dubla
+	}
+
+	return lstD;
+}
 void main() {
 
 	////// LISTA SIMPLA
@@ -143,6 +172,46 @@ void main() {
 	parseList(prim);
 
 	////// LISTA DUBLA
+	ListaDbl lstStuds;
+	lstStuds.p = lstStuds.u = 0;
+
+	Student* pStud;
+
+	fseek(f, 0, 0); // SEEK_SET
+
+	while (fgets(file_buf, sizeof(file_buf), f)) {
+		token = strtok(file_buf, sep_list);
+		pStud = (Student*)malloc(sizeof(Student));
+		pStud->id = atoi(token);
+
+		token = strtok(NULL, sep_list);
+		pStud->nume = (char*)malloc((strlen(token) + 1) * sizeof(char));
+		strcpy(pStud->nume, token);
+
+		token = strtok(NULL, sep_list);
+		pStud->medie = atof(token);
+
+		token = strtok(NULL, sep_list);
+		if (token)
+			printf("\nEroare preluare token!");
+
+		// inserare nod la inceputul listei
+		lstStuds = inserareListaDubla(lstStuds, pStud);
+	}
+
+	printf("\n\nLista dubla dupa creare:\n");
+	parseListDblInvers(lstStuds);
+
+	lstStuds = stergereStudentDbl(lstStuds);
+	printf("\nLista dubla dupa stergere nod:\n");
+	parseListDblInvers(lstStuds);
+
+	//dezalocare lista dubla
+	while (lstStuds.p != NULL) {
+		lstStuds = stergereStudentDbl(lstStuds);
+	}
+	printf("\n\nLista dubla dupa dezalocare:\n");
+	parseListDblInvers(lstStuds);
 
 	fclose(f);
 }
