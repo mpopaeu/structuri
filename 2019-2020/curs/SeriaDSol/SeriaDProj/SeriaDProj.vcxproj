@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="08_Liste.cpp" />
+    <ClCompile Include="09_HashTable.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Studenti.txt" />
+    <Text Include="Students.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
