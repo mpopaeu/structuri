@@ -47,6 +47,18 @@ void printList(Nod* lst) {
 }
 
 // stergere/dezalocare nod din lista simpla (la inceputul listei)
+Nod* stergereNodInceput(Nod* lst) {
+	if (lst) {
+		Nod* t = lst; // t inceput lista curenta
+
+		lst = lst->next; // lst este nou inceput de lista
+
+		free(t->stud.nume); // dezalocare nume student
+		free(t); // dezalocare nod
+	}
+
+	return lst;
+}
 
 // dezalocare lista simpla
 
@@ -192,6 +204,66 @@ Nod* interschimbOarecare(Nod* lst, int poz1, int poz2) {
 	return lst;
 }
 
+// sortare cu interschimb noduri oarecare in lista simpla
+Nod* sortareListaSimpla(Nod *lst) {
+	Nod *p, *q;
+	p = lst;
+	int i = 1, j;
+	if (lst) {
+		while (p->next) { // p poate fi maxim penultimul nod
+
+			q = p->next; // q pleaca de la succesorul imediat al lui p
+			j = i + 1;
+
+			while (q) { // q poate fi maxim ultimul nod
+
+				if (p->stud.id > q->stud.id) {
+					// criteriul de sortare nu este indeplinit
+					lst = interschimbOarecare(lst, i, j);
+					Nod* t = p;
+					p = q;
+					q = t;
+				}
+
+				q = q->next;
+				j += 1;
+			}
+
+			p = p->next;
+			i += 1;
+		}
+	}
+
+	return lst;
+}
+
+// varianta 2 sortare - utilizare structuri DO-FOR
+Nod* sortareListaSimpla_v2(Nod *lst) {
+	int n = nrNoduri(lst);
+
+	Nod *p, *q;
+
+	p = lst;
+	for (int i = 0; i < n - 1; i++) {
+		q = p->next;
+		for (int j = i + 1; j < n; j++) {		
+			if (p->stud.id > q->stud.id) {
+				// criteriul de sortare nu este indeplinit
+				lst = interschimbOarecare(lst, i + 1, j + 1); // trimit pozitii catre functia de interschimb, nu OFFSET!!!
+				Nod* t = p;
+				p = q;
+				q = t;
+			}
+
+			q = q->next;
+		}
+
+		p = p->next;
+	}	
+
+	return lst;
+}
+
 // sortare lista simpla (bubble, selectie etc)
 Nod* sortareBubble(Nod* lst) {
 	char flag = 1; // 1 - reluare traversare lista in vederea validarii
@@ -258,10 +330,21 @@ void main() {
 	//printList(prim);
 
 	// prim = interschimbAdiacente(prim, 5);
-	prim = interschimbOarecare(prim, 2, 3);
-	printf("\nLista dupa interschimb:\n");
+	//prim = interschimbOarecare(prim, 2, 3);
+	//printf("\nLista dupa interschimb:\n");
+	//printList(prim);
+
+	// prim = sortareListaSimpla(prim);
+	prim = sortareListaSimpla_v2(prim);
+	printf("\nLista dupa sortare Selectie:\n");
 	printList(prim);
 
-
+	// dezalocare lista simpla prin stergere repetata a primul nod
+	while (prim) {
+		prim = stergereNodInceput(prim);
+	}
+	printf("\n\nLista dupa dezalocare:\n");
+	printList(prim);
+	
 	fclose(f);
 }
