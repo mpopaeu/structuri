@@ -65,7 +65,6 @@ int searchStudent(Student* ht, int size, char* studName)
 		return -1; // student not found
 }
 
-
 // delete a student in hash table using linear probing
 char deleteStudent(Student* ht, int size, char* studName)
 {
@@ -77,7 +76,7 @@ char deleteStudent(Student* ht, int size, char* studName)
 
 				  // "stergere" student
 	free(ht[poz].name);
-	ht[poz].name = 0; // pozitia se disponibilizeaza la inserare
+	ht[poz].name = NULL; // pozitia se disponibilizeaza la inserare
 	int inf, sup; // capete ale cluster-ului in care se sterge
 
 				  // determinare limita inferioara cluster
@@ -212,9 +211,20 @@ void main() {
 		}
 	}
 
-	/*
+	char numeCautat[] = "Marius Popa";
+	int pozStudent = searchStudent(HTable, size, numeCautat);
+	if (pozStudent != -1) {
+		// student gasit in tabela de dispersie
+		printf("\n\n Student identificat pe pozitia %d: %d %s\n", pozStudent, HTable[pozStudent].id, HTable[pozStudent].name);
+	}
+	else {
+		// studentul nu a fost gasit in tabela de dispersie
+		printf("\n\n Studentul %s nu exista in tabela de dispersie!\n", numeCautat);
+	}
+
+	
 	// delete a student in hash table
-	char studName[] = { "Popescu Gigel" };
+	char studName[] = { "Georgescu Alexandru" };
 	char deleted = deleteStudent(HTable, size, studName);
 
 	// parsing entire hash table for content validation
@@ -223,7 +233,16 @@ void main() {
 		if (HTable[i].name) {
 			printf("Position: %d, Student: %d %s\n", i, HTable[i].id, HTable[i].name);
 		}
-	} */
+	} 
+
+	// dezalocare tabela de dispersie
+	for (unsigned int i = 0; i<size; i++) {
+		if (HTable[i].name) {
+			free(HTable[i].name); // dezalocare nume student
+		}
+	}
+	free(HTable); // dezalocare vector suport pentru tabela de dispersie
+	HTable = NULL;
 
 	fclose(f);
 }
