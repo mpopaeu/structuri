@@ -20,7 +20,11 @@ Nod* inserareNodSfarsit(Nod* lista, Student s) {
 	Nod* nou;
 	nou = (Nod*)malloc(sizeof(Nod));
 
-	nou->stud = s; // copiere byte cu byte a lui s peste nou->st; partajare temporara nume student ca si locatie de heap
+	// nou->stud = s; // copiere byte cu byte a lui s peste nou->st; partajare temporara nume student ca si locatie de heap
+	nou->stud.id = s.id;
+	nou->stud.nume = s.nume; // partajare temporara nume student ca si locatie de heap
+	strcpy(nou->stud.nrGrupa, s.nrGrupa);
+
 	nou->next = NULL; // nou devine ultimul nod in lista simpla
 
 	if (lista == NULL) // nu exista nici un nod in lista
@@ -144,8 +148,8 @@ Nod* interschimbNoduriOarecare(Nod* lst, int idStud1, int idStud2)
 				r = q->next;
 				gasit = 1;
 			}
-
-			p = p->next;
+			else
+				p = p->next;
 		}
 	}
 
@@ -153,7 +157,7 @@ Nod* interschimbNoduriOarecare(Nod* lst, int idStud1, int idStud2)
 	if (lst->stud.id == idStud2) {
 		// t este primul nod din lista
 		t = lst;
-		v = q->next;
+		v = t->next;
 	}
 	else {
 		// parsare lista simpla pt identificare lui idStud2
@@ -166,8 +170,8 @@ Nod* interschimbNoduriOarecare(Nod* lst, int idStud1, int idStud2)
 				v = t->next;
 				gasit = 1;
 			}
-
-			s = s->next;
+			else
+				s = s->next;
 		}
 	}
 
@@ -247,14 +251,36 @@ Nod* dezalocareLista(Nod* lst) {
 	return lst;
 }
 
-////////
-// sortare prin selectie etc (interschimb noduri oarecare)
 
-// interschimb noduri adiacente in lista dubla
-// interschimb noduri oarecare in lista dubla
-// sortare pe lista dubla
-// creare lista dubla
-// dezalocare lista dubla
+// sortare prin selectie etc (interschimb noduri oarecare)
+Nod* sortareSelectie(Nod* lst)
+{
+	if (lst == NULL || lst->next == NULL)
+	{
+		return lst;
+	}
+
+	Nod* p = lst, *q;
+	while (p->next != NULL)
+	{
+		q = p->next;
+		while (q != NULL)
+		{
+			if (q->stud.id < p->stud.id)
+			{
+				lst = interschimbNoduriOarecare(lst, p->stud.id, q->stud.id);
+				Nod* aux;
+				aux = p;
+				p = q;
+				q = aux;
+			}
+			q = q->next;
+		}
+		p = p->next;
+	}
+	return lst;
+}
+
 
 void main() {
 	Nod* prim = NULL;
@@ -300,23 +326,25 @@ void main() {
 	//}
 
 
-	prim = interschimbNoduriOarecare(prim, 51, 57);
-	printf("\nTraversare lista simpla dupa interschimb oarecare:\n");
-	temp = prim;
-	while (temp != NULL) {
-		printf("Student %d, %s, %s\n", temp->stud.id, temp->stud.nume, temp->stud.nrGrupa);
-
-		temp = temp->next;
-	}
-
-	//prim = sortareBubble(prim);
-	//printf("\nTraversare lista simpla dupa sortare Bubble:\n");
+	//prim = interschimbNoduriOarecare(prim, 82, 57);
+	//printf("\nTraversare lista simpla dupa interschimb oarecare:\n");
 	//temp = prim;
 	//while (temp != NULL) {
 	//	printf("Student %d, %s, %s\n", temp->stud.id, temp->stud.nume, temp->stud.nrGrupa);
 
 	//	temp = temp->next;
 	//}
+
+	//prim = sortareBubble(prim);
+	//printf("\nTraversare lista simpla dupa sortare Bubble:\n");
+	printf("\nTraversare lista simpla dupa sortare Selectie:\n");
+	prim = sortareSelectie(prim);
+	temp = prim;
+	while (temp != NULL) {
+		printf("Student %d, %s, %s\n", temp->stud.id, temp->stud.nume, temp->stud.nrGrupa);
+
+		temp = temp->next;
+	}
 
 	fclose(f);
 }
