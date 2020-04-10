@@ -120,12 +120,6 @@ Nod* interschimbAdiacente(Nod* lst, int idStud) {
 	return lst;
 }
 
-// interschimb noduri oarecare in lista simpla (cu modificare de adrese de legatura)
-// sortare cu apel interschimb noduri oarecare
-
-// interschimb noduri adiacente in lista dubla
-// interschimb noduri oarecare in lista dubla
-// sortare noduri lista dubla
 
 // sortarea unei liste simple (cu apel functie/functii de interschimb noduri dezvoltate/implementate mai sus)
 Nod* sortareLista(Nod* lst) {
@@ -148,6 +142,105 @@ Nod* sortareLista(Nod* lst) {
 			else
 				temp = temp->next;
 		}
+	}
+
+	return lst;
+}
+
+// interschimb noduri oarecare in lista simpla (cu modificare de adrese de legatura)
+
+Nod* interschimbNoduriOarecare(Nod* lst, int idStud1, int idStud2) {
+	Nod* p, *q, *r, *s, *temp, *prevP, *prevQ;
+	temp = (Nod*)malloc(sizeof(Nod));
+
+	// Caz 0 sau 1 nod
+	if (lst == NULL || lst->next == NULL)
+		return lst;
+
+	// Caz general
+	p = lst;
+	//prim = p;
+	//daca primul nod e bun
+
+	if (p->stud.id == idStud1 || p->stud.id == idStud2) {
+		prevQ = p;
+		q = p->next;
+		s = q;
+		while (q) {
+			r = q->next;
+			if (q->stud.id == idStud2 || q->stud.id == idStud1) {
+				if (p->next == q) {
+					return interschimbAdiacente(lst, p->stud.id);
+				}
+				else {
+					q->next = p->next;
+					prevQ->next = p;
+					p->next = r;
+
+					return q;
+				}
+			}
+			prevQ = q;
+			q = q->next;
+		}
+	}
+
+	//in rest
+	prevP = p;
+	p = p->next;
+
+	while (p->next) {
+		if (p->stud.id == idStud1 || p->stud.id == idStud2) {
+			prevQ = p;
+			q = p->next;
+			s = q;
+			while (q) {
+				r = q->next;
+				if (q->stud.id == idStud2 || q->stud.id == idStud1) {
+					if (p->next == q) {
+						return interschimbAdiacente(lst, p->stud.id);
+					}
+					else {
+						prevP->next = q;
+						q->next = p->next;
+						prevQ->next = p;
+						p->next = r;
+
+						return lst;
+					}
+				}
+				prevQ = q;
+				q = q->next;
+			}
+		}
+		prevP = p;
+		p = p->next;
+	}
+
+	//daca cel putin un nod nu exista
+	return lst;
+}
+
+// sortare cu apel interschimb noduri oarecare
+Nod* sortareOarecare(Nod* lst) {
+	Nod* p, *q;
+	int ok = 0;
+	p = lst;
+
+
+	while (p->next) {
+		q = p->next;
+
+		while (q) {
+			if (p->stud.id > q->stud.id) {
+				lst = interschimbNoduriOarecare(lst, p->stud.id, q->stud.id);
+				Nod *t = p;
+				p = q;
+				q = t;
+			}
+			q = q->next;
+		}
+		p = p->next;
 	}
 
 	return lst;
@@ -203,8 +296,10 @@ void main() {
 		temp = temp->next;
 	}
 
-	prim = sortareLista(prim);
-	printf("\nTraversare lista simpla dupa sortare BubbleSort:\n");
+	//prim = sortareLista(prim);
+	//printf("\nTraversare lista simpla dupa sortare BubbleSort:\n");
+	prim = sortareOarecare(prim);
+	printf("\nTraversare lista simpla dupa sortare selectie:\n");
 	temp = prim;
 	while (temp != NULL) {
 		printf(" Student id: %d, %s, %s\n", temp->stud.id, temp->stud.nume, temp->stud.nrGrupa);
