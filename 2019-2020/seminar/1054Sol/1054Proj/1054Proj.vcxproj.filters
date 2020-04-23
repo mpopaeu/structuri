@@ -23,7 +23,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="08_ListaDubla.cpp">
+    <ClCompile Include="09_HashTable_Chain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
