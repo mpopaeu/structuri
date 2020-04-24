@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="07_TabelaHash.cpp">
+    <ClCompile Include="09_StructUnion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
