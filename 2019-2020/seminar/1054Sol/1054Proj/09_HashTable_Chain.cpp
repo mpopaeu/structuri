@@ -34,7 +34,7 @@ Nod* inserareSfarsitLista(Nod* p, Student s) {
 		Nod* temp = p;
 		while (temp->next != NULL)
 			temp = temp->next;
-		// legare ultimul nod din lista la nodul nou
+		// conectare ultimul nod din lista la nodul nou
 		temp->next = nou;
 	}
 
@@ -50,6 +50,39 @@ Nod* stergereNodInceput(Nod* lst) {
 
 		free(temp->stud.nume); // dezalocare mem heap pt nume student
 		free(temp);			// dezalocare mem heap pt nod din lista
+	}
+
+	return lst;
+}
+
+// stergere nod din lista (pe baza nume student)
+// se vor sterge toti studentii cu acelasi nume
+Nod* stergereNodNumeStudent(Nod* lst, char *numeStud) {
+	Nod * temp = lst;
+
+	if (lst != NULL) {
+		// actualizare stergere la inceput cu parsarea lista in intregime
+		// pt situatia in care exista mai multi studenti cu acelasi nume in lista
+		if (strcmp(lst->stud.nume, numeStud) == 0) {
+			// studentul este identificat in primul nod din lista
+			lst = lst->next; // actualizare inceput de lista
+			free(temp->stud.nume); // dezalocare nume student
+			free(temp); // dezalocare nod din lista
+		}
+		// else {
+			// cautare nod de sters prin testarea sa din predecesor (temp)
+			while (temp->next) {
+				Nod* q = temp->next;
+				if (strcmp(q->stud.nume, numeStud) == 0) {
+					// q este nodul de sters, temp este predecesor lui q
+					temp->next = q->next; // izolare q fata de lista 
+					free(q->stud.nume);
+					free(q);
+				}
+				else
+					temp = temp->next;
+			}
+		// }
 	}
 
 	return lst;
