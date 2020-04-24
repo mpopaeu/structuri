@@ -95,6 +95,10 @@ void parseHTable(Nod** hTab, int size) {
 void stergereHTable(Nod** hTab, int size, char* numeStudent) {
 }
 
+// consolidare tabele de dispersie
+// 2 tabele de dispersie -> mutat continutul celor 2 tabele in tabela nr 3
+// fiecare din cele 3 tabele de dispersie au dimensiuni diferite
+
 void main() {
 
 	Nod* *HTable;
