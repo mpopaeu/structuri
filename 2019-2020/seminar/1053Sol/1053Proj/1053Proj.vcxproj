@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="07_ListaDubla.cpp" />
+    <ClCompile Include="08_HashTable_Chain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="strings.txt" />
