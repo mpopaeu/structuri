@@ -140,10 +140,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="08_HashTable_Chain.cpp" />
+    <ClCompile Include="09_StructHeap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="strings.txt" />
     <Text Include="Studenti.txt" />
+    <Text Include="StudHeap.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

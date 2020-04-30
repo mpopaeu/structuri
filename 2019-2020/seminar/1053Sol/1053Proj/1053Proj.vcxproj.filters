@@ -18,12 +18,18 @@
     <ClCompile Include="08_HashTable_Chain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="09_StructHeap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="strings.txt">
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="Studenti.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="StudHeap.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

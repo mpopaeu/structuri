@@ -1,0 +1,6 @@
+57,Vasilescu Mihai,1054,23,
+82,Marinescu George,1053,1,
+111,Popescu Mircea,1053,18,
+51,Ionescu Madalin,1053,31,
+139,Georgescu Alexandru,1054,9,
+131,Mircea Popescu,1054,43,
