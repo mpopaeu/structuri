@@ -21,9 +21,12 @@
     <Text Include="Studenti.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="StudHeap.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="08_HashTable.cpp">
+    <ClCompile Include="09_StructHeap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
