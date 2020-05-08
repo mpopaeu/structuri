@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="09_StructUnion.cpp">
+    <ClCompile Include="11_ArboreBC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

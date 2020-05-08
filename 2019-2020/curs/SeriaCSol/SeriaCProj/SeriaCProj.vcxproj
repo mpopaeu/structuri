@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="09_StructUnion.cpp" />
+    <ClCompile Include="11_ArboreBC.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Studenti.txt" />
