@@ -139,7 +139,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="08_HashTable_Chain.cpp" />
     <ClCompile Include="09_StructHeap.cpp" />
   </ItemGroup>
   <ItemGroup>

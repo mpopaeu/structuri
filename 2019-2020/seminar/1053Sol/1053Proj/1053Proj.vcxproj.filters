@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="08_HashTable_Chain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="09_StructHeap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
