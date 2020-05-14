@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="09_StructHeap.cpp">
+    <ClCompile Include="10_ArboriBinari.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="09_StructHeap.cpp" />
+    <ClCompile Include="10_ArboriBinari.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="strings.txt" />
