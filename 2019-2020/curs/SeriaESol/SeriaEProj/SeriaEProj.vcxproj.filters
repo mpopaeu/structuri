@@ -15,12 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="11_StructUnion.cpp">
+    <ClCompile Include="13_ArboreBC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Students.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Studenti.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

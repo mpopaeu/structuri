@@ -19,9 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="11_StructUnion.cpp" />
+    <ClCompile Include="13_ArboreBC.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Studenti.txt" />
     <Text Include="Students.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
