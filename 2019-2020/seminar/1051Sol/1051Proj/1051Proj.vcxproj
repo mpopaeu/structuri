@@ -144,7 +144,7 @@
     <Text Include="StudHeap.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="09_StructHeap.cpp" />
+    <ClCompile Include="10_ArboriBC.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
