@@ -65,8 +65,23 @@ int inaltimeABC(NodABC * r)
 // determinare nr de noduri de pe un nivel specificat
 void nrNoduriNivel(NodABC * r, int nivel, int &nr)
 {
+	if (r) {
+		nrNoduriNivel(r->st, nivel - 1, nr);
+		
+		// validare pozitie pe nivel curent si incrementare nr
 
+		nrNoduriNivel(r->dr, nivel - 1, nr);
+	}
 }
+
+// TEMA
+// determinare numar frunze ABC
+// copiere noduri de pe nivel specificat in structura suport (vector/lista)
+// copiere noduri frunza in structura suport (vector/lista)
+// determinare niveluri pe care se afla noduri frunza
+// determinare numar de noduri cu 2 descendenti
+// noduri plasate pe drumul de la radacina la un nod specificat prin id student. Copiere noduri in structura suport (vector/lista)
+// stergere nod din ABC
 
 void main() {
 
