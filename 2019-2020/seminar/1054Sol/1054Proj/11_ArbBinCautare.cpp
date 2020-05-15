@@ -65,6 +65,17 @@ void salvareIDFrunze(NodABC *r, int * vFrunze, int offset)
 
 }
 
+
+// TEMA
+// determinare nr noduri ABC
+// determinare inaltime ABC
+// determinare nr noduri de pe un nivel specificat in ABC
+// salvare noduri (cheie id student) intr-un vector de pe un nivel specificat in ABC
+// traversare preordine ABC
+// traversare postordine ABC
+// traversare pe niveluri ABC
+// stergere nod din ABC
+
 void main() {
 
 	Student stud;
