@@ -3,4 +3,4 @@
 374,Popescu Gigel,9.33
 1,Ionescu Pavel,8.80
 13,Georgescu Alexandru,6.57
-453,Gigel opescuP,9.33
+35,Gigel opescuP,9.33
