@@ -81,7 +81,69 @@ void nrNoduriNivel(NodABC * r, int nivel, int &nr)
 // determinare niveluri pe care se afla noduri frunza
 // determinare numar de noduri cu 2 descendenti
 // noduri plasate pe drumul de la radacina la un nod specificat prin id student. Copiere noduri in structura suport (vector/lista)
+
 // stergere nod din ABC
+NodABC *stergere(NodABC *r, int idStud)
+{
+	if (r != NULL) {		
+		if (r->s.id > idStud)
+			r->st = stergere(r->st, idStud);
+		else
+			if (r->s.id < idStud)
+				r->dr = stergere(r->dr, idStud);
+			else
+			{
+				// am identificat nodul de sters
+				if ((r->st == NULL) && (r->dr == NULL))
+				{
+					// cazul 1 : nod frunza
+					free(r->s.nume); // dezalocare nume student din nod
+					free(r); // dezalocare nod ABC
+					r = NULL;
+				}
+				else
+				{
+					if ((r->st == NULL) || (r->dr == NULL))
+					{
+						// cazul 2 : 1 descendent
+						NodABC* descendent = r->st;
+						if (descendent != NULL)
+							descendent = r->dr;
+
+						free(r->s.nume);
+						free(r);
+
+						r = descendent;
+					}
+					else
+					{
+						// cazul 3: 2 descendenti
+						NodABC * cms, *parinteCMS = NULL;
+						cms = r->dr;
+						while (cms->st != NULL)
+						{
+							parinteCMS = cms;
+							cms = cms->st;
+						}
+
+						// interschimbul nod curent r cu cms
+
+						if (parinteCMS == NULL)
+						{
+							// cms nod este radacina de subarbore dreapta
+						}
+						else
+						{
+							// am identificat cms nod si pe parintele sau
+							parinteCMS->st = NULL;
+						}
+					}
+				}
+			}
+	}
+	
+	return r;
+}
 
 void main() {
 
