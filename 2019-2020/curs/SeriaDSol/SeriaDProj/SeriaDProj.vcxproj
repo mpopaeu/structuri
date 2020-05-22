@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="13_ABC.cpp" />
+    <ClCompile Include="14_AVL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Studenti.txt" />
