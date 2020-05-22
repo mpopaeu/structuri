@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="13_ArboreBC.cpp" />
+    <ClCompile Include="14_ArboreAVL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Studenti.txt" />
