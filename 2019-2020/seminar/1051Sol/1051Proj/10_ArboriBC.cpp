@@ -90,6 +90,48 @@ int inaltimeArbore(NodABC *r)
 // traversare ABC pe niveluri
 // determinare noduri plasate pe drumul de la radacina la nod specificat prin id
 
+NodABC *stergere(NodABC *r, int idStud)
+{
+	if (r != NULL) {
+		if (r->s.id > idStud)
+			r->st = stergere(r->st, idStud);
+		else
+			if(r->s.id < idStud)
+			r->dr = stergere(r->dr, idStud);
+			else
+			{
+				//nodul de sters a fost identificat si este r
+				if (r->st== NULL && r->dr == NULL)
+				{
+					// cazul 1: nod frunza
+					free(r->s.nume); // dezalocare nume student
+					free(r); // dezalocare nod
+					r = NULL;
+				}
+				else
+				{
+					if (r->st == NULL || r->dr == NULL)
+					{
+						// cazul 2: nodul de sters are 1 desc
+						NodABC * descendent = r->dr;
+						if (descendent == NULL) descendent = r->st;
+
+
+						free(r->s.nume); // dezalocare nume student
+						free(r); // dezalocare nod
+						r = descendent;
+					}
+					else {
+						// cazul 3: nodul de sters are 2 desc
+					}
+				}
+			}
+	}
+	
+
+	return r;
+}
+
 void main() {
 
 	Student stud;
