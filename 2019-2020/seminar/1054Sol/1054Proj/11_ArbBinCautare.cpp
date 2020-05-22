@@ -60,10 +60,10 @@ void nrFrunze(NodABC *r, int &nr)
 	}
 }
 
-void salvareIDFrunze(NodABC *r, int * vFrunze, int offset)
-{
-
-}
+//void salvareIDFrunze(NodABC *r, int * vFrunze, int offset)
+//{
+//
+//}
 
 
 // TEMA
@@ -75,6 +75,65 @@ void salvareIDFrunze(NodABC *r, int * vFrunze, int offset)
 // traversare postordine ABC
 // traversare pe niveluri ABC
 // stergere nod din ABC
+
+NodABC *stergereNod(NodABC *r, int idStud)
+{
+	if (r != NULL) {
+		if (r->s.id == idStud)
+		{
+			// aplicare operatie stergere
+			// nodul a fost identificat
+			// 1. nod frunza
+			// 2. nod cu 1 descendent
+			// 3. nod cu 2 descendenti
+			if ((r->st == NULL) && (r->dr == NULL))
+			{
+				// cazul 1
+				free(r->s.nume); // dezalocare extensie/extensii student in heap
+				free(r); // dezalocare nod
+				r = NULL;
+			}
+			else
+			{
+				if ((r->st == NULL) || (r->dr == NULL))
+				{
+					// cazul 2
+					NodABC* descendent = r->dr;
+					if (descendent == NULL) descendent = r->st;
+					free(r->s.nume);
+					free(r);
+
+					r = descendent;
+				}
+				else
+				{
+					// cazul 3 
+					NodABC* cmsNod = r->dr; // radacina subarbore dreapta
+					NodABC* parinteCMSNod = r->dr;
+
+					// caz particular: radacina subarbore dreapta nu are nici un desc stanga adica este CMS
+					// caut cel mai din stanga nod cu salvarea parintelui
+					while (cmsNod->st != NULL) {
+						// traversez pe stanga subarborelui
+
+						parinteCMSNod = cmsNod;
+						cmsNod = cmsNod->st;
+					}
+				}
+			}
+		}
+		else
+		{
+			// cautare nod bazata pe relatiile de ordine ale ABC
+			if (r->s.id > idStud)
+				r->st = stergereNod(r->st, idStud);
+			else
+				r->dr = stergereNod(r->dr, idStud);
+		}
+	}
+	
+	return r;
+}
 
 void main() {
 
@@ -120,9 +179,11 @@ void main() {
 	nrFrunze(root, nrFrunzeABC);
 	printf("\nArborele are nr de frunze = %d\n\n", nrFrunzeABC);
 
-	int* vIDFrunze = new int[nrFrunzeABC];
-	int i = 0; // offset element 1 in vector
-	salvareIDFrunze(root, vIDFrunze, i);
+	//int* vIDFrunze = new int[nrFrunzeABC];
+	//int i = 0; // offset element 1 in vector
+	//salvareIDFrunze(root, vIDFrunze, i);
+
+
 
 	fclose(f);
 }
