@@ -139,9 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="12_ArboreAVL.cpp" />
+    <ClCompile Include="13_Grafuri.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Graf.txt" />
     <Text Include="Studenti.txt" />
     <Text Include="Students.txt" />
   </ItemGroup>
