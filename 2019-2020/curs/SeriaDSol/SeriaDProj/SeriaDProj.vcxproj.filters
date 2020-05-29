@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="14_AVL.cpp">
+    <ClCompile Include="15_Graf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -24,6 +24,9 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="Studenti.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Graf.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
