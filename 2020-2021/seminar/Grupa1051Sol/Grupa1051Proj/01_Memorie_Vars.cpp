@@ -29,11 +29,11 @@ int main()
 	px = NULL;
 	// px[0] = vx[0] + 3;
 
-	int z = 0x11227978;
+	int z = 0x1122D178;
 	px = (char*)&z;
 
-	for (char i = sizeof(int) - 1; i >=0 ; i--)
-		printf(" %X ", px[i]);
+	for (char i = sizeof(int) - 1; i >= 0 ; i--)
+		printf(" %02X ", (unsigned char)px[i]);
 	printf("\n");
 
 	return 0;
