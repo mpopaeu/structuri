@@ -30,14 +30,14 @@ int main()
 	free(px);
 	px = NULL;
 
-	int z = 0x01234567; // implicit long int, 4 bytes; variabila locala in stack seg
-	px = (char*)&z;
+	int z = 0x01A54567; // implicit long int, 4 bytes; variabila locala in stack seg
+	unsigned char *pz = (unsigned char*)&z; // declarat unsigned pentru a evita conversiile implicite
 
 	for (char i = sizeof(int) - 1; i >= 0; i--)
-		printf(" %02X ", px[i]);
+		printf(" %02X ", pz[i]); // memoria la nivel de byte se afiseaza intocmai cu continutul binar la nivel fizic al memoriei
 	printf("\n");
 
-	px[0] = 0x89;
+	pz[0] = 0x89;
 	printf(" %02X ", z);
 
 
