@@ -29,6 +29,31 @@ int main()
 	free(px);
 	px = NULL;
 
+	if(px != NULL)
+		*px = 0x11;
+
+	////////////////////////////
+
+	int z = 0xA511DD80;
+	unsigned char *pz = NULL;
+
+	pz = (unsigned char*)&z;
+
+	// BIG ENDIAN
+	for (char i = 0; i < sizeof(int); i++)
+		printf(" %02X ", pz[i]);
+	printf("\n");
+
+	// LITTLE ENDIAN ***
+	for (char i = sizeof(int) - 1; i >= 0; i--)
+		printf(" %02X ", pz[i]);
+	printf("\n");
+
+	pz[2] = 0x89; // modific byte-ul cu offset 2 in 0x89 (continutul anterior este 0x11, byte-ul 2 din initializarea lui z)
+				  // LITTLE ENDIAN ***
+	for (char i = sizeof(int) - 1; i >= 0; i--)
+		printf(" %02X ", pz[i]);
+	printf("\n");
 
 	return 0;
 }
