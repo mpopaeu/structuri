@@ -3,28 +3,26 @@
 
 int main()
 {
-	char x = 70; // tipuri standard: [char, int,] [float, double, long double]
-				// dim: sizeof(char) = 1 byte; variabila locala, alocare la compilare in stack seg
-				// char x = 'F'; char x = 0x46;
+	char x = 77; // var locala lui main(); alocat la compilare in stack seg; dimensiune = 1 byte = sizeof(char)
+				 // char x = 0x4D; char x = 'M';
+				 // [char, int], [float, double, long double]
+	char vx[10]; // vector, alocat in stack seg la compilare (var locala); dimensiune = 10 * sizeof(char) = 10 bytes
+				 // elementele din vector au valori arbitrare (0xcc)
+	char *px = NULL; // variabila locala, alocata la compilare in stack seg; dimensiune = sizeof(px) = sizeof(char*) = 4 bytes
+					 // variabila pointer, de tip FAR seg:off (alternativa: NEAR)
 
-	char vx[10]; // vector de elemente de tip char; dim = 10 * sizeof(char) = 10 bytes
-				// alocare la compilare, variabila vx este locala in main(), rezervare 10 bytes in stack seg
-				// 0xcc --- valoare arbitrare
+	// incarc px cu adresa de stack seg a lui x
+	px = &x;
+	*px = x + 4; // modificare indirecta a lui x
 
-	char * px = NULL; // variabila pointer; dim: sizeof(px) = 4 bytes; pointer de tip FAR seg : off, NEAR off
-				// variabila locala, alocata la compilare in stack seg
-
-	// incarc adresa de memorie in pointerul px
-	// adresa stack seg a lui x
-	px = &x; // exista 2 puncte de acces la locatia x: direct (x), indirect (px)
-	*px = x + 2; // x se modifica in mod indirect prin utilizare variabile pointer px
-
-	// incarc adresa de vector in var pointer px
+	// incarc adresa de inceput a vectorului vx in variabila pointer px
 	px = vx;
-	for (char i = 0; i < sizeof(vx); i++)
-		px[i] = x + 1; // px[i] <--> *(px + i)
 
-	// alocare la run-time
+	for (char i = 0; i < sizeof(vx); i++)
+		px[i] = x + i; // acces indirect la elementul cu offset i in vectorul vx
+					   // px[i] <--> *(px + i)
+
+	// alocare (incarc adresa) de memorie heap
 	char n = sizeof(vx) - 3;
 
 	px = (char*)malloc(n * sizeof(char));
@@ -35,6 +33,39 @@ int main()
 
 	// dezalocare mem heap
 	free(px);
+	px = NULL;
+
+	if (px)
+		*px = x + 10;
+
+	//////
+	int z = 0x123457BA;
+	unsigned char *pz;
+
+	pz = (unsigned char*)&z;
+
+	printf("z = %d\n ", z);
+	// BIG_ENDIAN
+	printf("BIG_ENDIAN ");
+	for (char i = 0; i < sizeof(int); i++)
+		printf(" %02X ", pz[i]);
+	printf("\n");
+
+	// LITTLE_ENDIAN *****
+	printf("LITTLE_ENDIAN ");
+	for (char i = sizeof(int) - 1; i >= 0 ; i--)
+		printf(" %02X ", pz[i]);
+	printf("\n");
+
+	pz[1] = 0xFF;
+
+	printf("z = %d\n ", z);
+	// LITTLE_ENDIAN *****
+	printf("LITTLE_ENDIAN ");
+	for (char i = sizeof(int) - 1; i >= 0; i--)
+		printf(" %02X ", pz[i]);
+	printf("\n");
+
 
 	return 0;
 }
