@@ -29,11 +29,11 @@ int main()
 	if(px != NULL)
 		px[0] = px[0] + 3;
 
-	////////
+	//////////////////////////////////////
 
 	int z = 0x1122bacd;
 
-	unsigned char *pz; // mapez pz peste z
+	unsigned char *pz; // mapare pz peste z
 
 	pz = (unsigned char *)&z;
 
