@@ -43,13 +43,13 @@ void suma_scalar_ref(int * &x, unsigned char y) // "transfer" prin referinta a p
 	*x = y + 3;
 }
 
-void suma_scalar_adr(int * *x, unsigned char y) // transfer prin adresa a parametrului x
+void suma_scalar_adr(int * *x, unsigned char y) // transfer prin adresa a parametrului x; se intoarce adresa de heap prin parametrul x
 {
 	*x = (int*)malloc(sizeof(int));
 	**x = y + 3;
 }
 
-int* suma_scalar_ret(unsigned char y) // transfer prin valoare a parametrului x
+int* suma_scalar_ret(unsigned char y) // transfer prin valoare a parametrului y; se intoarce adresa de heap alocata de functie
 {
 	int * x = (int*)malloc(sizeof(int));
 	*x = y + 3;
