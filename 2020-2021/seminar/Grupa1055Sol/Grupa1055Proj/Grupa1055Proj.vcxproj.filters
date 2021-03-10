@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="01_Memorie_Vars.cpp">
+    <ClCompile Include="02_Functii.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
