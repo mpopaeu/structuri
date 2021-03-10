@@ -18,5 +18,8 @@
     <ClCompile Include="02_Functii.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="03_Matrice_heap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
