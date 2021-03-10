@@ -43,7 +43,7 @@ int main()
 
 	printf("vreg = %d\n", vreg);
 
-	// Definire si utilizare variabile static
+	// Definire si utilizare variabile statice
 	int j;
 	for (j = 0; j < 10; j++) {
 		printf("Rezultat functie f: %d\n", f());
