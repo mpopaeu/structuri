@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <malloc.h>
 
+////// functii cu parametri non-pointer
+
 short int add(unsigned char x, unsigned char y) // transfer prin valoare pt x si y
 {
 	short int s = 0;
@@ -33,6 +35,7 @@ short int add_adr(unsigned char *x, unsigned char y) // transfer prin adresa x s
 	return s;
 }
 
+/////// functii cu argument pointer
 
 void add_pval(short int *x, unsigned char y) // transfer prin valoare pt x si y
 {
@@ -80,7 +83,7 @@ int main()
 	/////////
 
 	short int * px = NULL;
-	//add_pval(px, b);
+	add_pval(px, b);
 	//printf(" *px = %d, b = %d\n", *px, b);
 
 	add_pref(px, b);
