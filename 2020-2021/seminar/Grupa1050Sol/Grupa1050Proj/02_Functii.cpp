@@ -31,6 +31,7 @@ short int add_adr(unsigned char *x, unsigned char y) // transfer prin adresa x s
 	return s;
 }
 
+/////////////////////////////////////////////
 
 void add_pval(short int *x, unsigned char y) // transfer pointer x prin valoare, transfer y prin valoare
 {	
@@ -65,6 +66,7 @@ int main()
 	unsigned char a = 0x12, b = 0x1A; // a = 18, b = 26
 	short int sum = 0;
 
+	///////////////// transfer variabila non-pointer in functie
 	sum = add(a, b);
 	printf(" a = %d, b = %d, suma = %d\n", a, b, sum); // a nemodificat
 
@@ -75,9 +77,10 @@ int main()
 	sum = add_adr(&a, b);
 	printf(" a = %d, b = %d, suma = %d\n", a, b, sum); // a modificat indirect din functie
 
-	/////////////////
+	a = 0x12;
+	///////////////// transfer variabila pointer in functie
 	short int *px = NULL;
-	// add_pval(px, b); // generare de mem leak
+	add_pval(px, b); // generare de mem leak
 	// printf(" *px = %d, b = %d\n", *px, b); // px nu se modifica, contine NULL la terminarea lui add_pval
 
 	add_pref(px, b);
