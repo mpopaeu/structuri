@@ -1,0 +1,4 @@
+2342,Popescu Ion,1055
+65,Georgescu Marin,1053
+9,Ionescu Georgel,1050
+82,Vasilescu Alex,1050

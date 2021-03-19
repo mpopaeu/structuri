@@ -139,8 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="02_Functii.cpp" />
-    <ClCompile Include="03_Matrice_heap.cpp" />
+    <Text Include="Studenti.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="04_Lista_simpla.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

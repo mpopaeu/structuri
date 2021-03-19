@@ -6,6 +6,7 @@
 #define RIGHT	4
 
 // TEMA
+// Iordache Denisa - actualizat
 int** concatenare_matrice(int **pMat, unsigned char m, unsigned char n, int **pCat, unsigned char mc, unsigned char nc,
 							char tip_operatie_concatenare)
 {
@@ -20,6 +21,121 @@ int** concatenare_matrice(int **pMat, unsigned char m, unsigned char n, int **pC
 	//
 	// return: adresa de matrice obtinuta dupa concatenare, NULL daca matricele pMat si pCat nu au fost validate 
 	//			dpv al operatiei de concatenare
+
+	int** pRez = NULL;
+
+	switch (tip_operatie_concatenare)
+	{
+	case TOP:
+		if (n == nc)
+		{
+			pRez = (int**)malloc((m + mc) * sizeof(int*));
+			for (unsigned char i = 0; i < m + mc; i++)
+			{
+				pRez[i] = (int*)malloc((n) * sizeof(int));
+			}
+
+			for (unsigned char i = 0; i < mc; i++)
+			{
+				for (unsigned char j = 0; j < nc; j++)
+				{
+					pRez[i][j] = pCat[i][j];
+				}
+			}
+
+			for (unsigned char i = 0; i < m; i++)
+			{
+				for (unsigned char j = 0; j < n; j++)
+				{
+					pRez[i + mc][j] = pMat[i][j];
+				}
+			}
+		}
+		break;
+
+	case BOTTOM:
+		if (n == nc)
+		{
+			pRez = (int**)malloc((m + mc) * sizeof(int*));
+			for (unsigned char i = 0; i < m + mc; i++)
+			{
+				pRez[i] = (int*)malloc((n) * sizeof(int));
+			}
+
+			for (unsigned char i = 0; i < m; i++)
+			{
+				for (unsigned char j = 0; j < n; j++)
+				{
+					pRez[i][j] = pMat[i][j];
+				}
+			}
+
+			for (unsigned char i = 0; i < mc; i++)
+			{
+				for (unsigned char j = 0; j < nc; j++)
+				{
+					pRez[i + m][j] = pCat[i][j];
+				}
+			}
+		}
+		break;
+
+	case LEFT:
+		if (m == mc)
+		{
+			pRez = (int**)malloc((m) * sizeof(int*));
+			for (unsigned char i = 0; i < m; i++)
+			{
+				pRez[i] = (int*)malloc((n + nc) * sizeof(int));
+			}
+
+			for (unsigned char i = 0; i < mc; i++)
+			{
+				for (unsigned char j = 0; j < nc; j++)
+				{
+					pRez[i][j] = pCat[i][j];
+				}
+			}
+
+			for (unsigned char i = 0; i < m; i++)
+			{
+				for (unsigned char j = 0; j < n; j++)
+				{
+					pRez[i][j + nc] = pMat[i][j];
+				}
+			}
+		}
+		break;
+
+	case RIGHT:
+		if (m == mc)
+		{
+			pRez = (int**)malloc((m) * sizeof(int*));
+			for (unsigned char i = 0; i < m; i++)
+			{
+				pRez[i] = (int*)malloc((n + nc) * sizeof(int));
+			}
+
+			for (unsigned char i = 0; i < m; i++)
+			{
+				for (unsigned char j = 0; j < n; j++)
+				{
+					pRez[i][j] = pMat[i][j];
+				}
+			}
+
+			for (unsigned char i = 0; i < mc; i++)
+			{
+				for (unsigned char j = 0; j < nc; j++)
+				{
+					pRez[i][j + n] = pCat[i][j];
+				}
+			}
+		}
+		break;
+	}
+
+	return pRez;
 }
 
 int main()
