@@ -6,7 +6,8 @@
 #define LEFT	3
 #define RIGHT	4
 
-int** concatenare_matrice(int **pMat, unsigned char m, unsigned char, int** pCat, unsigned char mc, unsigned char nc,
+// Udris Bogdan - actualizat
+int** concatenare_matrice(int **pMat, unsigned char m, unsigned char n, int** pCat, unsigned char mc, unsigned char nc,
 							char tip_operatie_concatenare)
 {
 	// pMat - adresa matrice alocata in mem heap
@@ -19,6 +20,144 @@ int** concatenare_matrice(int **pMat, unsigned char m, unsigned char, int** pCat
 	//													RIGHT (pCat la dreapta lui pMat)
 	//
 	// return: adresa matrice obtinuta prin concatenare, NULL daca nu s-au indeplinit conditiile 
+
+	int** pRez = nullptr;
+
+	switch (tip_operatie_concatenare)
+	{
+
+	case TOP:
+	{
+		//TOP
+		// verificare
+		if (n == nc)
+		{
+			// alocare matrice rezultat
+			pRez = (int**)malloc(sizeof(int*) * (m + mc));
+			for (unsigned char i = 0; i < m + mc; i++)
+				pRez[i] = (int*)malloc(sizeof(int) * n);
+
+			//construire pRez;
+			for (int i = 0; i < mc; i++)
+			{
+				for (int j = 0; j < nc; j++)
+				{
+					pRez[i][j] = pCat[i][j];
+				}
+			}
+			for (int i = mc; i < mc + m; i++)
+			{
+				for (int j = 0; j < n; j++)
+				{
+					pRez[i][j] = pMat[i - mc][j];
+				}
+
+			}
+			return pRez;
+		}
+
+	}
+	break;
+
+	case BOTTOM:
+	{
+		//BOTTOM
+		// verificare
+		if (n == nc)
+		{
+			// alocare matrice rezultat
+			pRez = (int**)malloc(sizeof(int*) * (m + mc));
+			for (unsigned char i = 0; i < m + mc; i++)
+				pRez[i] = (int*)malloc(sizeof(int) * nc);
+
+			//construire pRez;
+			for (int i = 0; i < m; i++)
+			{
+				for (int j = 0; j < n; j++)
+				{
+					pRez[i][j] = pMat[i][j];
+				}
+			}
+			for (int i = m; i < mc + m; i++)
+			{
+				for (int j = 0; j < nc; j++)
+				{
+					pRez[i][j] = pCat[i - m][j];
+				}
+			}
+			return pRez;
+		}
+
+	}
+	break;
+
+	case LEFT:
+	{
+		//LEFT
+		// verificare
+		if (m == mc)
+		{
+			// alocare matrice rezultat
+			pRez = (int**)malloc(sizeof(int*) * m);
+			for (unsigned char i = 0; i < m; i++)
+				pRez[i] = (int*)malloc(sizeof(int) * (nc + n));
+
+			//construire pRez;
+			for (int i = 0; i < mc; i++)
+			{
+				for (int j = 0; j < nc; j++)
+				{
+					pRez[i][j] = pCat[i][j];
+				}
+			}
+			for (int i = 0; i < m; i++)
+			{
+				for (int j = nc; j < n + nc; j++)
+				{
+					pRez[i][j] = pMat[i][j - nc];
+				}
+			}
+			return pRez;
+		}
+
+	}
+	break;
+
+	case RIGHT:
+	{
+		//RIGHT
+		// verificare
+		if (m == mc)
+		{
+			// alocare matrice rezultat
+			pRez = (int**)malloc(sizeof(int*) * m);
+			for (unsigned char i = 0; i < m; i++)
+				pRez[i] = (int*)malloc(sizeof(int) * (nc + n));
+
+			//construire pRez;
+			for (int i = 0; i < m; i++)
+			{
+				for (int j = 0; j < n; j++)
+				{
+					pRez[i][j] = pMat[i][j];
+				}
+			}
+			for (int i = 0; i < mc; i++)
+			{
+				for (int j = n; j < n + nc; j++)
+				{
+					pRez[i][j] = pCat[i][j - n];
+				}
+			}
+			return pRez;
+		}
+
+	}
+	break;
+
+	}
+
+	return pRez;
 }
 
 int main()
