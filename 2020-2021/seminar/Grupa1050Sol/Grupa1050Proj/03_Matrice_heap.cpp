@@ -5,6 +5,7 @@
 #define LEFT	3
 #define RIGHT	4
 
+// Andrei Ana Maria - actualizat
 int** concatenare_matrice(int** pMat, unsigned char m, unsigned char n, int** pCat, unsigned char mc, unsigned char nc,
 							char tip_operatie_concat)
 {
@@ -18,6 +19,89 @@ int** concatenare_matrice(int** pMat, unsigned char m, unsigned char n, int** pC
 	//		LEFT (pCat la stanga lui pMat), RIGHT (pCat la dreapta lui pMat)
 	//
 	// return - Matrice rezultat cu elemente concatenate din pMat si pCat
+
+	int** matFin;
+
+	if (tip_operatie_concat == TOP) {
+		//aloc spatiu pt MatFin
+		matFin = (int**)malloc(sizeof(int*) * (m + mc));
+		//aloc pt prima jumatate a matricii rezultate
+		for (unsigned char i = 0; i < (m + mc); i++) {
+			matFin[i] = (int*)malloc(sizeof(int) * n);
+		}
+
+		//populez matricea
+		for (unsigned char i = 0; i < mc; i++) {
+			for (unsigned char j = 0; j < nc; j++) {
+				matFin[i][j] = pCat[i][j];
+			}
+		}
+		for (unsigned char i = mc; i < m + mc; i++) {
+			for (unsigned char j = 0; j < n; j++) {
+				matFin[i][j] = pMat[i - mc][j];
+			}
+		}
+		return matFin;
+	}
+
+
+	if (tip_operatie_concat == BOTTOM) {
+		matFin = (int**)malloc(sizeof(int*)*(m + mc));
+		for (unsigned char i = 0; i < (m + mc); i++) {
+			matFin[i] = (int*)malloc(sizeof(int) * n);
+		}
+
+		for (unsigned char i = 0; i < m; i++) {
+			for (unsigned char j = 0; j < n; j++) {
+				matFin[i][j] = pMat[i][j];
+			}
+		}
+		for (unsigned char i = m; i < m + mc; i++) {
+			for (unsigned char j = 0; j < nc; j++) {
+				matFin[i][j] = pCat[i - m][j];
+			}
+		}
+		return matFin;
+	}
+
+	if (tip_operatie_concat == LEFT) {
+		matFin = (int**)malloc(sizeof(int*) * m);
+		for (unsigned char i = 0; i <m; i++) { //am alocat spatiu pt toata matricea
+			matFin[i] = (int*)malloc(sizeof(int) * (n + nc));
+		}
+		
+		for (unsigned char i = 0; i < mc; i++) {
+			for (unsigned char j = 0; j <nc; j++) {
+				matFin[i][j] = pCat[i][j];
+			}
+		}
+
+		for (unsigned char i = 0; i < m; i++) {
+			for (unsigned char j = nc; j < n + nc; j++) {			
+				matFin[i][j] = pMat[i][j - nc];
+			}
+		}
+		return matFin;
+	}
+
+	if (tip_operatie_concat == RIGHT) {
+		matFin = (int**)malloc(sizeof(int*) * m);
+		for (unsigned char i = 0; i < m; i++) { //am alocat spatiu pt toata matricea
+			matFin[i] = (int*)malloc(sizeof(int) * (n + nc));
+		}
+		for (unsigned char i = 0; i < m; i++) {
+			for (unsigned char j = 0; j < n; j++) {
+				matFin[i][j] = pMat[i][j];
+			}
+		}
+
+		for (unsigned char i = 0; i < mc; i++) {
+			for (unsigned char j = n; j < n + nc; j++) {
+				matFin[i][j] = pCat[i][j - n];
+			}
+		}
+		return matFin;
+	}
 }
 
 int main()

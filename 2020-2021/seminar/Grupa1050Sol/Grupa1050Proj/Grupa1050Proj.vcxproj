@@ -18,6 +18,12 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Studenti.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="04_Lista_simpla.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{9901B233-BECA-4AEC-8B1A-08DD14E54657}</ProjectGuid>
@@ -138,10 +144,6 @@
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="02_Functii.cpp" />
-    <ClCompile Include="03_Matrice_heap.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
