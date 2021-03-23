@@ -19,7 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_Argumente_main.cpp" />
+    <ClCompile Include="07_Liste_simple.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="08_Liste_duble.cpp" />
+    <Text Include="Studenti.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
