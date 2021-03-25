@@ -53,13 +53,20 @@ Nod* stergere_nod(Nod* lst, Student &st)
 
 // concatenare a doua liste
 // input: lst1, lst2 - liste simple
-// output: lst3 - lista simpla; nu parteaja zone de mem heap cu nici una din liste lst1, lst2
+// output: lst3 - lista simpla; nu partajeaza zone de mem heap cu nici una din listele lst1, lst2
 
 Nod* concatenare_liste(Nod* lst1, Nod* lst2) // ----> lst3 = { lst1, lst2 }
 {
 
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////
+// TEMA
+// inserare/stergere interior in/din lista simpla (definire cerinte)
+// interschimbare noduri adiacente/oarecare in lista simpla (definire cerinte)
+// deconcatenare lista simpla (definire cerinte)
+//////////////////////////////////////////////////////////////////////////////////
 
 int main() {
 	Nod* prim = NULL; // lista simpla empty
