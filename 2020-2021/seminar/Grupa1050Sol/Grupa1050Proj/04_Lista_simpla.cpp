@@ -55,8 +55,22 @@ Nod* stergere_nod(Nod* lst, Student &st)
 
 // functie care creeaza un vector cu studenti (din lista simpla) care fac parte din aceeasi grupa
 // input: lista simpla, nr grupa selectie studenti
-// output: vector de studenti (id, nume student) in aceeasi grupa, dimensiune vector; 
+// output: vector de studenti (id, nume student, nr grupa) in aceeasi grupa, dimensiune vector; 
 // studentii din vector nu partajeaza zone de heap cu nodurile din lista simpla
+
+Student* studenti_per_grupa(Nod* lst, char* nr_grupa, unsigned int &nr_studenti)
+{
+	// determinare nr studenti care indeplinesc criteriul de filtrare (parsare lista simpla)
+
+	// alocare vector pe exact nr de studenti determinat la pasul anterior
+
+	// copierea datelor studentilor din lista simpla in vectorul de studenti (parsare lista simpla)
+}
+
+// TEMA
+// inserare/stergere nod in/din lista simpla (interior lista cu definire criteriu de inserare/stergere)
+// interschimbare noduri adiacente/oarecare in lista simpla (cu definire criteriu de interschimb)
+// concatenare/deconcatenare liste simple (cu definire definire operatie)
 
 
 int main() {
