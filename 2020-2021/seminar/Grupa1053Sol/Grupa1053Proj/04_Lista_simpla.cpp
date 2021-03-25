@@ -28,6 +28,38 @@ Nod* inserare_nod(Nod* lst, Student st)
 	return nou;
 }
 
+Nod* stergere_nod(Nod* lst, Student &st)
+{
+	if (lst)
+	{
+		// exista cel putin 1 nod in lista
+		st.id = lst->stud.id;
+		st.nume = lst->stud.nume;
+		strcpy(st.nrGrupa, lst->stud.nrGrupa);
+
+		Nod* t = lst->next; // salvare adresa nod 2/NULL in t
+		free(lst); // dezalocare prim nod in lista
+
+		lst = t;
+	}
+	else
+	{
+		// nu exista nici un nod in lista
+		st.nume = NULL;
+	}
+
+	return lst;
+}
+
+// concatenare a doua liste
+// input: lst1, lst2 - liste simple
+// output: lst3 - lista simpla; nu parteaja zone de mem heap cu nici una din liste lst1, lst2
+
+Nod* concatenare_liste(Nod* lst1, Nod* lst2) // ----> lst3 = { lst1, lst2 }
+{
+
+}
+
 
 int main() {
 	Nod* prim = NULL; // lista simpla empty
@@ -55,6 +87,22 @@ int main() {
 		s.nume = NULL; // eliminare partajare zona heap pt ultimul student inserat
 	}
 
+	printf("Lista simpla dupa creare:\n");
+	Nod* t = prim; 
+	while (t)
+	{
+		printf(" %d %s\n", t->stud.id, t->stud.nume);
+
+		t = t->next; // t (locatie in stack seg) se rescrie cu continutul campului next (preluat din mem heap)
+	}
+
+	printf("\n\nDezalocare lista simpla:\n");
+	while (prim)
+	{
+		prim = stergere_nod(prim, s);
+		printf(" %d %s\n", s.id, s.nume);
+		free(s.nume);
+	}
 
 
 	return 0;
