@@ -59,10 +59,14 @@ Nod* stergere_inceput_lista(Nod* p, Student &s)
 
 
 // stergere noduri (toate) studenti care fac parte din grupa specificata
-Nod* stergere_nod_grupa(Nod* lst, char* nr_grupa)
+Nod* stergere_noduri_grupa(Nod* lst, char* nr_grupa)
 {
 
 }
+
+// TEMA
+// adaptare cod sursa curs pentru liste duble la structura Student din seminar
+// implemntare inserare/stergere pozitie specificata in lista dubla
 
 int main() {
 	Nod* prim = NULL; // lista este empty
@@ -103,6 +107,7 @@ int main() {
 	}
 
 	// apel functie stergere noduri/studenti in lista simpla in fct de nr grupa
+	prim = stergere_noduri_grupa(prim, (char*)"1052");
 
 	// stergere lista simpla
 	printf("Dezalocare lista simpla:\n");
