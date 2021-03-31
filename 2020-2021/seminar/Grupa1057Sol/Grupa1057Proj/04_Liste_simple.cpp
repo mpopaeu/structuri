@@ -59,6 +59,11 @@ Nod* stergere_nod_inceput(Nod* lst, Student &s)
 // concatenare de liste simple 
 // de-concatenare ("spargere", "rupere") lista simpla in mai multe liste
 
+// functia de stergere noduri pentru studentii care au id cuprins intr-un interval de valori specificat
+// stergere - dezalocare nod, impreuna cu orice extensie in mem heap pt structura Student
+// semnatura functie (params I/); /O
+// apeluri de functie pe anumite use case-uri
+
 int main() {
 	Nod* prim = NULL; // lista simpla empty
 	Student s;
