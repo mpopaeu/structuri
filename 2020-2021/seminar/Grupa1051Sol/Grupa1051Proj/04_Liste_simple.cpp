@@ -113,6 +113,10 @@ Nod* copiere_studenti_nume(Nod* lst, char litera_inceput_nume)
 
 }
 
+// TEMA
+// adaptarea codului sursa de la curs pentru liste duble
+// inserare/stergere nod lista dubla la interiorul structura
+
 int main() {
 	Nod* prim = NULL; // lista simpla empty
 	Student s;
