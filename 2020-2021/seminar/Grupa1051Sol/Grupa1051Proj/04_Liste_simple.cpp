@@ -105,6 +105,14 @@ Nod* inserare_interior_lista(Nod* lst, Student s, unsigned int pozitie)
 // concatenare de liste simple
 // "spargerea" unei liste simple
 
+// Copiere noduri pt care numele studentului incepe cu o litera specificata
+// Copierea are loc intr-o structura lista simpla separata; listele nu partajeaza memorie heap
+// vizualizare continut lista 2 dupa apel
+Nod* copiere_studenti_nume(Nod* lst, char litera_inceput_nume)
+{
+
+}
+
 int main() {
 	Nod* prim = NULL; // lista simpla empty
 	Student s;
