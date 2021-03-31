@@ -58,6 +58,12 @@ Nod* stergere_inceput_lista(Nod* p, Student &s)
 // ----> testare pt diverse scenarii de apel, inclusiv pe cazuri particulare
 
 
+// stergere noduri (toate) studenti care fac parte din grupa specificata
+Nod* stergere_nod_grupa(Nod* lst, char* nr_grupa)
+{
+
+}
+
 int main() {
 	Nod* prim = NULL; // lista este empty
 	Student s;	// locatie buffer intre sursa de date externa si lista simpla (alocata dinamic)
@@ -95,6 +101,8 @@ int main() {
 		t = t->next; // modificare adresa stocata in t; dupa, t contine adresa nodului succesor
 					// t devine 0/NULL cand t curent este ultimul nod
 	}
+
+	// apel functie stergere noduri/studenti in lista simpla in fct de nr grupa
 
 	// stergere lista simpla
 	printf("Dezalocare lista simpla:\n");
