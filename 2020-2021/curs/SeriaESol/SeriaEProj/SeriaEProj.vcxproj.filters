@@ -15,16 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="07_Liste_simple.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="Studenti.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="08_Liste_duble.cpp">
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="08_Liste_duble.cpp">
       <Filter>Source Files</Filter>
-    </Text>
+    </ClCompile>
   </ItemGroup>
 </Project>
