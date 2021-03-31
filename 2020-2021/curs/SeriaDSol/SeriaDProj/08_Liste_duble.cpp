@@ -12,7 +12,7 @@ struct Student {
 };
 
 struct NodD {
-	Student *st;
+	Student *st; // adresa locatie de tip Student
 	NodD *next, *prev;
 };
 
@@ -28,20 +28,48 @@ ListaDbl inserareListaDubla(ListaDbl lstD, Student * pStd) {
 	nou->next = 0;
 	nou->prev = lstD.u;
 
-	if (!lstD.p) // check exista cel putin 1 nod in lista
+	if (!lstD.p) // nu exista nici un nod in lista dubla (empty)
 		lstD.p = lstD.u = nou; // lista dubla empty
-	else {
+	else { // exista cel putin un nod in lista dubla
 		lstD.u->next = nou;
 		lstD.u = nou;
 	}
 
 	return lstD;
+}
 
+void parseListDblInvers(ListaDbl lstD) {
+	NodD *tmp = lstD.u;
+	while (tmp) {
+		printf("%d %s %5.2f\n", tmp->st->id, tmp->st->nume, tmp->st->medie);
+
+		tmp = tmp->prev; // se rescrie locatia de stack seg a var locale tmp
+	}	
+}
+
+ListaDbl stergereStudentDbl(ListaDbl lstD) { // stergere primul nod din lista dubla (fara salvare/extragere student)
+	NodD * tmp = lstD.p;
+
+	if (tmp) { // exista cel putin un nod in lista dubla
+		lstD.p = lstD.p->next;
+		if (lstD.p)
+			lstD.p->prev = 0;
+		else {
+			// exista un singur nod in lista
+			lstD.u = 0;
+		}
+
+		free(tmp->st->nume); // dezalocare nume student (nivel 3 de indirectare)
+		free(tmp->st);		// dezalocare locatie de tip Student (nivel 2 de indirectare)
+		free(tmp);			// dealocare nod lista dubla (nivel 1 de indirectare)
+	}
+
+	return lstD;
 }
 
 int main()
 {
-	ListaDbl lstStuds;
+	ListaDbl lstStuds; // variabila locala
 	lstStuds.p = lstStuds.u = 0; // lista dubla empty
 
 	Student* pStud;
@@ -67,9 +95,27 @@ int main()
 		if (token)
 			printf("\nEroare preluare token!");
 
+		//pStud = (Student*)malloc(sizeof(Student));
+		//char nume_temp[100];
+		//sscanf(file_buf, "%d,%[^,],%f", &pStud->id, nume_temp, &pStud->medie);
+		//pStud->nume = (char*)malloc((strlen(nume_temp) + 1) * sizeof(char));
+		//strcpy(pStud->nume, nume_temp);
+
 		// inserare nod la inceputul listei
 		lstStuds = inserareListaDubla(lstStuds, pStud);
 	}
+
+	printf("Lista dubla dupa creare:\n");
+	parseListDblInvers(lstStuds);
+
+	// dezalocare lista dubla prin stergere repetata a primului nod
+	while (lstStuds.p)
+	{
+		lstStuds = stergereStudentDbl(lstStuds);
+	}
+
+	printf("Lista dubla dupa dezalocare:\n");
+	parseListDblInvers(lstStuds);
 
 	fclose(f);
 
