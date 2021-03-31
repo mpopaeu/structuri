@@ -64,6 +64,10 @@ Nod* stergere_nod_inceput(Nod* lst, Student &s)
 // semnatura functie (params I/); /O
 // apeluri de functie pe anumite use case-uri
 
+// liste duble ---> implementare de curs
+// adaptare la structura Student definita la seminar
+// inserare/stergere nod in/din lista dubla
+
 int main() {
 	Nod* prim = NULL; // lista simpla empty
 	Student s;
@@ -98,6 +102,10 @@ int main() {
 
 		t = t->next;
 	}
+
+	// apel functie stergere studenti pe baza de id
+
+	// afisare lista simpla dupa stergere studenti pe baza de id
 
 
 	// dezalocare lista simpla
