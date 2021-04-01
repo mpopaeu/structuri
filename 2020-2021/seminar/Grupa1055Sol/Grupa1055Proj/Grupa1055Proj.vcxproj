@@ -142,7 +142,7 @@
     <Text Include="Studenti.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="04_Liste_simple.cpp" />
+    <ClCompile Include="05_Liste_duble.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
