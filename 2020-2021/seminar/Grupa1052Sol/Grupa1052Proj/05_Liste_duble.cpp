@@ -76,10 +76,16 @@ ListaDbl stergereStudentDbl(ListaDbl lstD) { // stergere primul nod din lista du
 	return lstD;
 }
 
-// inserare nod in lusta dubla sortata crescator dupa id student
+// inserare nod in lista dubla sortata crescator dupa id student
 // dupa inserare lista dubla trebuie sa pastreze caracteristica de sortare
-ListaDbl inserareListaDubla(ListaDbl lstD, Student * pStd) {
+ListaDbl inserareListaDublaSortata(ListaDbl lstD, Student * pStd) {
 }
+
+// TEMA
+/////
+// concatenare/deconcatenare
+// interschimb noduri (modificare legaturi) adiacente/oarecare ---> algoritmi de sortare (liste simple, liste duble)
+// QuickSort (stiva-stive)
 
 int main()
 {
@@ -110,7 +116,8 @@ int main()
 			printf("\nEroare preluare token!");
 
 		// inserare nod la inceputul listei
-		lstStuds = inserareListaDubla(lstStuds, pStud);
+		// lstStuds = inserareListaDubla(lstStuds, pStud);
+		lstStuds = inserareListaDublaSortata(lstStuds, pStud);
 	}
 
 	printf("Lista dubla dupa creare (invers):\n");
