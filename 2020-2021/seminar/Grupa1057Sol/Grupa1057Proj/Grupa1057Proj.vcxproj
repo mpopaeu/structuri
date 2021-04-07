@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="04_Liste_simple.cpp" />
+    <ClCompile Include="05_Liste_duble.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Studenti.txt" />
