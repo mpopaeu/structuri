@@ -78,7 +78,7 @@ ListaDbl stergereStudentDbl(ListaDbl lstD) { // stergere primul nod din lista du
 
 // extragerea studentilor (dezalocare noduri din lista dubla) dintr-o grupa specificata intr-un vector
 // in - lista dubla cu studenti
-// in - nr de grupa pentru care se face filtrare studenti in lista dubla (medie student)
+// in - nr de grupa (medie student) pentru care se face filtrare studenti in lista dubla 
 // out - lista dubla dupa extrageri
 // out - vector de studenti extrasi din lista dubla
 // out - dimensiune vector studenti extrasi din lista dubla
