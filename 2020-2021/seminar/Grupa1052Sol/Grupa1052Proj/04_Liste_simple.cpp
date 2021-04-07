@@ -66,7 +66,7 @@ Nod* stergere_noduri_grupa(Nod* lst, char* nr_grupa)
 
 // TEMA
 // adaptare cod sursa curs pentru liste duble la structura Student din seminar
-// implemntare inserare/stergere pozitie specificata in lista dubla
+// implementare inserare/stergere pozitie specificata in lista dubla
 
 int main() {
 	Nod* prim = NULL; // lista este empty
