@@ -77,14 +77,18 @@ ListaDbl stergereStudentDbl(ListaDbl lstD) { // stergere primul nod din lista du
 }
 
 // interschimbarea primului nod cu ultimul nod
-// cu modificarea ordinii de acces la noduri
+// cu modificarea ordinii de acces la noduri (modificare adrese de legatura)
 // in - lista dubla in care se efectueaza interschimb
-// out - lista dubla cu ordinea de acces la noduri modificata
-// ?? - cazuri paticulare
+// out - lista dubla cu ordinea de acces la noduri modificata (p devine u, u devine p)
+// ?? - cazuri paticulare (nr noduri < 2)
 ListaDbl interschimbare_1N(ListaDbl lst)
 {
 
 }
+
+// concatenare/deconcatenare
+// interschimb noduri adiacente/oarecare ---> algo de sortare
+// QuickSort --> stiva/stive
 
 int main()
 {
@@ -121,8 +125,15 @@ int main()
 
 	printf("\nLista dubla dupa creare (invers):\n");
 	parseListDblInvers(lstStuds);
-
 	printf("\nLista dubla dupa creare (normal):\n");
+	parseListDbl(lstStuds);
+
+	// interschimbare primul cu ultimul nod in lista dubla
+	lstStuds = interschimbare_1N(lstStuds);
+
+	printf("\nLista dubla dupa interschimbare (invers):\n");
+	parseListDblInvers(lstStuds);
+	printf("\nLista dubla dupa interschimbare (normal):\n");
 	parseListDbl(lstStuds);
 
 	// dezalocare lista dubla prin stergere repetata a primului nod
