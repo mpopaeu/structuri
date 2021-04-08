@@ -132,7 +132,72 @@ ListaDbl inserareListaDubla(ListaDbl lstD, Student * pStd, int pozitie) // 1, 2,
 // out - lista dubla actualizata (prim, ultim nod), date Student
 ListaDbl stergere_nod_lista_dubla(ListaDbl lst, int pozitie, Student &s)
 {
+	s.nume = NULL;
+	if (lst.p)
+	{
+		NodD * tmp = lst.p;
+		if (pozitie == 1)
+		{
+			// se sterge primul si se actualizeaza inceputul de lista dubla
+			lst.p = lst.p->next; // se muta p pe nodul 2
+			if (lst.p)
+			{
+				lst.p->prev = NULL; // lista contine cel putin 2 noduri
+			}
+			else
+			{
+				// lista contine 1 singur nod
+				lst.u = NULL;
+			}
+			
+			// salvare/extragere student din nodul tmp
+			s.id = tmp->st->id;
+			strcpy(s.nrGrupa, tmp->st->nrGrupa);
+			s.nume = tmp->st->nume;
 
+			// dezalocare nod nr 1 (tmp)
+			free(tmp->st);
+			free(tmp);
+		}
+		else
+		{
+			int counter = 1;
+			while (tmp && counter < pozitie)
+			{
+				counter += 1;
+				tmp = tmp->next;
+			}
+
+			if (tmp)
+			{
+				// tmp este pe valoarea data de parametrul "pozitie"
+				if (tmp == lst.u)
+				{
+					// caz particular in care se sterge ultimul nod din lista dubla
+					lst.u = lst.u->prev;
+					lst.u->next = NULL;
+				}
+				else
+				{
+					// caz general de stergere
+					NodD* t_pred = tmp->prev, *t_succ = tmp->next;
+					t_pred->next = t_succ;
+					t_succ->prev = t_pred;
+				}
+
+				// salvare/extragere student din nodul tmp
+				s.id = tmp->st->id;
+				strcpy(s.nrGrupa, tmp->st->nrGrupa);
+				s.nume = tmp->st->nume;
+
+				// dezalocare spatii heap pentru studentul din nod si pentru nod
+				free(tmp->st);
+				free(tmp);
+			}
+		}
+	}
+
+	return lst;
 }
 
 int main()
@@ -145,7 +210,7 @@ int main()
 	FILE * f;
 	f = fopen("Studenti.txt", "r");
 
-	char * token, file_buf[LINESIZE], sep_list[] = ",";
+	char * token, file_buf[LINESIZE], sep_list[] = ",\n";
 
 	while (fgets(file_buf, sizeof(file_buf), f)) {
 		token = strtok(file_buf, sep_list);
@@ -170,13 +235,24 @@ int main()
 	printf("Lista dubla dupa creare:\n");
 	parseListDblInvers(lstStuds);
 
+	// stergere nod pe pozitie specificata
+	Student stud;
+	lstStuds = stergere_nod_lista_dubla(lstStuds, 7, stud);
+	printf("\n\nLista dubla dupa stergere student pe pozitie specificata:\n");
+	parseListDblInvers(lstStuds);
+	if (stud.nume != NULL)
+	{
+		printf("\nStudent extras: %d %s\n", stud.id, stud.nume);
+		free(stud.nume);
+	}
+
 	// dezalocare lista dubla prin stergere repetata a primului nod
 	while (lstStuds.p)
 	{
 		lstStuds = stergereStudentDbl(lstStuds);
 	}
 
-	printf("Lista dubla dupa dezalocare:\n");
+	printf("\n\nLista dubla dupa dezalocare:\n");
 	parseListDblInvers(lstStuds);
 
 	fclose(f);
