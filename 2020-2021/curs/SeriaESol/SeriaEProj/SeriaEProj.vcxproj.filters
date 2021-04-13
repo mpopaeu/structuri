@@ -18,11 +18,11 @@
     <Text Include="Studenti.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Students.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="08_Liste_duble.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="09_Tabele_dispersie.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

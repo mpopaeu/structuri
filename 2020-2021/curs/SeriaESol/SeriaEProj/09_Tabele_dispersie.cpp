@@ -21,7 +21,7 @@ int positionHashFunction(char *str, int size) {
 }
 
 char insertStudent(Student* ht, int size, Student s) {
-	int pos = positionHashFunction(s.name, size);
+	int pos = positionHashFunction(s.name, size); // apel functie pentru determinare pozitie in tabela hash (functia hash)
 	printf("Position: %d for %s\n", pos, s.name);
 
 	char inserted = 0;
@@ -39,16 +39,16 @@ char insertStudent(Student* ht, int size, Student s) {
 
 int searchStudent(Student* ht, int size, char* studName)
 {
-	int pos = positionHashFunction(studName, size);
+	int pos = positionHashFunction(studName, size); // pozitia initiala -> poate fi pozitie de coliziunea -> se cauta pozitia reala
 	char found = 0;
 	for (int i = pos; i<size && !found; i++)
 	{
-		if (ht[i].name == 0)
+		if (ht[i].name == 0) // se termina cluster-ul -> se incheie op de cautare
 			found = -1;
 		else if (strcmp(ht[i].name, studName) == 0)
 		{
-			found = 1;
-			pos = i;
+			found = 1; // s-a identificat student in tabela hash
+			pos = i; // pozitia reala pe care se afla studentul in tabela hash
 		}
 	}
 
@@ -63,10 +63,10 @@ char deleteStudent(Student* ht, int size, char* studName)
 {
 	int poz = searchStudent(ht, size, studName);
 	if (poz == -1)
-		return 0;
+		return 0; // studentul nu a fost gasit in tabela hash
 
-	free(ht[poz].name);
-	ht[poz].name = 0;
+	free(ht[poz].name); // pozitia reala a studentului in tabela hash; dezalocare nume student
+	ht[poz].name = NULL; // se disponibileaza pozitia reala a studentului
 	int inf, sup;
 
 	char flag = 0;
@@ -91,23 +91,23 @@ char deleteStudent(Student* ht, int size, char* studName)
 	if (!flag)
 		sup = size - 1;
 
-	Student* temp = (Student*)malloc(sizeof(Student)*(sup - inf));
+	Student* temp = (Student*)malloc(sizeof(Student)*(sup - inf)); // alocare vector suport pt stocare temporara studenti din cluster
 	int  j = 0;
 	for (int i = inf; i<poz; i++)
 	{
-		temp[j++] = ht[i];
-		ht[i].name = 0;
+		temp[j++] = ht[i]; // copiez studenti din tabela hash in vector suport temp pentru cluster 1
+		ht[i].name = NULL; // disponibilizare pozitii din cluster 1
 	}
 	for (int i = poz + 1; i <= sup; i++)
 	{
-		temp[j++] = ht[i];
-		ht[i].name = 0;
+		temp[j++] = ht[i]; // copiez studenti din tabela hash in vector suport temp pentru cluster 2
+		ht[i].name = NULL; // disponibilizare pozitii din cluster 2
 	}
 
 	for (int i = 0; i < (sup - inf); i++)
-		flag = insertStudent(ht, size, temp[i]);
+		flag = insertStudent(ht, size, temp[i]); // reinserare element i (student) din vector suport temo in tabela hash
 
-	free(temp);
+	free(temp); // dezalocare vector suport
 
 	return 1;
 }
@@ -116,13 +116,13 @@ void main() {
 	FILE* f;
 	f = fopen("Students.txt", "r");
 
-	char buffer[LINESIZE], seps[] = { "," }, *token;
+	char buffer[LINESIZE], seps[] = { ",\n" }, *token;
 	Student s;
 
 	Student * HTable; // tabela de dispersie/vector alocat la runtime
-	int size = ARRAY_SIZE;
+	int size = ARRAY_SIZE; // dimensiune initiala tabela de dispersie
 
-	HTable = (Student*)malloc(size * sizeof(Student));
+	HTable = (Student*)malloc(size * sizeof(Student)); // alocare mem heap pentru vectorul suport
 	for (unsigned int i = 0; i<size; i++) {
 		HTable[i].name = NULL; // marcaj pentru a indica disponibilitate pozitie (i) la inserare in tabela hash
 	}
@@ -141,33 +141,39 @@ void main() {
 
 		printf("%d %s\n", s.id, s.name);
 
-		char insert = insertStudent(HTable, size, s);
+		char insert = insertStudent(HTable, size, s); // apel functie inserare student in tabela de dispersie
 		int newSize = size;
 
-		while (!insert) {
-			Student *newHTable;
-			newSize += ARRAY_SIZE;
-			newHTable = (Student*)malloc(newSize * sizeof(Student));
+		while (!insert) { // realocare tabela de dispersie pe zona mai mare (dimensiunea mai mare)
+			Student *newHTable; // noua tabela de dispesie
+			newSize += ARRAY_SIZE; // noua dimensiune a tabelei de dispersie
+			newHTable = (Student*)malloc(newSize * sizeof(Student)); // alocare noua tabela de dispersie
 
 			for (int i = 0; i<newSize; i++) {
-				newHTable[i].name = NULL;
+				newHTable[i].name = NULL; // initializare elemente din noua tabela (marcate toate ca fiind disponibile pt inserare)
 			}
 
+			// copierea elementelor din vechea tabela in noua tabela
 			insert = 1;
-			for (int i = 0; i<size && insert; i++) {
+			for (int i = 0; i<size && insert; i++) { // traversare secventiala vechea tabela de dispersie
 				if (HTable[i].name)
-					insert = insertStudent(newHTable, newSize, HTable[i]);
+					insert = insertStudent(newHTable, newSize, HTable[i]); // "reinserarea" studentilor in noua tabela de dispersie
 			}
 
 			if (!insert) {
-				free(newHTable);
+				free(newHTable); // noua tabela formeaza cluster de elemente pe final pe durata operatiei de copiere 
+								// din tabela initiala
+								// se dezaloca noua tabela de dispersie
+								// se continua cu alocarea noii tabela pe o dimesiune si mai mare
 			}
 			else {
-				free(HTable);
+				// copiere cu succes a elementelor din tabela initiala HTable in noua tabela newHTable
+				free(HTable); // se dezaloca tabela initiala
 
-				HTable = newHTable;
-				size = newSize;
+				HTable = newHTable; // actualizare var pointer catre noul vector suport (mai mare)
+				size = newSize; // actualizare dimensiune pt noul vector suport 
 
+				// noua tentativa de a insera setul de date s
 				insert = insertStudent(HTable, size, s);
 			}
 		}
