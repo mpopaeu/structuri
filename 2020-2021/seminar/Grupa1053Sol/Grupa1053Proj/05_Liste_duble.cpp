@@ -71,52 +71,59 @@ ListaDbl stergereStudentDbl(ListaDbl lstD) { // stergere primul nod din lista du
 // I/ --- lista dubla, pozitia (1, 2, ...., n)
 // /O --- lista dubla actualizata (p, u pot fi actualizati) pe tipul de return, Student (stergere cu extragere) -- se da in lista de param de I/
 
-ListaDbl stergere_student_pozitie_data(ListaDbl lst, unsigned int pos, Student &s)
-{
-	if (pos > 0)
-	{
-		NodD * t = lst.p; // adresa primului nod in lista dubla
-		unsigned int counter = 1;
-
-		while (t && counter < pos)
-		{
-			t = t->next;
-			counter += 1;
-		}
-
-		if (t)
-		{
-			// exista pos in lista dubla
-			if (counter == pos)
-			{
-				// se dezaloca/sterge ultimul nod in lista dubla
-			}
-			else
-			{
-				if (counter == 1)
-				{
-					// se sterge primul nod
-					// ? daca exista un singur nod ?
-				}
-				else
-				{
-					// cazul general
-					// se sterge nodul t (lista este dubla, deci putem accesa t->prev)
-				}
-			}
-		}
-		else
-		{
-			// t a ajuns pe NULL (a fost parsata intreaga lista dubla)
-			// nu exista pozitia pos
-			;
-		}
-	}
-
-	return lst;
-}
+//ListaDbl stergere_student_pozitie_data(ListaDbl lst, unsigned int pos, Student &s)
+//{
+//	if (pos > 0)
+//	{
+//		NodD * t = lst.p; // adresa primului nod in lista dubla
+//		unsigned int counter = 1;
+//
+//		while (t && counter < pos)
+//		{
+//			t = t->next;
+//			counter += 1;
+//		}
+//
+//		if (t)
+//		{
+//			// exista pos in lista dubla
+//			if (counter == pos)
+//			{
+//				// se dezaloca/sterge ultimul nod in lista dubla
+//			}
+//			else
+//			{
+//				if (counter == 1)
+//				{
+//					// se sterge primul nod
+//					// ? daca exista un singur nod ?
+//				}
+//				else
+//				{
+//					// cazul general
+//					// se sterge nodul t (lista este dubla, deci putem accesa t->prev)
+//				}
+//			}
+//		}
+//		else
+//		{
+//			// t a ajuns pe NULL (a fost parsata intreaga lista dubla)
+//			// nu exista pozitia pos
+//			;
+//		}
+//	}
+//
+//	return lst;
+//}
 
 // operatiile similare de la liste simple
+
+// stergere studenti(noduri) din lista dubla pentru o grupa specificata
+ListaDbl stergere_studenti_grupa(ListaDbl lst, char* nr_grupa)
+{
+
+}
+
 
 
 int main()
@@ -129,7 +136,7 @@ int main()
 	FILE * f;
 	f = fopen("Studenti.txt", "r");
 
-	char * token, file_buf[LINESIZE], sep_list[] = ",";
+	char * token, file_buf[LINESIZE], sep_list[] = ",\n";
 
 	while (fgets(file_buf, sizeof(file_buf), f)) {
 		token = strtok(file_buf, sep_list);

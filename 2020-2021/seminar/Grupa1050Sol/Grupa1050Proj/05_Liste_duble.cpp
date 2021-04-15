@@ -74,7 +74,78 @@ ListaDbl stergereStudentDbl(ListaDbl lstD) { // stergere primul nod din lista du
 // !!! cazuri particulare
 ListaDbl inserareListaDubla_pozitie(ListaDbl lstD, Student * pStd, int pozitie)
 {
+	NodD* nou = (NodD*)malloc(sizeof(NodD));
+	nou->st = pStd;
 
+	if (pozitie == 1)
+	{
+		nou->prev = NULL;
+		nou->next = lstD.p;
+
+		if (lstD.p)
+		{
+			// lista contine cel putin 1 nod
+			lstD.p->prev = nou;
+			lstD.p = nou;
+		}
+		else
+		{
+			// lista este empty lstD.p == lstD.u == NULL
+			lstD.p = lstD.u = nou;
+		}
+	}
+	else
+	{
+		NodD * temp;
+		int counter = 1;
+		temp = lstD.p; // adresa primului nod
+		if (temp) // ma asigur ca lista contine cel putin 1 nod
+		{
+			while (temp && counter < pozitie) // ! conditie compusa (SI/AND logic)
+			{
+				temp = temp->next;
+				counter += 1;
+			}
+
+			if (temp)
+			{
+				// temp este nodul de pe pozitia "pozitie"
+				// cazul general
+				NodD* t_pred = temp->prev;
+				nou->next = temp;
+				nou->prev = t_pred;
+
+				t_pred->next = nou;
+				temp->prev = nou;
+			}
+			else
+			{
+				// ?! counter
+				if (counter == (pozitie - 1))
+				{
+					// pozitie este n + 1 (n este nr de noduri); 
+					// nodul inserat devine ultimul nod din lista dubla
+					nou->next = NULL;
+					nou->prev = lstD.u;
+
+					lstD.u->next = nou;
+					lstD.u = nou;
+				}
+				else
+				{
+					// pozitie > n + 1 (n este nr de noduri)
+					// nu se efectueaza operatie de inserare
+
+					free(nou); // dezalocare nod lista dubla
+					// dezalocare student
+					free(pStd->nume);
+					pStd->nume = NULL; // folosit pe post de flag in apelator
+				}
+			}
+		}
+	}
+
+	return lstD;
 }
 
 int main()
@@ -87,7 +158,7 @@ int main()
 	FILE * f;
 	f = fopen("Studenti.txt", "r");
 
-	char * token, file_buf[LINESIZE], sep_list[] = ",";
+	char * token, file_buf[LINESIZE], sep_list[] = ",\n";
 
 	while (fgets(file_buf, sizeof(file_buf), f)) {
 		token = strtok(file_buf, sep_list);
@@ -105,14 +176,11 @@ int main()
 		if (token)
 			printf("\nEroare preluare token!");
 
-		//pStud = (Student*)malloc(sizeof(Student));
-		//char nume_temp[100];
-		//sscanf(file_buf, "%d,%[^,],%s\n", &pStud->id, nume_temp, &pStud->nrGrupa);
-		//pStud->nume = (char*)malloc((strlen(nume_temp) + 1) * sizeof(char));
-		//strcpy(pStud->nume, nume_temp);
-
 		// inserare nod la inceputul listei
-		lstStuds = inserareListaDubla(lstStuds, pStud);
+		// lstStuds = inserareListaDubla(lstStuds, pStud);
+		lstStuds = inserareListaDubla_pozitie(lstStuds, pStud, 1);
+		if (pStud->nume == NULL) // inserarea nu a avut loc
+			free(pStud); 
 	}
 
 	printf("Lista dubla dupa creare:\n");
