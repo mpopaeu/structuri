@@ -136,9 +136,41 @@ void calcul_max_coliziuni(Nod** hTab, int size, int &idx_list, int &max_elem)
 // in - size dimensiunea tabela de dispersie
 // out - return lista simpla cu studentii extrasi din tabela de dispersie
 
+// TEMA - testare implementare
 Nod* extragere_studenti_nume(Nod** hTab, char* nume_student, int size)
 {
+	int k;
+	k = calculPozitie_string(nume_student, size);
 
+	Nod* lst_studs = NULL;
+
+	Nod* tmp = hTab[k];
+	while (tmp && tmp->next) // traversare lista i de pe nodul 2,.... n
+	{
+		if (strcmp(nume_student, tmp->next->st.nume) == 0)
+		{
+			Nod* tmp_mutat = tmp->next;
+			tmp->next = tmp_mutat->next; // am izolat tmp_mutat din lista i
+			// adaugarea nodului izolat din tabela de dispersie in lista simpla rezultat
+			tmp_mutat->next = lst_studs;
+			lst_studs = tmp_mutat;
+		}
+
+		tmp = tmp->next;
+	}
+
+	// verificare nod 1
+	if (strcmp(nume_student, hTab[k]->st.nume) == 0)
+	{
+		Nod* tmp_mutat = hTab[k];
+		hTab[k] = hTab[k]->next;
+
+		// adaugare nodul 1 la lista rezultat
+		tmp_mutat->next = lst_studs;
+		lst_studs = tmp_mutat;
+	}
+
+	return lst_studs;
 }
 
 int main() {
