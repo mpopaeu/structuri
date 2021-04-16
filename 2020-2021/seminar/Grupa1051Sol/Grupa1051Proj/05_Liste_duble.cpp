@@ -82,9 +82,83 @@ ListaDbl stergereStudentDbl(ListaDbl lstD) { // stergere primul nod din lista du
 // out - lista dubla dupa extrageri
 // out - vector de studenti extrasi din lista dubla
 // out - dimensiune vector studenti extrasi din lista dubla
-ListaDbl extragere_studenti_grupa(ListaDbl lst, char* nr_grupa /* float medie */, Student* &vStudenti, unsigned char &nr_studenti)
+ListaDbl extragere_studenti_grupa(ListaDbl lst, char* nr_grupa, Student* &vStudenti, unsigned char &nr_studenti)
 {
+	// determinare nr studenti care indeplinesc criteriul (nr grupa specificata)
+	nr_studenti = 0;
+	NodD* tmp = lst.p;
+	while (tmp)
+	{
+		if (strcmp(tmp->st->nrGrupa, nr_grupa) == 0) // student care indeplineste criteriul de filtrare
+			nr_studenti += 1;
 
+		tmp = tmp->next;
+	}
+
+	// alocare spatiu necesar pentru salvarea studentilor in vector
+	vStudenti = (Student*)malloc(nr_studenti * sizeof(Student));
+
+	// extragerea studentilor (cu dezalocare nodului aferent in lista dubla)
+	unsigned char i = 0;
+	tmp = lst.p;
+	while (tmp)
+	{
+		if (strcmp(tmp->st->nrGrupa, nr_grupa) == 0)
+		{
+			// student identificat in tmp
+			// copiere date student in vector
+			vStudenti[i].id = tmp->st->id;
+			vStudenti[i].nume = tmp->st->nume;
+			strcpy(vStudenti[i].nrGrupa, tmp->st->nrGrupa);
+			i += 1;
+
+			// refacerea legaturilor
+			NodD* tmp_pred, * tmp_succ;
+			tmp_pred = tmp->prev;
+			tmp_succ = tmp->next;
+
+			if (tmp_pred && tmp_succ)
+			{
+				// tmp este nod interior lista dubla
+				tmp_pred->next = tmp_succ;
+				tmp_succ->prev = tmp_pred;
+			}
+			else
+			{
+				if (tmp_pred == NULL)
+				{
+					// tmp este nodul 1
+					if (tmp_succ == NULL)
+					{
+						// tmp este si ultimul nod (unicul nod din lista dubla)
+						lst.p = lst.u = NULL;
+					}
+					else
+					{
+						// lista contine cel putin 2 noduri
+						tmp_succ->prev = NULL;
+						lst.p = tmp_succ;
+					}
+				}
+				else
+				{
+					// tmp este ultimul nod
+					tmp_pred->next = NULL;
+					lst.u = tmp_pred;
+				}
+			}
+
+			// dezalocare nod lista dubla
+			free(tmp->st); // se "rupe" partajarea de memorie heap pt nume student cu vectorul 
+			free(tmp);
+
+			tmp = tmp_succ;
+		}
+		else
+			tmp = tmp->next;
+	}
+
+	return lst;
 }
 
 int main()
@@ -124,12 +198,30 @@ int main()
 	printf("\nLista dubla dupa creare (normal):\n");
 	parseListDbl(lstStuds);
 
+	Student* vStuds;
+	unsigned char nrStuds;
+	char nr_grupa[] = { "1051" };
+	lstStuds = extragere_studenti_grupa(lstStuds, nr_grupa, vStuds, nrStuds);
+
+	printf("\n Lista dubla dupa extragere (normal):\n");
+	parseListDbl(lstStuds);
+	printf("\n Lista dubla dupa extragere (invers):\n");
+	parseListDblInvers(lstStuds);
+	printf("\n Vector cu studenti extrasi din lista dubla:\n");
+	for(unsigned char i = 0; i<nrStuds; i++)
+		printf("%d %s %s\n", vStuds[i].id, vStuds[i].nume, vStuds[i].nrGrupa);
 
 	// dezalocare lista dubla prin stergere repetata a primului nod
 	while (lstStuds.p)
 	{
 		lstStuds = stergereStudentDbl(lstStuds);
 	}
+
+	// dezalocare vector studenti extrasi in functie de nr grupa
+	for (unsigned char i = 0; i < nrStuds; i++)
+		free(vStuds[i].nume);
+	free(vStuds);
+
 
 	printf("\nLista dubla dupa dezalocare:\n\n");
 	parseListDblInvers(lstStuds);
