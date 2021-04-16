@@ -83,7 +83,38 @@ ListaDbl stergereStudentDbl(ListaDbl lstD) { // stergere primul nod din lista du
 // ?? - cazuri paticulare (nr noduri < 2)
 ListaDbl interschimbare_1N(ListaDbl lst)
 {
+	if (!lst.p || lst.p == lst.u) // lista dubla contine 0 sau 1 nod
+		return lst;
 
+	if (lst.p->next == lst.u)
+	{
+		// lista contine doar 2 noduri
+		lst.p->next = NULL;
+		lst.u->prev = NULL;
+		lst.p->prev = lst.u;
+		lst.u->next = lst.p;
+	}
+	else
+	{
+		// cel putin 3 noduri in lista
+		NodD* p_succ = lst.p->next; // nodul 2
+		NodD* u_pred = lst.u->prev; // nodul n-1 (penultimul nod din lista dubla)
+
+		lst.u->prev = NULL;
+		lst.u->next = p_succ;
+
+		lst.p->prev = u_pred;
+		lst.p->next = NULL;
+
+		p_succ->prev = lst.u;
+		u_pred->next = lst.p;
+	}
+
+	NodD* tmp = lst.p;
+	lst.p = lst.u;
+	lst.u = tmp;
+
+	return lst;
 }
 
 // concatenare/deconcatenare

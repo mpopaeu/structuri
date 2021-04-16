@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="05_Liste_duble.cpp">
+    <ClCompile Include="06_hTables_chain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
