@@ -66,7 +66,7 @@ void parseHTable(Nod** hTab, int size) {
 			Nod* tmp = hTab[i];
 			printf("Lista no. %d:\n", i);
 			while (tmp) {
-				printf("%d %s\n", tmp->st.id, tmp->st.nume);
+				printf("%d %s %s\n", tmp->st.id, tmp->st.nume, tmp->st.nrGrupa);
 				tmp = tmp->next;
 			}
 		}
@@ -98,7 +98,62 @@ Student cauta_student_nume(Nod* *hTab, int size_hTab, char* nume_student)
 }
 
 // stergerea studentilor care fac parte din aceeasi grupa
+void stergere_studenti_grupa(Nod* *hTab, int size_hTab, char* nr_grupa)
+{
+	for (int i = 0; i < size_hTab; i++) // traversare secventiala vector (tabela de dispersie)
+	{
+		if (hTab[i] != NULL)
+		{
+			// exista lista simpla i cu cel putin 1 nod (student)
+			// traversare secventiala lista i
+
+			// stergerea nodurilor aflate pe pozitiile consecutive 1, 2, ... j ale listei simple i
+			while (hTab[i] && strcmp(hTab[i]->st.nrGrupa, nr_grupa) == 0)
+			{
+				Nod* tmp = hTab[i]; // tmp este nodul care tb dezalocat
+				hTab[i] = hTab[i]->next; // noul inceput de lista simpla i este nodul 2
+
+				free(tmp->st.nume);
+				free(tmp);
+			}
+
+			if (hTab[i] != NULL)
+			{
+				// stergerea nodurilor de pe pozitii interioare ale listei simple i
+				Nod* tmp = hTab[i];
+
+				while (tmp->next)
+				{
+					if (strcmp(tmp->next->st.nrGrupa, nr_grupa) == 0)
+					{
+						Nod* de_sters = tmp->next;
+						tmp->next = de_sters->next; // actualizare succesor pentru tmp
+
+						// dezalocare nod
+						free(de_sters->st.nume);
+						free(de_sters);
+					}
+					else
+						tmp = tmp->next;
+				}
+			}
+		}
+	}
+}
+
 // dezalocarea tabelei de dispersie
+
+
+// Extragerea studentilor din tabela de dispersie (cu dezalocare noduri) pe baza numelui specificat.
+// Studentii se salveaza intr-un vector
+// in - hTab - tabela de dispersie
+// in - size_hTab - dimensiunea vector (tabela de dispersie)
+// in - nume_student - nume student folosit la identificarea nodurilor
+// out - return - adresa de inceput a vectorului unde se salveaza studentii extrasi
+// out - size_vStudenti - dimensiunea vectorului returnat cu studentii extrasi
+Student* extrage_studenti_nume(Nod* *hTab, int size_hTab, char* nume_student, int &size_vStudenti)
+{
+}
 
 void main() {
 
@@ -150,6 +205,10 @@ void main() {
 	{
 		printf("\nStudent nu este in tabela hash.\n");
 	}
+
+	stergere_studenti_grupa(HTable, DIM, (char*)"1055");
+	printf("\n Tabela de dispersie dupa stergere studentilor din grupa specificata.\n\n");
+	parseHTable(HTable, DIM);
 	
 	fclose(f);
 }
