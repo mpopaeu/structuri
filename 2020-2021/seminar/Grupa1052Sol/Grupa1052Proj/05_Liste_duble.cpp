@@ -79,6 +79,7 @@ ListaDbl stergereStudentDbl(ListaDbl lstD) { // stergere primul nod din lista du
 // inserare nod in lista dubla sortata crescator dupa id student
 // dupa inserare lista dubla trebuie sa pastreze caracteristica de sortare
 ListaDbl inserareListaDublaSortata(ListaDbl lstD, Student * pStd) {
+	return lstD;
 }
 
 // TEMA
