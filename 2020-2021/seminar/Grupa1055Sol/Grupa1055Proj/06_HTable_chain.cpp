@@ -148,7 +148,7 @@ void stergere_studenti_grupa(Nod* *hTab, int size_hTab, char* nr_grupa)
 // Studentii se salveaza intr-un vector
 // in - hTab - tabela de dispersie
 // in - size_hTab - dimensiunea vector (tabela de dispersie)
-// in - nume_student - nume student folosit la identificarea nodurilor
+// in - nume_student - nume student folosit la identificarea nodurilor (cheie de cautare tabela de dispersie)
 // out - return - adresa de inceput a vectorului unde se salveaza studentii extrasi
 // out - size_vStudenti - dimensiunea vectorului returnat cu studentii extrasi
 Student* extrage_studenti_nume(Nod* *hTab, int size_hTab, char* nume_student, int &size_vStudenti)
