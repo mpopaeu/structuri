@@ -99,7 +99,42 @@ Student cauta_student(Nod** hTab, int size, char* nume_student)
 // TEMA
 ///////
 // stergere student(ilor) identificat pe baza cheii de cautare (nume student)
+
 // cautare studenti pentru un nr de grupa specificat (fara printf in functie)
+Nod* cauta_studenti_grupa(Nod** hTab, int size, const char* nr_grupa)
+{
+	Nod* lst_studs = NULL;
+
+	for (int i = 0; i < size; i++)
+	{
+		if (hTab[i]) // exista cel putin1 nod in lista i din tabela de dispersie
+		{
+			Nod* tmp = hTab[i];
+			while (tmp)
+			{
+				if (strcmp(tmp->st.nrGrupa, nr_grupa) == 0)
+				{
+					lst_studs = inserareLista(lst_studs, tmp->st);
+				}
+				tmp = tmp->next;
+			}
+		}
+	}
+
+	return lst_studs;
+}
+
+// modificare nume student; studentul se identifica si pe baza criteriul 2 -> id student
+// [in] hTab - tabela de dispersie cu chaining cu studenti
+// [in] size - dimensiune tabela de dispersie
+// [in] nume_student - numele studentului care se modifica
+// [in] id_student - id student care se modifica (pt identificare exacta a studentului cu nume nou)
+// [in] nume_nou_student - numele care inlocuieste nume_student in tabela hTab
+
+void modificare_nume_student(Nod** hTab, int size, char* nume_student, int id_student, char* nume_nou_student)
+{
+
+}
 
 int main() {
 
@@ -155,6 +190,15 @@ int main() {
 		printf("\n\n Studentul %s nu a fost identificat in tabela hash.\n", nume_student);
 	}
 
+	Nod* lista_studenti_grupa = cauta_studenti_grupa(HTable, DIM, "1051");
+	printf("\n\n Studenti din grupa cautata (1051):\n");
+	Nod* tmp = lista_studenti_grupa;
+	while (tmp)
+	{
+		printf("\nStudent %d %s in grupa 1051:", tmp->st.id, tmp->st.nume);
+		tmp = tmp->next;
+	}
+
 	// dezalocare tabela de dispersie
 	for (int i = 0; i < DIM; i++) // dealocare liste cu adrese de inceput stocate in vector
 		if (HTable[i]) {  // lista i contine cel putin un student
@@ -172,6 +216,8 @@ int main() {
 
 	free(HTable); // dezalocare vector de pointeri la liste simple
 	HTable = NULL;
+
+	// dezalocare lista simpla lista_studenti_grupa
 
 	fclose(f);
 
