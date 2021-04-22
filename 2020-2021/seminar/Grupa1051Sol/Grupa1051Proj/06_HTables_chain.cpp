@@ -133,7 +133,48 @@ Nod* cauta_studenti_grupa(Nod** hTab, int size, const char* nr_grupa)
 
 void modificare_nume_student(Nod** hTab, int size, char* nume_student, int id_student, char* nume_nou_student)
 {
+	int k;
+	k = calculPozitie_String(nume_student, size);
+	
+	if (hTab[k])
+	{
+		Nod* tmp = NULL;
+		if (strcmp(nume_student, hTab[k]->st.nume) == 0 && id_student == hTab[k]->st.id)
+		{
+			tmp = hTab[k];
+			hTab[k] = hTab[k]->next;
+		}
+		else
+		{
+			Nod* q = hTab[k];
+			while (q->next)
+			{
+				if (strcmp(nume_student, q->next->st.nume) == 0 && id_student == q->next->st.id)
+				{
+					// pozitionare pe nodul care isi modifica numele (cheie de cautare)--- tmp
+					tmp = q->next;
+					q->next = tmp->next; // actualizare legaturi intre predecesorul lui tmp si succesorul lui tmp
+				}
+				else
+					q = q->next;
+			}
+		}
 
+		// tmp este nodul de modificat
+		if (tmp)
+		{
+			if (nume_nou_student != NULL)
+			{
+				free(tmp->st.nume);
+				tmp->st.nume = (char*)malloc((strlen(nume_nou_student) + 1) * sizeof(char));
+				strcpy(tmp->st.nume, nume_nou_student);
+
+				k = calculPozitie_String(nume_nou_student, size); // noua lista in care trebuie sa ajunga studentul cu numele modificat
+				tmp->next = hTab[k]; // tmp devine primul nod in noua lista hTab[k] determinata pe baza nume_nou_student
+				hTab[k] = tmp;
+			}
+		}
+	}
 }
 
 int main() {
@@ -197,6 +238,17 @@ int main() {
 	{
 		printf("\nStudent %d %s in grupa 1051:", tmp->st.id, tmp->st.nume);
 		tmp = tmp->next;
+	}
+
+	modificare_nume_student(HTable, DIM, nume_student, id_student, nume_nou_student);
+	stud = cauta_student(HTable, DIM, nume_nou_student);
+	if (stud.nume != NULL)
+	{
+		printf("\n\n Student identificat: %d %s\n", stud.id, stud.nrGrupa);
+	}
+	else
+	{
+		printf("\n\n Studentul %s nu a fost identificat in tabela hash.\n", nume_student);
 	}
 
 	// dezalocare tabela de dispersie
