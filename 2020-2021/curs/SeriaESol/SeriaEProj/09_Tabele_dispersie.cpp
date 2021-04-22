@@ -189,7 +189,7 @@ void main() {
 	char studName[] = { "Popescu Gigel" };
 	char deleted = deleteStudent(HTable, size, studName);
 
-	printf("\n Tabela de dispesie dupa stergere:\n", size);
+	printf("\n Tabela de dispesie dupa stergere:\n");
 	for (unsigned int i = 0; i<size; i++) {
 		if (HTable[i].name) {
 			printf("Pozitie: %d, Student: %d %s\n", i, HTable[i].id, HTable[i].name);

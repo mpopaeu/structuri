@@ -23,7 +23,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="09_Tabele_dispersie.cpp">
+    <ClCompile Include="11_Struct_uniune.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
