@@ -97,7 +97,47 @@ Student cauta_student(Nod** hTab, int size, char* nume_student)
 // TEMA
 //////
 // identificarea studentilor intr-o grupa specificata
+Nod* studenti_grupa(Nod** hTab, int size, const char* nr_grupa)
+{
+	Nod* lst = NULL;
+
+	for (int i = 0; i < size; i++)
+	{
+		if (hTab[i])
+		{
+			// exista cel putin 1 nod in lista hTab[i]
+			Nod* tmp = hTab[i];
+			while (tmp)
+			{
+				if (strcmp(tmp->st.nrGrupa, nr_grupa) == 0)
+				{
+					lst = inserareLista(lst, tmp->st); // malloc dedicat pentru nume student la inserare in nod lista simpla 
+													   // (FARA partajare intre lista si tabela hash)
+				}
+
+				tmp = tmp->next;
+			}
+		}
+	}
+
+	return lst;
+}
+
+
 // modificarea cheii de cautare a unui student specificat prin cheie de cautare
+
+// creare tabela de dispersie (cheie de cautare: numar grupa) pentru studentii care au acelasi nume specificat (cheie: nume student)
+// tabela de dispersie nr 2 - aceeasi dimensiune DIM ca tabela nr. 1
+// [in] hTab - tabela de dispersie (cheie: nume student); sursa de date pentru tabela nr. 2
+// [in] size - dimensiune tabele de dispersie nr. 1 (cheie: nume student), nr. 2 (cheie: nr grupa)
+// [in] nume_student - nume student care se copiaza din tabela nr. 1 in tabela nr. 2
+// [out] return [Nod**] - tabela de dispersie nr. 2 (cheie: nr grupa)
+
+Nod** tabela_hash_grupa(Nod** hTab, int size, char* nume_student)
+{
+
+}
+
 
 int main() {
 
@@ -154,6 +194,16 @@ int main() {
 		printf("\n\n Studentul %s nu a fost identificat in tabela de dispersie.\n", nume_student);
 	}
 
+	// creare lista simpla cu studentii in grupa specificata
+	Nod* lst_studs = studenti_grupa(HTable, DIM, "1057");
+	printf("\n Studenti in lista cu grupa specificata:\n");
+	Nod* tmp = lst_studs;
+	while (tmp)
+	{
+		printf("\n %d %s", tmp->st.id, tmp->st.nume);
+		tmp = tmp->next;
+	}
+
 	// dezalocare tabela de dispersie
 	// 1. dezalocare liste simple (max DIM liste simple)
 	for (int i = 0; i < DIM; i++)
@@ -170,6 +220,8 @@ int main() {
 		}
 	// 2. dezalocare vector de adrese de inceput de liste (au devenit toate de tip NULL)
 	free(HTable);
+
+	// dezalocare lista simpla lst_studs
 
 	fclose(f);
 

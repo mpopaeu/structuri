@@ -94,6 +94,18 @@ Student cautaHTable(Nod** hTab, int size, char * nume_student) {
 // cautare student pt o grupa specificata ---> secvential pe intreaga tabela de dispersie
 // dezalocare tabelei de dispersie
 
+//////////
+// extragere student/studenti (cu stergere student in tabela de dispersie) pt nume student specificat
+// [in] hTab - tabela de dispersie in care se aplica operatia de extragere (cu stergere) - nume student este cheie de cautare
+// [in] sizeHT - dimensiune tabela de dispersie (nr elemente vector suport)
+// [in] nume_student - nume student pentru care se aplica operatia de extragere
+// [out] [Nod*] - lista simpla cu datele studentilor extrasi din tabela de dispersie hTab
+
+Nod* extragere_studenti_nume(Nod** hTab, int sizeHT, char* nume_student)
+{
+
+}
+
 int main() {
 
 	Nod* * HTable;
