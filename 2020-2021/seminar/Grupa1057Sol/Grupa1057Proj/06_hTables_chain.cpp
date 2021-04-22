@@ -56,7 +56,7 @@ void parseHTable(Nod** hTab, int size) {
 			Nod* tmp = hTab[i];
 			printf("Lista no. %d:\n", i);
 			while (tmp) {
-				printf("%d %s\n", tmp->st.id, tmp->st.nume);
+				printf("%d %s %s\n", tmp->st.id, tmp->st.nume, tmp->st.nrGrupa);
 				tmp = tmp->next;
 			}
 		}
@@ -78,7 +78,7 @@ Student cauta_student(Nod** hTab, int size, char* nume_student)
 {
 	int k = calculPozitie_String(nume_student, size);
 
-	Nod* tmp = hTab[k]; // adresa de incepu a listei simple k din vectorul hTab
+	Nod* tmp = hTab[k]; // adresa de inceput a listei simple k din vectorul hTab
 	while (tmp)
 	{
 		if (strcmp(nume_student, tmp->st.nume) == 0)
@@ -133,9 +133,33 @@ Nod* studenti_grupa(Nod** hTab, int size, const char* nr_grupa)
 // [in] nume_student - nume student care se copiaza din tabela nr. 1 in tabela nr. 2
 // [out] return [Nod**] - tabela de dispersie nr. 2 (cheie: nr grupa)
 
+void inserareHTable_grupa(Nod** hTab, int sizeHT, Student s) {
+	int k; // pozitie de inserare pentru s
+	k = calculPozitie_String(s.nrGrupa, sizeHT);
+
+	hTab[k] = inserareLista(hTab[k], s);
+}
+
 Nod** tabela_hash_grupa(Nod** hTab, int size, char* nume_student)
 {
+	Nod** hTab_grupa = (Nod**)malloc(size * sizeof(Nod*)); // tabela de dispersie nr. 2 (cheie: nr grupa)
+	for (int i = 0; i < size; i++)
+		hTab_grupa[i] = NULL;
 
+
+	int k = calculPozitie_String(nume_student, size);
+
+	Nod* tmp = hTab[k]; // adresa de inceput a listei simple k din vectorul hTab
+	while (tmp)
+	{
+		if (strcmp(nume_student, tmp->st.nume) == 0)
+		{
+			inserareHTable_grupa(hTab_grupa, DIM, tmp->st);
+		}
+		tmp = tmp->next;
+	}
+
+	return hTab_grupa;
 }
 
 
@@ -200,11 +224,17 @@ int main() {
 	Nod* tmp = lst_studs;
 	while (tmp)
 	{
-		printf("\n %d %s", tmp->st.id, tmp->st.nume);
+		printf("%d %s\n", tmp->st.id, tmp->st.nume);
 		tmp = tmp->next;
 	}
 
-	// dezalocare tabela de dispersie
+	// creare tabela de dispersie nr. 2 (cheie: nr grupa) pentru un student cu nume specificat
+	Nod** HTable_grupa = tabela_hash_grupa(HTable, DIM, (char*)"Ionescu Cristian");
+
+	printf("\n\n Tabela de dispersie nr. 2 (cheie: nr grupa):\n");
+	parseHTable(HTable_grupa, DIM);
+
+	// dezalocare tabela de dispersie nr. 1
 	// 1. dezalocare liste simple (max DIM liste simple)
 	for (int i = 0; i < DIM; i++)
 		if (HTable[i]) {  // lista i contine cel putin un student
@@ -222,6 +252,8 @@ int main() {
 	free(HTable);
 
 	// dezalocare lista simpla lst_studs
+
+	// dezalocare tabela de dispersie nr. 2 (HTable_grupa)
 
 	fclose(f);
 
