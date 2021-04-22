@@ -23,7 +23,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="09_Tabele_hash.cpp">
+    <ClCompile Include="11_Struct_union.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
