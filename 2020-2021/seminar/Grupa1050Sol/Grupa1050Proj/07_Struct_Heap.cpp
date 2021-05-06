@@ -33,6 +33,77 @@ void inserare_cheie_heap(int* strHeap, int &strSize, int key)
 // TEMA
 // apelata pentru operatia de stergere cheie in structura Heap
 //////
+int stergere_cheie_heap(int* strHeap, int& strSize)
+{
+	int key;
+	int offs_key = 0;
+	int max;
+	//preiau ultimul element din structura
+	int lastElement = strHeap[strSize - 1];
+	key = strHeap[0];
+	strHeap[0] = lastElement; //ultimul element devine primul
+
+	strSize -= 1; //numarul de chei scade cu 1
+
+	int Left = 2 * offs_key + 1;
+	int Right = 2 * offs_key + 2;
+
+	if (Left < strSize && Right < strSize) // exista ambii descendenti
+	{
+		if (strHeap[Left] > strHeap[Right])
+		{
+			max = Left;
+		}
+		else
+		{
+			max = Right;
+		}
+	}
+	else
+	{
+		if (Left < strSize)
+		{
+			max = Left;
+		}
+	}
+
+	while (strHeap[max] > lastElement) //nu se respecta relatia de ordine 
+	{
+		//interschimbare key-parinte
+		int aux = strHeap[offs_key];
+		strHeap[offs_key] = strHeap[max];
+		strHeap[max] = aux;
+
+		// actualizare offset key in vector
+		offs_key = max;
+
+		//calcul offset pentru noul key
+		Left = 2 * offs_key + 1;
+		Right = 2 * offs_key + 2;
+		if (Left < strSize && Right < strSize)
+		{
+			if (strHeap[Left] > strHeap[Right])
+			{
+				max = Left;
+			}
+			else
+			{
+				max = Right;
+			}
+		}
+		else
+		{
+			if (Left < strSize)
+			{
+				max = Left;
+			}
+		}
+	}
+
+	return key;
+}
+
+
 
 int main()
 {
@@ -83,6 +154,18 @@ int main()
 		printf(" %d ", strHeap[i]);
 	printf("\n");
 
+	printf("Stergere chei din structura Heap: ");
+	while (nKeys > 0)
+	{
+		printf(" %d ", stergere_cheie_heap(strHeap, nKeys));
+		// inserare cheie in structura min-heap
+	}
+	printf("\n\n");
+
+	// afisare vector suport structura min-heap
+
+	// dezalocare vector suport structura Heap
+	free(strHeap);
 	fclose(f);
 	return 0;
 }
