@@ -31,27 +31,86 @@ void inserare_cheie_Heap(int* vHeap, int &nKeys, int cheie)
 
 }
 
+// stergere/extragere cheie din structura max-Heap
+// nodul radacina este sters din structura max-Heap
 int extragere_cheie_Heap(int* vHeap, int &nKeys)
 {
 	// salvare cheie din offset 0
+	int key = vHeap[0];
 
 	// interschimb cheie offset 0 cu cheie offset nKeys-1
+	int aux = vHeap[0];
+	vHeap[0] = vHeap[nKeys - 1];
+	vHeap[nKeys - 1] = aux;
 
 	// actualizare nKeys -= 1
+	nKeys -= 1; // reducerea numarului de chei din structura Heap
 
 	// calcul descendenti stanga, dreapta pentru cheie curenta offset 0
 	// determinare max(cheie_stanga, cheie_dreapta)
+	int i = 0; // offset nod curent
+	int max = -1; // offset pentru cheia de valoare maxima dintre descendenti
+	int offset_stanga = 2 * i + 1;
+	int offset_dreapta = 2 * i + 2;
+	if (offset_stanga < nKeys && offset_dreapta < nKeys)
+	{
+		// nodul curent i are doi descendenti
+		if (vHeap[offset_stanga] < vHeap[offset_dreapta])
+			max = offset_dreapta;
+		else
+			max = offset_stanga;
+	}
+	else
+	{
+		if (offset_stanga < nKeys)
+		{
+			// nodul curent i are 1 descendent
+			max = offset_stanga;
+		}
+	}
 
 	// iterativ
-	while ()
+	while (nKeys > 1 && vHeap[i] < vHeap[max]) 
 	{
+		// regula de ordonare a cheilor nu este respectata
 		// interschimb cheie curenta cu cheie_max descendenti
+		aux = vHeap[i];
+		vHeap[i] = vHeap[max];
+		vHeap[max] = aux;
 
 		// actualizare offset cheie curenta
+		i = max;
+		// recalculare offsets descendenti pentru noul i
+		offset_stanga = 2 * i + 1;
+		offset_dreapta = 2 * i + 2;
 
 		// calcul descendenti stanga, dreapta pentru cheie curenta
 		// determinare max(cheie_stanga, cheie_dreapta)
+		if (offset_stanga < nKeys && offset_dreapta < nKeys)
+		{
+			// nodul curent i are doi descendenti
+			if (vHeap[offset_stanga] < vHeap[offset_dreapta])
+				max = offset_dreapta;
+			else
+				max = offset_stanga;
+		}
+		else
+		{
+			if (offset_stanga < nKeys)
+			{
+				// nodul curent i are 1 descendent
+				max = offset_stanga;
+			}
+		}
 	}
+
+	return key;
+}
+
+// creare vector cu valori de cheie sortate descrescator
+// valorile de cheie se extrag din structura max-heap
+int* vector_sortat(int* vHeap, int &nKeys)
+{
 
 }
 
@@ -113,12 +172,20 @@ int main()
 		// comutarea pe noul vector
 		vHeap = new_vHeap;
 	}
+
 	inserare_cheie_Heap(vHeap, nKeys, 26);
 
 	printf("\n Structura Heap dupa inserare cheie 26: ");
 	for (int i = 0; i < nKeys; i++)
 		printf(" %d ", vHeap[i]);
 	printf("\n");
+
+	printf(" Stergere chei din structura Heap: ");
+	while (nKeys > 0)
+	{
+		printf(" %d ", extragere_cheie_Heap(vHeap, nKeys));
+	}
+	printf("\n\n");
 
 	// dezalocare vector suport structura Heap
 	free(vHeap);
