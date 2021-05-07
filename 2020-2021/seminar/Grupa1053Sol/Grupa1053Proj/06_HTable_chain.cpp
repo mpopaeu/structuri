@@ -108,7 +108,7 @@ Student cauta_student_cheie(Nod** hTab, int size, char* nume_student) // nume st
 // [in] nume_student - nume student pentru care se filtreaza datele in tabela 1
 // [in,out] hTable2 - tabela de dispersie, cheie: nr grupa
 // [in] size2 - dimensiunea tabelei de dispersie 2 (nr grupa)
-void creare_tabela_grupa(Nod* hTable1, int size1, char* nume_student, Nod* hTable2, int size2)
+void creare_tabela_grupa(Nod* *hTable1, int size1, char* nume_student, Nod* *hTable2, int size2)
 {
 
 }
