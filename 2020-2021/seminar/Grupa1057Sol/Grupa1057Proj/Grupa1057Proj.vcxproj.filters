@@ -15,12 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_hTables_chain.cpp">
+    <ClCompile Include="07_Struct_Heap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Studenti.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="HeapKeys.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
