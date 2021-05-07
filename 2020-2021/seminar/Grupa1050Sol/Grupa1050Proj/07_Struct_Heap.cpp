@@ -16,7 +16,7 @@ void inserare_cheie_heap(int* strHeap, int &strSize, int key)
 
 	while (strHeap[offs_key] > strHeap[offs_parinte]) // nu se respecta relatia de ordine pentru un max-heap
 	{
-		// interscimbare key-parinte
+		// interschimbare key-parinte
 		int aux = strHeap[offs_key];
 		strHeap[offs_key] = strHeap[offs_parinte];
 		strHeap[offs_parinte] = aux;
@@ -37,7 +37,7 @@ int stergere_cheie_heap(int* strHeap, int& strSize)
 {
 	int key;
 	int offs_key = 0;
-	int max;
+	int max = 0;
 	//preiau ultimul element din structura
 	int lastElement = strHeap[strSize - 1];
 	key = strHeap[0];
@@ -67,7 +67,7 @@ int stergere_cheie_heap(int* strHeap, int& strSize)
 		}
 	}
 
-	while (strHeap[max] > lastElement) //nu se respecta relatia de ordine 
+	while (strSize > 0 && strHeap[max] > lastElement) //nu se respecta relatia de ordine 
 	{
 		//interschimbare key-parinte
 		int aux = strHeap[offs_key];
@@ -164,8 +164,10 @@ int main()
 
 	// afisare vector suport structura min-heap
 
-	// dezalocare vector suport structura Heap
+	// dezalocare vector suport structura max-heap
 	free(strHeap);
+	// dezalocare vector suport structura min-heap
+
 	fclose(f);
 	return 0;
 }
