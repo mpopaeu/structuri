@@ -139,9 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="06_HTables_chain.cpp" />
+    <ClCompile Include="07_Struct_Heap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="HeapKeys.txt" />
     <Text Include="Studenti.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
