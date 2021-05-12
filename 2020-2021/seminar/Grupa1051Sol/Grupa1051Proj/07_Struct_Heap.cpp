@@ -50,6 +50,61 @@ int* inserare_cheie_Heap(int* strHeap, int &nrNoduri, int &capacitate, int cheie
 
 // TEMA
 // stergere/extragere nod din structura Heap
+int extragere_nod_Heap(int* sHeap, int& nrNoduri)
+{
+	int radacina = sHeap[0];	// salvare cheie din radacina	
+	sHeap[0] = sHeap[nrNoduri - 1]; 
+
+	if (--nrNoduri > 1)	// daca vectorul contine cel putin doua elemente
+	{
+		int offset_cheie = 0; // offset radacina cu noua cheie
+
+		// identificare descendenti
+		int offset_stanga = 2 * offset_cheie + 1;
+		int offset_dreapta = 2 * offset_cheie + 2;
+
+		// determinare descendent cu valoarea cheii maxima
+		int offset_maxim = -1;
+		if (offset_stanga < nrNoduri && offset_dreapta < nrNoduri)	// daca exista ambii descendenti
+			offset_maxim = (sHeap[offset_stanga] > sHeap[offset_dreapta]) ? offset_stanga : offset_dreapta;	// offset-ul maxim va fi cel al descendentului cu valoarea cheii mai mare
+		else
+			if (offset_stanga < nrNoduri)	// daca exista doar descendentul stanga
+				offset_maxim = offset_stanga;	// offset-ul maxim va fi cel al nodului din stanga
+
+		while (offset_maxim != -1 && sHeap[offset_maxim] > sHeap[offset_cheie])
+		{
+			// interschimbare elemente
+			int aux = sHeap[offset_cheie];
+			sHeap[offset_cheie] = sHeap[offset_maxim];
+			sHeap[offset_maxim] = aux;
+
+			// actualizare offset cheie, offset stanga, offset dreapta
+			offset_cheie = offset_maxim;
+			offset_stanga = 2 * offset_cheie + 1;
+			offset_dreapta = 2 * offset_cheie + 2;
+
+			if (offset_stanga < nrNoduri && offset_dreapta < nrNoduri)	// daca exista ambii descendenti
+				offset_maxim = (sHeap[offset_stanga] > sHeap[offset_dreapta]) ? offset_stanga : offset_dreapta;	// offset-ul maxim va fi cel al descendentului cu valoarea cheii mai mare
+			else
+				if (offset_stanga < nrNoduri)	// daca exista doar descendentul stanga
+					offset_maxim = offset_stanga;	// offset-ul maxim va fi cel al nodului din stanga
+				else
+					offset_maxim = -1;	// marcare nod ca neavand descendenti
+		}
+	}
+
+	return radacina;
+}
+
+int* creare_vector_sortat(int* sHeap, int& nrNoduri, int& nrSortate)
+{
+	nrSortate = nrNoduri;
+	int* vSortate = (int*)malloc(nrSortate * sizeof(int));
+	for (int i = 0; i < nrSortate; i++)
+		vSortate[i] = extragere_nod_Heap(sHeap, nrNoduri);
+
+	return vSortate;
+}
 
 int main()
 {
@@ -85,8 +140,37 @@ int main()
 		printf(" %d ", sHeap[i]);
 	printf("\n");
 
-	// dezalocare vector suport
-	free(sHeap);
+	// extragere cheie din structura heap
+	cheie = extragere_nod_Heap(sHeap, nrNoduri);
+	printf("Structura Heap dupa extragere cheie radacina: ");
+	for (int i = 0; i < nrNoduri; i++)
+		printf(" %d ", sHeap[i]);
+	printf("\n");
+
+	// creare vector de elemente sortate descrescator din structura max-heap
+	int* vSortate = NULL, nrSortate;
+	vSortate = creare_vector_sortat(sHeap, nrNoduri, nrSortate);
+
+	printf("Structura Heap dupa creare vector elemente sortate: ");
+	for (int i = 0; i < nrNoduri; i++)
+		printf(" %d ", sHeap[i]);
+	printf("\n");
+	printf("Vectorul cu elementele sortate prin extragerea tuturor nodurilor din structura Heap: ");
+	for (int i = 0; i < nrSortate; i++)
+		printf(" %d ", vSortate[i]);
+	printf("\n");
+
+	// create structura min-heap cu cheile din vectorul sortate descrescator
+
+
+
+	// dezalocare vector suport structura Heap
+	if(sHeap)
+		free(sHeap);
+
+	// dezalocare vector cu chei sortate descrescator
+	if (vSortate)
+		free(vSortate);
 
 	fclose(f);
 	return 0;
