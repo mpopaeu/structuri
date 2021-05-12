@@ -109,10 +109,14 @@ int extragere_cheie_Heap(int* vHeap, int &nKeys)
 
 // creare vector cu valori de cheie sortate descrescator
 // valorile de cheie se extrag din structura max-heap
-int* vector_sortat(int* vHeap, int &nKeys)
+int* vector_sortat_din_Heap(int* vHeap, int &nKeys, int &dim)
 {
 
 }
+
+// TEMA
+// functie conversie structura max-heap (vHeap) intr-o structura de tip min-heap
+// conversia are loc prin extragere cheie din max-heap si inserarea ei in structura noua min-heap
 
 int main()
 {
