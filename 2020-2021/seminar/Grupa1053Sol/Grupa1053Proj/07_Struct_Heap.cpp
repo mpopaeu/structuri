@@ -30,6 +30,63 @@ void inserare_cheie_Heap(int* vHeap, int &nKeys, int cheie)
 
 // TEMA
 // implementare operatie de stergere in structura Heap
+void interschimbare(int* vHeap, int offs_nod_descendent, int offs_nod_current) {
+	int aux = vHeap[offs_nod_descendent];
+	vHeap[offs_nod_descendent] = vHeap[offs_nod_current];
+	vHeap[offs_nod_current] = aux;
+}
+
+void ordonare(int* vHeap, int nKeys, int offs_nod_current)
+{
+		int left = 2 * offs_nod_current + 1;
+		int right = 2 * offs_nod_current + 2;
+		if (left < nKeys && right < nKeys)
+		{
+			if (vHeap[offs_nod_current] < vHeap[left] || vHeap[offs_nod_current] < vHeap[right])
+			{
+				if (vHeap[left] < vHeap[right])
+				{
+					interschimbare(vHeap, right, offs_nod_current);
+					ordonare(vHeap, nKeys, right);
+				}
+				else
+				{
+					interschimbare(vHeap, left, offs_nod_current);
+					ordonare(vHeap, nKeys, left);
+				}
+			}
+		}
+		if (left < nKeys) // penultimul nivel
+		{
+			if (vHeap[offs_nod_current] < vHeap[left])
+			{
+				interschimbare(vHeap, left, offs_nod_current);
+			}
+		}
+}
+
+// extragere cheie din nod radacina
+int extragere_cheie_Heap(int* vHeap, int& nKeys)
+{
+	if (nKeys > 0)
+	{
+		int aux = vHeap[0];
+		vHeap[0] = vHeap[nKeys - 1]; // primul element (radacina) rescrisa cu ultimul element
+		nKeys -= 1; // noul numar de noduri din arbore de structura Heap
+		ordonare(vHeap, nKeys, 0);
+
+		return aux;
+	}
+
+	return -1; // daca cheile nu accepta valori intregi negative
+}
+
+// creare vector de chei extrase din structura max-heap pana la un prag specificat
+
+int* creare_vector(int* vHeap, int& nKeys, int prag_minim)
+{
+
+}
 
 int main()
 {
@@ -87,7 +144,19 @@ int main()
 	}
 	inserare_cheie_Heap(vHeap, nKeys, 26);
 
-	printf("\n Structura Heap dupa inserare cheie 26 cu dimensiune %d: ", capacitate_stocare);
+	printf("\n Structura Heap dupa inserare cheie 26 cu capacitate de stocare %d: ", capacitate_stocare);
+	for (int i = 0; i < nKeys; i++)
+		printf(" %d ", vHeap[i]);
+	printf("\n");
+
+	cheie = extragere_cheie_Heap(vHeap, nKeys);
+	printf("\n Structura Heap dupa extragere cheie %d: ", cheie);
+	for (int i = 0; i < nKeys; i++)
+		printf(" %d ", vHeap[i]);
+	printf("\n");
+
+	cheie = extragere_cheie_Heap(vHeap, nKeys);
+	printf("\n Structura Heap dupa extragere cheie %d: ", cheie);
 	for (int i = 0; i < nKeys; i++)
 		printf(" %d ", vHeap[i]);
 	printf("\n");
