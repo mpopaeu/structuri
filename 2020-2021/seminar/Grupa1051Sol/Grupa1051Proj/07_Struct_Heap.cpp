@@ -106,6 +106,68 @@ int* creare_vector_sortat(int* sHeap, int& nrNoduri, int& nrSortate)
 	return vSortate;
 }
 
+
+int* inserare_cheie_min_Heap(int* strHeap, int& nrNoduri, int& capacitate, int cheie)
+{
+	if (nrNoduri == capacitate)
+	{
+		// nu exista loc in vector pentru cheie
+
+		capacitate += DIM;	// capacitate de stocare marita
+		int* new_sHeap = (int*)malloc(capacitate * sizeof(int));	// alocare vector nou pe capacitate marita
+
+		// copiere elemente in noul vector
+		for (int i = 0; i < nrNoduri; i++)
+			new_sHeap[i] = strHeap[i];
+
+		// dezalocare strHeap (fara capacitate de stocare)
+		free(strHeap);
+
+		// mutare strHeap pe noul vector
+		strHeap = new_sHeap;
+	}
+
+	nrNoduri += 1;
+	int offset_cheie, offset_parinte;
+	offset_cheie = nrNoduri - 1;
+
+	strHeap[offset_cheie] = cheie;	// se insereaza noul nod pe prima pozitie disponibila in struct Heap
+	offset_parinte = (offset_cheie - 1) / 2;
+
+	while (strHeap[offset_cheie] < strHeap[offset_parinte]) // validare relatie de ordine pe min-heap
+	{
+		// nu se respecta relatia de ordine specifica unui min-heap
+
+		// 1. interschimb elemente
+		int aux = strHeap[offset_cheie];
+		strHeap[offset_cheie] = strHeap[offset_parinte];
+		strHeap[offset_parinte] = aux;
+
+		// 2. actualizare offset cheie, offset parinte
+		offset_cheie = offset_parinte;	// noul offset pentru cheia de inserat
+		offset_parinte = (offset_cheie - 1) / 2;	// offset pentru noul parinte al cheii de inserat
+	}
+
+	return strHeap;
+}
+
+int* creare_min_Heap(int* minHeap, int& nrNoduri, int*& vSortate, int& nrSortate, int& capacitate) {
+	nrNoduri = 0;
+	// for (int i = nrSortate - 1; i >= 0; i--)
+	for (int i = 0; i < nrSortate; i++)
+	{
+		minHeap = inserare_cheie_min_Heap(minHeap, nrNoduri, capacitate, vSortate[i]);
+	}
+	nrSortate = 0;
+	if (vSortate)
+	{
+		free(vSortate);
+		vSortate = NULL;
+	}
+
+	return minHeap;
+}
+
 int main()
 {
 	FILE* f;
@@ -160,13 +222,25 @@ int main()
 		printf(" %d ", vSortate[i]);
 	printf("\n");
 
-	// create structura min-heap cu cheile din vectorul sortate descrescator
+	// creare structura min-heap cu cheile din vectorul sortate descrescator
+	int* minHeap, nrNoduriMin, capacitateMin;
+	capacitateMin = DIM;
+	minHeap = (int*)malloc(capacitateMin * sizeof(int));
+	minHeap = creare_min_Heap(minHeap, nrNoduriMin, vSortate, nrSortate, capacitateMin);
+	printf("Structura Min-Heap dupa creare din vector elemente sortate: ");
+	for (int i = 0; i < nrNoduriMin; i++)
+		printf(" %d ", minHeap[i]);
+	printf("\n");
 
 
-
-	// dezalocare vector suport structura Heap
+	// dezalocare vector suport structura Max-Heap
 	if(sHeap)
 		free(sHeap);
+
+	// dezalocare vector suport structura Min-Heap
+	if (minHeap)
+		free(minHeap);
+
 
 	// dezalocare vector cu chei sortate descrescator
 	if (vSortate)
