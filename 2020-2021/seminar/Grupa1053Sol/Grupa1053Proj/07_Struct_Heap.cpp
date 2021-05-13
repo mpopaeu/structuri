@@ -82,8 +82,13 @@ int extragere_cheie_Heap(int* vHeap, int& nKeys)
 }
 
 // creare vector de chei extrase din structura max-heap pana la un prag specificat
+// [in,out] vHeap - vectorul suport pentru structura max-heap
+// [in,out] nKeys - nr de noduri din structura max-heap
+// [in] prag_minim - pragul pana la care se face extragerea din max-heap
+// [out] nVExtrase - nr de chei extrase
+// return - vector cu chei extrase
 
-int* creare_vector(int* vHeap, int& nKeys, int prag_minim)
+int* creare_vector(int* vHeap, int& nKeys, int prag_minim, int &nVExtrase)
 {
 
 }
