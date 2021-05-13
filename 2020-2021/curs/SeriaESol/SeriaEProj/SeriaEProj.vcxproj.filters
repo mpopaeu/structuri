@@ -23,7 +23,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="11_Struct_uniune.cpp">
+    <ClCompile Include="12_ArbO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

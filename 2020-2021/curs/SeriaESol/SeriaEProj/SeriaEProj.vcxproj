@@ -23,7 +23,7 @@
     <Text Include="Students.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="11_Struct_uniune.cpp" />
+    <ClCompile Include="12_ArbO.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
