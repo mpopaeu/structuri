@@ -154,6 +154,8 @@ int main()
 		printf(" %d ", strHeap[i]);
 	printf("\n");
 
+	cheie = stergere_cheie_heap(strHeap, nKeys);
+
 	printf("Stergere chei din structura Heap: ");
 	while (nKeys > 0)
 	{

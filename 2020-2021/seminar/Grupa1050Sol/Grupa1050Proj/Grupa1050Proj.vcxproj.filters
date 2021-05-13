@@ -23,7 +23,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="07_Struct_Heap.cpp">
+    <ClCompile Include="08_BinTrees.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
