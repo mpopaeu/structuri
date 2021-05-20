@@ -65,6 +65,33 @@ int Inaltime(NodABC* r)
 // stergere a unui nod in ABC
 // determinare numar de noduri frunza in ABC
 
+int numar_frunze(NodABC* r)
+{
+	if (r)
+	{
+		if (r->st == NULL && r->dr == NULL)
+		{
+			return 1; // adaug nodul curent r la nr de noduri frunza calculat anterior
+		}
+		else
+		{
+			return 0 + numar_frunze(r->st) + numar_frunze(r->dr); // numar_frunze - valoarea partiala/intermediara a nr frunze pt argument
+		}
+	}
+
+	return 0; // daca r este NULL
+}
+
+// craeare vector cu studenti plasati pe drumul de la radacina la un nod/student specificat prin id
+// [in] r - radacina de arbore binar de cautare
+// [in] id_student - id student pentru care se efectueaza cautarea
+// [out] n - numarul de studenti plasati pe drumul de la radacina catre nodul cu id_student
+// return - vector de studenti plasati pe drumul de la radacina catre nodul cu id_student
+Student* vector_studenti_drum(NodABC* r, int id_student, unsigned char &n)
+{
+
+}
+
 int main()
 {
 	Student stud;
@@ -105,6 +132,9 @@ int main()
 	printf(" Arborele binar de cautare dupa creare: ");
 	Inordine(root);
 	printf("\n\n");
+
+	int nrf = numar_frunze(root);
+	printf(" Numar frunze arbore: %d\n\n", nrf);
 
 	printf("Inaltime arbore binar de cautare: %d niveluri\n\n", Inaltime(root));
 
