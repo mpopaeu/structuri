@@ -1,5 +1,5 @@
 23,Popescu Gigel,1051
 234,Ionescu Georgel,1050
 123,Vasilescu Marian,1051
-8787,Georgescu Alexandru,1056
-2347,Pop Gigelescu,1051
+8,Georgescu Alexandru,1056
+34,Pop Gigelescu,1051

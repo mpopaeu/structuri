@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="07_Struct_Heap.cpp" />
+    <ClCompile Include="08_ArbBin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="HeapKeys.txt" />
