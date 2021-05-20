@@ -82,7 +82,7 @@ int numar_frunze(NodABC* r)
 	return 0; // daca r este NULL
 }
 
-// craeare vector cu studenti plasati pe drumul de la radacina la un nod/student specificat prin id
+// creare vector cu studenti plasati pe drumul de la radacina la un nod/student specificat prin id
 // [in] r - radacina de arbore binar de cautare
 // [in] id_student - id student pentru care se efectueaza cautarea
 // [out] n - numarul de studenti plasati pe drumul de la radacina catre nodul cu id_student
