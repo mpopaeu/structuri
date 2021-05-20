@@ -1,4 +1,8 @@
-2342,Popescu Ion,1049
+23,Popescu Ion,1049
 65,Georgescu Marin,1053
 9,Vasilescu Alex,1051
 82,Vasilescu Alex,1053
+14,Georgescu Marcel,1053
+51,Georgescu Marin,1053
+90,Georgescu Marin,1053
+65,Marinescu George,1053
