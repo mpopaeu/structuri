@@ -26,5 +26,8 @@
     <ClCompile Include="12_ArbO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="13_AVL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
