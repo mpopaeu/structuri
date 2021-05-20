@@ -62,7 +62,41 @@ int Inaltime(NodABC* r)
 
 // TEMA
 // salvare noduri frunza din ABC in vector (cu stergerea nodurilor frunza)
+// cu alocare prealabila a vectorului
+NodABC* salveaza_frunze(NodABC* r, Student* vFrunze, unsigned char& i)
+{
+	if (r)
+	{
+		if (!r->st && !r->dr) // nodul curent r este nod frunza
+		{
+			vFrunze[i].id = r->s.id;
+			vFrunze[i].nume = r->s.nume;
+			strcpy(vFrunze[i].nrGrupa, r->s.nrGrupa);
+			i += 1;
+
+			free(r); // se dezaloca doar nodul; numele studentului este copiat in vector
+			r = NULL; // pointer NULL care va rescrie in parinte->st sau parinte->dr
+		}
+		else {
+			r->st = salveaza_frunze(r->st, vFrunze, i);
+			r->dr = salveaza_frunze(r->dr, vFrunze, i);
+		}
+	}
+	return r;
+}
+// cu realocarea vectorului (creare dinamica a vectorului fara determinare prealabila numar frunze)
+
 // stergere nod in ABC
+
+// creare vector de studenti copiati din nodurile plasate pe un nivel specificat
+// [in] r - (sub)arbore binar de cautare
+// [in] nivel - nivelul de pe care se copiaza studentii
+// [out] n - numarul de studenti copiati (dim vector de studenti)
+// return - vector de studenti copiati de pe nivelul nivel din arbore binar de cautare
+Student* vector_studenti_nivel(NodABC* r, unsigned char nivel, int &n)
+{
+
+}
 
 int main()
 {
