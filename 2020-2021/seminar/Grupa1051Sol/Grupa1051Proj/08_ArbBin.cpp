@@ -102,6 +102,17 @@ int nr_noduri_nivel(NodABC* r, unsigned char nivel)
 // extragere nod din ABC
 
 
+// creare ABC cu studenti inscrisi in grupa specificata din ABC existent
+// cele doua structuri NU partajeaza zone de heap
+// [in] r - arbore existent
+// [in] nr_grupa - numar grupa utilizat la filtrarea studentilor/nodurilor din r
+// return - ABC nr. 2 (adresa radacina ABC cu studenti din aceeasi grupa specificata de nr_grupa)
+
+NodABC* creare_abc_grupa_studenti(NodABC* r, char* nr_grupa)
+{
+
+}
+
 // Creare ABC din Studenti.txt		
 void main() {
 
