@@ -104,6 +104,72 @@ int nr_noduri_nivel(NodABC* r, unsigned char nivel)
 }
 
 // stergere nod din arbore binar de cautare
+NodABC* cautareMaxim(NodABC* r) {
+	if (r) {
+		while (r->dr) {
+			r = r->dr;
+		}		
+	}
+
+	return r;
+}
+
+NodABC* stergere(NodABC* r, int idStud)
+{
+	if (r != NULL) {
+		if (r->s.id > idStud)
+			r->st = stergere(r->st, idStud);
+		else
+			if (r->s.id < idStud)
+				r->dr = stergere(r->dr, idStud);
+			else
+			{
+				if ((r->st == NULL) && (r->dr == NULL))
+				{
+					free(r->s.nume);
+					free(r);
+					r = NULL;
+				}
+				else
+				{
+					if (r->st == NULL) {
+						NodABC* temp = r->dr;
+						free(r->s.nume);
+						free(r);
+						return temp;
+					}
+					if (r->dr == NULL) {
+						NodABC* temp = r->st;
+						free(r->s.nume);
+						free(r);
+						return temp;
+					}
+					else
+					{
+						NodABC* temp = cautareMaxim(r->st);
+						Student aux = temp->s;
+						r->s.id = temp->s.id;
+						strcpy(r->s.nrGrupa, temp->s.nrGrupa);
+						strcpy(r->s.nume, temp->s.nume);
+						r->st = stergere(r->st, temp->s.id);
+					}
+				}
+			}
+	}
+
+	return r;
+}
+
+// creare vector de studenti care fac parte din aceeasi grupa specificata
+// [in] r - adresa radacina arbore binar de cautare
+// [in] nr_grupa - numarul grupei din care fac parte studentii cautati
+// [out] size_vector - dimensiunea vector studenti din aceeasi grupa nr_grupa
+// return - adresa de inceput vector de studenti din aceeasi grupa
+
+Student* vector_studenti_grupa(NodABC* r, char* nr_grupa, int size_vector)
+{
+
+}
 
 // Creare ABC din Studenti.txt		
 void main() {
@@ -152,6 +218,11 @@ void main() {
 
 	int nr = nr_noduri_nivel(root, 50);
 	printf("Nr noduri pe nivel specificat: %d\n\n", nr);
+
+	// stergere nod in ABC
+	root = stergere(root, root->s.id);
+	printf("\nTraversare arbore inordine dupa stergere nod radacina:\n");
+	TraversareInordine(root);
 
 	// dezalocare arbore binar de cautare
 	root = dezalocare_arbore(root);
