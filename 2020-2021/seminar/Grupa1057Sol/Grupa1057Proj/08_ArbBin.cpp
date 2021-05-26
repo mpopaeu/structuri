@@ -96,7 +96,36 @@ NodABC* dezalocare_arbore(NodABC* r)
 }
 
 // determinare numar de noduri frunza din ABC
+int nr_frunze(NodABC* r)
+{
+	if (r)
+	{
+		// prelucrare nod curent r
+		if (r->st == NULL && r->dr == NULL)
+		{
+			return 1;
+		}
+
+		// prelucare noduri din subarbore stanga
+		// prelucrare noduri din subarbore dreapta
+		return 0 + nr_frunze(r->st) + nr_frunze(r->dr);
+	}
+
+	return 0;
+}
+ 
 // extragere nod din ABC
+
+// functia care salveaza nodurile frunza din arbore bin de cautare intr-un vector
+// ABC si vectorul NU partajeaza zone de mem heap
+// [in] r - arbore binar de cautare
+// [out] dim_vector - ne de studenti din nodurile frunza ale ABC
+// return - adresa vectorului de studenti
+
+Student* vector_studenti_frunze(NodABC* r, int dim_vector)
+{
+
+}
 
 // Creare ABC din Studenti.txt
 void main() {
@@ -142,6 +171,9 @@ void main() {
 
 	int h = inaltime_arbore(root);
 	printf("\nInaltime arbore: %d.", h);
+
+	int nrf = nr_frunze(root);
+	printf("\nnr frunze arbore: %d.", nrf);
 
 	// dezalocare arbore binar de cautare
 	root = dezalocare_arbore(root);
