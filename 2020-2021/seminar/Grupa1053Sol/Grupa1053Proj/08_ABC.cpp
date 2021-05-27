@@ -112,7 +112,31 @@ int* creare_vector_id(NodABC* r, int &n) // n - nr de frunze/studenti in noduri 
 // TEMA
 // vector cu id studenti de pe drumul invers de la un nod/student identificat pe baza de id specificat
 // stergere nod in ABC
+
 // dezalocare ABC
+NodABC* dezalocare_arbore(NodABC* r)
+{
+	if (r)
+	{
+		r->st = dezalocare_arbore(r->st);
+		r->dr = dezalocare_arbore(r->dr);
+
+		free(r->s.nume);
+		free(r);
+		r = NULL;
+	}
+
+	return r;
+}
+
+// crerare arbore binar de cautare u studenti plasati in frunzele unui arbore binar de cautare
+// [in] r - arbore binar de cautare curent
+// return - arbore binar de cautare (nr. 2) cu studenti plasati in frunzele din arborele r
+
+NodABC* creare_arbore_frunze(NodABC* r)
+{
+
+}
 
 // Creare ABC din Studenti.txt
 int main() {
@@ -166,6 +190,12 @@ int main() {
 	for (int i = 0; i < n; i++)
 		printf(" %d ", vFrunze[i]);
 	printf("\n\n");
+
+	// dezalocare arbore binar de cautare
+	root = dezalocare_arbore(root);
+	printf("\nTraversare arbore dupa dezalocare:\n");
+	TraversareInordine(root);
+
 
 	fclose(f);
 
