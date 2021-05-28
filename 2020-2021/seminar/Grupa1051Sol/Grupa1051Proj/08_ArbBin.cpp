@@ -110,7 +110,26 @@ int nr_noduri_nivel(NodABC* r, unsigned char nivel)
 
 NodABC* creare_abc_grupa_studenti(NodABC* r, char* nr_grupa)
 {
+	NodABC* newTree = NULL;
+	if (r)
+	{
+		// prelucrare nod curent
+		if (strcmp(r->s.nrGrupa, nr_grupa) == 0)
+		{
+			Student s;
+			s.id = r->s.id;
+			s.nume = (char*)malloc((strlen(r->s.nume) + 1) * sizeof(char));
+			strcpy(s.nume, r->s.nume);
+			strcpy(s.nrGrupa, r->s.nrGrupa);
+			int err;
+			newTree = inserare(newTree, s, err);
+		}
 
+		newTree = creare_abc_grupa_studenti(r->st, nr_grupa);
+		newTree = creare_abc_grupa_studenti(r->dr, nr_grupa);
+	}
+
+	return newTree;
 }
 
 // Creare ABC din Studenti.txt		
@@ -164,6 +183,11 @@ void main() {
 		int nr = nr_noduri_nivel(root, i);
 		printf("Nr noduri pe nivel specificat %d este %d.\n", i, nr);
 	}
+
+	NodABC* newTree;
+	newTree = creare_abc_grupa_studenti(root, (char*)"1051");
+	printf("\nTraversare arbore cu studenti filtrati pe grupa:\n");
+	TraversareInordine(newTree);
 
 	// dezalocare structura arbore binar de cautare
 	root = dezalocare_arbore(root);
