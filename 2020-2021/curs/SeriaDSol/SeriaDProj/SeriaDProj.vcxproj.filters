@@ -21,12 +21,12 @@
     <Text Include="Students.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Graf.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="12_ArbO.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="13_AVL.cpp">
+    <ClCompile Include="14_Graf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
