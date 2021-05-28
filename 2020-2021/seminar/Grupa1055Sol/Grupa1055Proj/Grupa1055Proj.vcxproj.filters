@@ -18,12 +18,9 @@
     <Text Include="Studenti.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="HeapKeys.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="08_ArbBin.cpp">
+    <ClCompile Include="04_Liste_simple.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
