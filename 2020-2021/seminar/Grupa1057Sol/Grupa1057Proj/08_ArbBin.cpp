@@ -122,9 +122,41 @@ int nr_frunze(NodABC* r)
 // [out] dim_vector - ne de studenti din nodurile frunza ale ABC
 // return - adresa vectorului de studenti
 
-Student* vector_studenti_frunze(NodABC* r, int dim_vector)
+void salveaza_studenti(NodABC* r, Student* vect, int& offset)
 {
+	if (r)
+	{
+		// prelucrare nod curent
+		if (r->st == NULL && r->dr == NULL)
+		{
+			// am gasit nod frunza
+			vect[offset].id = r->s.id;
+			vect[offset].nume = (char*) malloc((strlen(r->s.nume)+ 1) * sizeof(char));
+			strcpy(vect[offset].nume, r->s.nume);
+			strcpy(vect[offset].nrGrupa, r->s.nrGrupa);
 
+			offset += 1;
+		}
+
+		// prelucrare noduri descendent stanga
+		salveaza_studenti(r->st, vect, offset);
+		// prelucrare noduri descendent dreapta
+		salveaza_studenti(r->dr, vect, offset);
+	}
+}
+Student* vector_studenti_frunze(NodABC* root, int &dim_vector)
+{
+	// determinare nr frunze arbore
+	dim_vector = nr_frunze(root);
+
+	// alocare vector
+	Student* vect = (Student*)malloc(dim_vector *sizeof(Student));
+	int offset = 0;
+
+	// populare vector
+	salveaza_studenti(root, vect, offset);
+
+	return vect;
 }
 
 // Creare ABC din Studenti.txt
@@ -174,6 +206,13 @@ void main() {
 
 	int nrf = nr_frunze(root);
 	printf("\nnr frunze arbore: %d.", nrf);
+
+	int size;
+	Student* vFrunze = vector_studenti_frunze(root, size);
+	printf("\nVector studenti noduri frunza: ");
+	for (int i = 0; i < size; i++)
+		printf(" %d ", vFrunze[i].id);
+	printf("\n");
 
 	// dezalocare arbore binar de cautare
 	root = dezalocare_arbore(root);
