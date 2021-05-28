@@ -19,12 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Graf.txt" />
     <Text Include="Studenti.txt" />
     <Text Include="Students.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="12_ArbO.cpp" />
-    <ClCompile Include="13_AVL.cpp" />
+    <ClCompile Include="14_Graf.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

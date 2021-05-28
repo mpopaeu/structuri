@@ -1,7 +1,10 @@
 
 #include <stdio.h>
 #include <malloc.h>
+#include <stdlib.h>
+#include <string.h>
 
+#define LINESIZE 128
 // Definire structuri 
 
 struct Student {
@@ -143,5 +146,49 @@ void InordineAVL(NodAVL* rAVL) {
 		printf(" %d %d ", rAVL->stud.id, rAVL->GE);
 		InordineAVL(rAVL->dr);
 	}
+}
+
+int main()
+{
+	Student stud;
+	NodAVL* root = NULL;
+
+	FILE* f;
+	f = fopen("Studenti.txt", "r");
+	char studBuff[20];
+
+	char* token, file_buf[LINESIZE], sep_list[] = ",\n";
+
+	while (fgets(file_buf, sizeof(file_buf), f)) {
+		token = strtok(file_buf, sep_list);
+		stud.id = atoi(token);
+
+		token = strtok(NULL, sep_list);
+		stud.nume = (char*)malloc((strlen(token) + 1) * sizeof(char));
+		strcpy(stud.nume, token);
+
+		token = strtok(NULL, sep_list);
+		stud.medie = atof(token);
+
+		token = strtok(NULL, sep_list);
+		if (token)
+			printf("\nEroare preluare token!");
+
+		// inserare student in AVL
+		int err = 0;
+		root = insNodAVL(root, stud, &err);
+		if (err) {
+			printf("\nStudentul cu id %d exista in arbore.\n", stud.id);
+			free(stud.nume);
+		}
+		else
+			printf("\nStudentul %s a fost inserat\n", stud.nume);
+	}
+
+	InordineAVL(root);
+
+	fclose(f);
+
+	return 0;
 }
 
