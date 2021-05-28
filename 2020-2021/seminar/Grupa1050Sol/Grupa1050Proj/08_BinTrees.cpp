@@ -92,10 +92,68 @@ NodABC* salveaza_frunze(NodABC* r, Student* vFrunze, unsigned char& i)
 // [in] r - (sub)arbore binar de cautare
 // [in] nivel - nivelul de pe care se copiaza studentii
 // [out] n - numarul de studenti copiati (dim vector de studenti)
-// return - vector de studenti copiati de pe nivelul nivel din arbore binar de cautare
+// return - vector de studenti copiati de pe nivelul nivel din arbore binar de cautare; NU se partajeaza mem heap
+
+int nr_noduri_nivel(NodABC* r, unsigned char nivel)
+{
+	if (r)
+	{
+		if (nivel == 1)
+			return 1;
+		else
+			if (nivel > 1)
+			{
+				return 0 + nr_noduri_nivel(r->st, nivel - 1) + nr_noduri_nivel(r->dr, nivel - 1);
+			}
+	}
+
+	return 0;
+}
+
+void salveaza_studenti(NodABC* r, unsigned char nivel, Student * v, int &offset)
+{
+	if (r)
+	{
+		if (nivel == 1)
+		{
+			// r contine student pe nivelul dorit
+			// se copiaza studentul din r in poz curenta vector v
+			v[offset].id = r->s.id;
+			v[offset].nume = (char*)malloc((strlen(r->s.nume) + 1) * sizeof(char));
+			strcpy(v[offset].nume, r->s.nume);
+			strcpy(v[offset].nrGrupa, r->s.nrGrupa);
+
+			offset += 1;
+		}
+		else
+		{
+			if (nivel > 1)
+			{
+				salveaza_studenti(r->st, nivel - 1, v, offset);
+				salveaza_studenti(r->dr, nivel - 1, v, offset);
+			}
+		}
+	}
+}
+
 Student* vector_studenti_nivel(NodABC* r, unsigned char nivel, int &n)
 {
+	// determinare nr de noduri plasate pe nivel specificat (nivel)
+	n = nr_noduri_nivel(r, nivel);
 
+	// alocare vector de studenti pe nr elemente determinat anterior
+	Student* vStudenti = NULL;
+	
+	if (n > 0)
+	{
+		vStudenti = (Student*)malloc(n * sizeof(Student));
+
+		// copiere studenti de pe nivel specificat in vector
+		int offset = 0;
+		salveaza_studenti(r, nivel, vStudenti, offset);
+	}
+
+	return vStudenti;
 }
 
 int main()
@@ -141,6 +199,15 @@ int main()
 
 	printf("Inaltime arbore: %d niveluri\n\n", Inaltime(root));
 
+	int n;
+	Student* vStudenti = vector_studenti_nivel(root, 5, n);
+	printf("\n Vector studenti nivel:");
+	if (vStudenti != NULL)
+	{
+		for (int i = 0; i < n; i++)
+			printf("\n%d %s\n", vStudenti[i].id, vStudenti[i].nume);
+		printf("\n");
+	}
 	fclose(f);
 
 	return 0;
