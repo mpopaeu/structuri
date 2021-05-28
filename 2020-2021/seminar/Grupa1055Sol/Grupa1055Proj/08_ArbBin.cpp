@@ -87,9 +87,103 @@ int numar_frunze(NodABC* r)
 // [in] id_student - id student pentru care se efectueaza cautarea
 // [out] n - numarul de studenti plasati pe drumul de la radacina catre nodul cu id_student
 // return - vector de studenti plasati pe drumul de la radacina catre nodul cu id_student
-Student* vector_studenti_drum(NodABC* r, int id_student, unsigned char &n)
-{
 
+int nr_noduri_drum(NodABC* r, int id_student, char &gasit)
+{
+	if (r)
+	{
+		if (id_student == r->s.id)
+		{
+			gasit = 1;
+			return 1;
+		}
+		else
+		{
+			if (id_student < r->s.id)
+			{
+				return 1 + nr_noduri_drum(r->st, id_student, gasit);
+			}
+			else
+			{
+				return 1 + nr_noduri_drum(r->dr, id_student, gasit);
+			}
+		}
+	}
+
+	gasit = 0;
+	return 0;
+}
+
+void copiere_student(NodABC* r, Student* vStudenti, int offset)
+{
+	vStudenti[offset].id = r->s.id;
+	vStudenti[offset].nume = (char*)malloc((strlen(r->s.nume) + 1) * sizeof(char));
+	strcpy(vStudenti[offset].nume, r->s.nume);
+	strcpy(vStudenti[offset].nrGrupa, r->s.nrGrupa);
+}
+
+void salvare_studenti_vector(NodABC* r, int id_student, Student * vStudenti, int offset)
+{
+	if (r)
+	{
+		if (id_student == r->s.id)
+		{
+			// salvare student pe pozitia curenta data de offset
+			copiere_student(r, vStudenti, offset);
+		}
+		else
+		{
+			if (id_student < r->s.id)
+			{
+				copiere_student(r, vStudenti, offset);
+				salvare_studenti_vector(r->st, id_student, vStudenti, offset + 1);
+			}
+			else
+			{
+				copiere_student(r, vStudenti, offset);
+				salvare_studenti_vector(r->dr, id_student, vStudenti, offset + 1);
+			}
+		}
+	}
+
+}
+
+Student* vector_studenti_drum(NodABC* root, int id_student, unsigned char &n)
+{
+	// determinare nr de noduri/studenti plasati pe drumul de la radacina la nod cautat
+	char gasit;
+	n = nr_noduri_drum(root, id_student, gasit);
+	if (gasit == 0)
+		n = 0;
+	
+	Student* vStudenti = NULL;
+
+	if (n > 0)
+	{
+		// alocare vector de studenti
+		vStudenti = (Student*)malloc(n * sizeof(Student));
+
+		// salvare studenti in vector; NU se partajeaza mem heap intre ABC si vector
+		int offset = 0;
+		salvare_studenti_vector(root, id_student, vStudenti, offset);
+	}
+
+	return vStudenti;
+}
+
+NodABC* dezalocare_arbore(NodABC* r)
+{
+	if (r)
+	{
+		r->st = dezalocare_arbore(r->st);
+		r->dr = dezalocare_arbore(r->dr);
+
+		free(r->s.nume);
+		free(r);
+		r = NULL;
+	}
+
+	return r;
 }
 
 int main()
@@ -136,7 +230,23 @@ int main()
 	int nrf = numar_frunze(root);
 	printf(" Numar frunze arbore: %d\n\n", nrf);
 
+	unsigned char n;
+	Student* vStuds = vector_studenti_drum(root, 23, n);
+	printf("\nVector studenti plasati pe drum radacina->nod: \n");
+	if (vStuds != NULL)
+	{
+		for (unsigned char i = 0; i < n; i++)
+			printf("%d %s\n", vStuds[i].id, vStuds[i].nume);
+	}
+	printf("\n\n");
+
 	printf("Inaltime arbore binar de cautare: %d niveluri\n\n", Inaltime(root));
+
+	// dezalocare arbore binar de cautare
+	root = dezalocare_arbore(root);
+	printf(" Arborele binar de cautare dupa dezalocare: ");
+	Inordine(root);
+	printf("\n\n");
 
 	fclose(f);
 }
