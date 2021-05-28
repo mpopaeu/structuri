@@ -168,7 +168,11 @@ NodABC* stergere(NodABC* r, int idStud)
 
 Student* vector_studenti_grupa(NodABC* r, char* nr_grupa, int size_vector)
 {
+	// determinare numar studenti din ABC care fac parte din aceeasi grupa (traversare de ABC - inordine/preordine/postordine)
 
+	// alocare vector de studenti
+
+	// populare vector - traversare ABC - inordine/preordine/postordine
 }
 
 // Creare ABC din Studenti.txt		
