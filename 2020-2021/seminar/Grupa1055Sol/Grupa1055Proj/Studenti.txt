@@ -1,4 +1,8 @@
-44,Vasilescu George,1055
-8723,Ionescu Paul,1051
-821,Popescu Alexandru,1050
-98,Georgescu Alin,1049
+1,44,Vasilescu George,1051
+7,87,Ionescu Paul,1055
+8,821,Popescu Alexandru,1049
+3,98,Georgescu Vasile,1055
+2,23,Marinescu Alex,1055
+4,81,Ionescu Paul,1055
+5,321,Popescu Alexandru,1049
+6,49,Georgescu Vasile,1055
