@@ -24,6 +24,9 @@
     <Text Include="Graf.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="StudGraf.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="09_Graf.cpp">

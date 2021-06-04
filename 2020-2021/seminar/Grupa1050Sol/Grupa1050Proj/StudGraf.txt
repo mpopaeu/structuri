@@ -1,0 +1,7 @@
+1,232,Popescu Marian,1050
+7,263,Ionescu Cristian,1049
+5,12,Georgescu Vasile,1050
+2,234,Vasilescu George,1048
+4,251,Marinescu Florin,1051
+6,277,Vasilescu George,1048
+3,129,Marinescu Florin,1050

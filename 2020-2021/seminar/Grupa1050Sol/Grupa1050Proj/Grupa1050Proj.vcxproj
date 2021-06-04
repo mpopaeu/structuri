@@ -22,6 +22,7 @@
     <Text Include="Graf.txt" />
     <Text Include="HeapKeys.txt" />
     <Text Include="Studenti.txt" />
+    <Text Include="StudGraf.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="09_Graf.cpp" />
