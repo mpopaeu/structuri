@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="08_ArbBin.cpp">
+    <ClCompile Include="09_Graf_LstAd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -24,6 +24,9 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="HeapKeys.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Graf.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
