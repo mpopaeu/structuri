@@ -87,7 +87,87 @@ NodLP* cautaNodLP(NodLP* pLP, unsigned int idCautat) {
 	return tmp; // NULL; nu exista nod in LP cu idCautat
 }
 
+Nod* push(Nod* stack, unsigned int idv)
+{
+	Nod* nou = (Nod*)malloc(sizeof(Nod));
 
+	nou->idVarf = idv;
+	nou->next = stack;
+
+	return nou;
+}
+
+Nod* pop(Nod* stack, unsigned int &varf)
+{
+	if (stack)
+	{
+		varf = stack->idVarf;
+
+		Nod* tmp = stack;
+		stack = stack->next;
+
+		free(tmp);
+	}
+
+	return stack;
+}
+
+// traversare DF a grafului
+unsigned int* DF(NodLP* pLP, unsigned int start, unsigned int nrVarfuri) {
+	unsigned int * flags, *output, k = 0;
+	Nod * stack = 0;
+
+	// alocare vector de flaguri
+	flags = (unsigned int*)malloc(nrVarfuri * sizeof(unsigned int));
+	// initializare vector flaguri
+	for (unsigned int i = 0; i<nrVarfuri; i++)
+		flags[i] = 0;
+
+	// alocare vector de iesire
+	output = (unsigned int*)malloc(nrVarfuri * sizeof(unsigned int));
+
+	// push varf de start
+	stack = push(stack, start);
+	flags[start - 1] = 1;
+
+	while (stack) {
+		unsigned int varf;
+		// extragere nod graf din varful stivei
+		stack = pop(stack, varf);
+
+		// salvare in banda de iesire a varfului extras in vederea prelucrarii
+		output[k] = varf;
+		k = k + 1;
+
+		// stabilire vecini pentru varf
+		NodLP* tmpLP = cautaNodLP(pLP, varf);
+		NodLS* tmpLS = tmpLP->primListaVecini;
+		while (tmpLS)
+		{
+			if (flags[tmpLS->idNodAdiacent - 1] == 0)
+			{
+				// push pentru vecinii cu flags nul
+				stack = push(stack, tmpLS->idNodAdiacent);
+
+				// comutare flags pentru vecinii salvati pe stiva
+				flags[tmpLS->idNodAdiacent - 1] = 1;
+			}
+
+			tmpLS = tmpLS->next;
+		}		
+	}
+
+	free(flags);
+
+	return output;
+}
+
+// TO DO
+// implementare functie de traversare graf (lista de adiacenta) conform Breadth-First 
+
+// TO DO
+// creare graf cu matrice de adiacenta
+// implementari pentru DF si BF cu graf implementat cu matrice de adiacenta ca structura suport
 
 void main() {
 	FILE *f;
@@ -132,7 +212,7 @@ void main() {
 	}
 
 	fclose(f);
-	f = fopen("Studenti.txt", "r");
+	f = fopen("StudGraf.txt", "r");
 	char * token, file_buf[LINESIZE], sep_list[] = ",\n";
 
 	while (fgets(file_buf, sizeof(file_buf), f)) {
@@ -160,7 +240,62 @@ void main() {
 	tmpLP = pListaAdiacenta;
 	while (tmpLP) {
 
-		printf("\nVarf %d(%d) cu vecinii: ", tmpLP->idVarf, tmpLP->stud.id);
+		printf("\nVarf %d (%d-%s) cu vecinii: ", tmpLP->idVarf, tmpLP->stud.id, tmpLP->stud.nume);
+
+		NodLS* tmpLS = tmpLP->primListaVecini;
+		while (tmpLS) {
+			printf(" %d", tmpLS->idNodAdiacent);
+
+			tmpLS = tmpLS->next;
+		}
+
+		tmpLP = tmpLP->next;
+	}
+
+	fclose(f);
+
+	// traversare Depth-First graf (lista de adiacenta)
+	unsigned int * out = DF(pListaAdiacenta, 1, nrVarfuri);
+	printf("\nTraversare DF #1: ");
+	for (unsigned char i = 0; i < nrVarfuri; i++)
+		printf(" %d ", out[i]);
+	printf("\n");
+
+	free(out);
+
+	out = DF(pListaAdiacenta, 5, nrVarfuri);
+	printf("\nTraversare DF #2: ");
+	for (unsigned char i = 0; i < nrVarfuri; i++)
+		printf(" %d ", out[i]);
+	printf("\n");
+
+	free(out);
+
+	//dezalocare lista de adiacenta
+	while (pListaAdiacenta)
+	{
+		tmpLP = pListaAdiacenta;
+		pListaAdiacenta = pListaAdiacenta->next;
+
+		// dezalocare lista de noduri adiacente pt tmpLP
+		while (tmpLP->primListaVecini)
+		{
+			NodLS* tmpLS = tmpLP->primListaVecini;
+			tmpLP->primListaVecini = tmpLP->primListaVecini->next;
+
+			free(tmpLS);
+		}
+
+		free(tmpLP->stud.nume);
+		free(tmpLP);
+	}
+
+	// parsare lista de adiacenta
+	printf("\n\nLista de adiacenta dupa dezalocare: \n");
+	tmpLP = pListaAdiacenta;
+	while (tmpLP) {
+
+		printf("\nVarf %d (%d-%s) cu vecinii: ", tmpLP->idVarf, tmpLP->stud.id, tmpLP->stud.nume);
 
 		NodLS* tmpLS = tmpLP->primListaVecini;
 		while (tmpLS) {
@@ -173,7 +308,6 @@ void main() {
 	}
 
 	printf("\n\n");
-	fclose(f);
 }
 
 
