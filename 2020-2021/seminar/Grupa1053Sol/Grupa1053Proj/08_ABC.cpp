@@ -133,9 +133,37 @@ NodABC* dezalocare_arbore(NodABC* r)
 // [in] r - arbore binar de cautare curent
 // return - arbore binar de cautare (nr. 2) cu studenti plasati in frunzele din arborele r
 
-NodABC* creare_arbore_frunze(NodABC* r)
+void salveaza_in_arbore(NodABC *r, NodABC* &root_frunze)
 {
+	if (r)
+	{
+		if (r->st == NULL && r->dr == NULL)
+		{
+			Student stud;
+			stud.id = r->s.id;
+			strcpy(stud.nrGrupa, r->s.nrGrupa);
 
+			stud.nume = (char*)malloc((strlen(r->s.nume) + 1) * sizeof(char));
+			strcpy(stud.nume, r->s.nume);
+
+			int err = 0;
+			root_frunze = inserare(root_frunze, stud, err);
+		}
+		else
+		{
+			salveaza_in_arbore(r->st, root_frunze);
+			salveaza_in_arbore(r->dr, root_frunze);
+		}
+	}
+}
+
+NodABC* creare_arbore_frunze(NodABC* root)
+{
+	NodABC* root_frunze = NULL;
+
+	salveaza_in_arbore(root, root_frunze);
+
+	return root_frunze;
 }
 
 // Creare ABC din Studenti.txt
@@ -191,11 +219,19 @@ int main() {
 		printf(" %d ", vFrunze[i]);
 	printf("\n\n");
 
+	NodABC *rootF = creare_arbore_frunze(root);
+	printf("\nTraversare arbore cu studenti din frunze:\n");
+	TraversareInordine(rootF);
+
 	// dezalocare arbore binar de cautare
 	root = dezalocare_arbore(root);
 	printf("\nTraversare arbore dupa dezalocare:\n");
 	TraversareInordine(root);
 
+	// dezalocare arbore binar de cautare cu studenti din frunze
+	rootF = dezalocare_arbore(rootF);
+	printf("\nTraversare arbore frunzr dupa dezalocare:\n");
+	TraversareInordine(rootF);
 
 	fclose(f);
 
