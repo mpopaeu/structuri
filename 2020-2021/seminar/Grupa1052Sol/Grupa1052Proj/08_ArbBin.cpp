@@ -165,14 +165,63 @@ NodABC* stergere(NodABC* r, int idStud)
 // [in] nr_grupa - numarul grupei din care fac parte studentii cautati
 // [out] size_vector - dimensiunea vector studenti din aceeasi grupa nr_grupa
 // return - adresa de inceput vector de studenti din aceeasi grupa
+int nr_studenti(NodABC* r, char* nr_grupa)
+{
+	int n = 0;
+	if (r)
+	{
+		n = nr_studenti(r->st, nr_grupa);
+		if (strcmp(r->s.nrGrupa, nr_grupa) == 0)
+		{
+			n += 1;
+		}
+		n += nr_studenti(r->dr, nr_grupa);
+	}
 
-Student* vector_studenti_grupa(NodABC* r, char* nr_grupa, int size_vector)
+	return n;
+}
+
+void copiere_studenti_vector(NodABC* r, char* nr_grupa, Student* vStuds, int& idx)
+{
+	if (r)
+	{
+		// prelucrare nod curent (salvare studen in vector)
+		if (strcmp(r->s.nrGrupa, nr_grupa) == 0)
+		{
+			vStuds[idx].id = r->s.id;
+			strcpy(vStuds[idx].nrGrupa, r->s.nrGrupa);
+
+			vStuds[idx].nume = (char*)malloc((strlen(r->s.nume) + 1) * sizeof(char));
+			strcpy(vStuds[idx].nume, r->s.nume);
+
+			idx += 1;
+		}
+
+		copiere_studenti_vector(r->st, nr_grupa, vStuds, idx);
+		copiere_studenti_vector(r->dr, nr_grupa, vStuds, idx);
+	}
+}
+
+
+Student* vector_studenti_grupa(NodABC* root, char* nr_grupa, int &size_vector)
 {
 	// determinare numar studenti din ABC care fac parte din aceeasi grupa (traversare de ABC - inordine/preordine/postordine)
+	size_vector = nr_studenti(root, nr_grupa);
 
 	// alocare vector de studenti
+	Student* vStuds = NULL;
+	
+	if (size_vector != 0)
+	{
+		vStuds = (Student*)malloc(size_vector * sizeof(Student));
 
-	// populare vector - traversare ABC - inordine/preordine/postordine
+		// populare vector - traversare ABC - inordine/preordine/postordine
+		// copiere studenti in vector; NU se partajeaza memorie heap intre ABC si vector
+		int idx = 0;
+		copiere_studenti_vector(root, nr_grupa, vStuds, idx);
+	}
+
+	return vStuds;
 }
 
 // Creare ABC din Studenti.txt		
@@ -223,6 +272,13 @@ void main() {
 	int nr = nr_noduri_nivel(root, 50);
 	printf("Nr noduri pe nivel specificat: %d\n\n", nr);
 
+	// vector studenti din aceeasi grupa
+	int size;
+	Student* vStudenti = vector_studenti_grupa(root, (char*)"1051", size);
+	printf("Vector studenti grupa:\n");
+	for (int i = 0; i < size; i++)
+		printf(" %s %s\n", vStudenti[i].nume, vStudenti[i].nrGrupa);
+
 	// stergere nod in ABC
 	root = stergere(root, root->s.id);
 	printf("\nTraversare arbore inordine dupa stergere nod radacina:\n");
@@ -232,6 +288,11 @@ void main() {
 	root = dezalocare_arbore(root);
 	printf("\nTraversare arbore inordine dupa dezalocare:\n");
 	TraversareInordine(root);
+
+	// dezalocare vector studenti
+	for (int i = 0; i < size; i++)
+		free(vStudenti[i].nume);
+	free(vStudenti);
 
 	fclose(f);
 }
