@@ -108,9 +108,8 @@ int nr_noduri_nivel(NodABC* r, unsigned char nivel)
 // [in] nr_grupa - numar grupa utilizat la filtrarea studentilor/nodurilor din r
 // return - ABC nr. 2 (adresa radacina ABC cu studenti din aceeasi grupa specificata de nr_grupa)
 
-NodABC* creare_abc_grupa_studenti(NodABC* r, char* nr_grupa)
+NodABC* creare_abc_grupa_studenti(NodABC* r, char* nr_grupa, NodABC* newTree)
 {
-	NodABC* newTree = NULL;
 	if (r)
 	{
 		// prelucrare nod curent
@@ -125,8 +124,8 @@ NodABC* creare_abc_grupa_studenti(NodABC* r, char* nr_grupa)
 			newTree = inserare(newTree, s, err);
 		}
 
-		newTree = creare_abc_grupa_studenti(r->st, nr_grupa);
-		newTree = creare_abc_grupa_studenti(r->dr, nr_grupa);
+		newTree = creare_abc_grupa_studenti(r->st, nr_grupa, newTree);
+		newTree = creare_abc_grupa_studenti(r->dr, nr_grupa, newTree);
 	}
 
 	return newTree;
@@ -184,8 +183,8 @@ void main() {
 		printf("Nr noduri pe nivel specificat %d este %d.\n", i, nr);
 	}
 
-	NodABC* newTree;
-	newTree = creare_abc_grupa_studenti(root, (char*)"1051");
+	NodABC* newTree = NULL;
+	newTree = creare_abc_grupa_studenti(root, (char*)"1051", newTree);
 	printf("\nTraversare arbore cu studenti filtrati pe grupa:\n");
 	TraversareInordine(newTree);
 
