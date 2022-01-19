@@ -1,7 +1,0 @@
-232,Popescu Marian,1050
-23,Ionescu Cristian,1057
-12,Georgescu Vasile,1057
-987,Vasilescu George,1048
-22,Ionescu Cristian,1051
-299,Ionescu Cristian,1057
-1003,Ionescu Peter,1051

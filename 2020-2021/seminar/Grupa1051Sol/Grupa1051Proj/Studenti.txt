@@ -1,5 +1,0 @@
-23,Popescu Gigel,1052
-234,Ionescu Georgel,1052
-123,Vasilescu Marian,1053
-8,Georgescu Alexandru,1052
-34,Pop Gigelescu,1053
