@@ -24,7 +24,7 @@ void main()
 
 	a = (char)i;
 
-	float f; // nr real reprezentat in VM -> 4 bytes
+	float f; // nr real reprezentat in Virgula Mobila -> 4 bytes
 	f = (float)i;
 
 	char v[10]; // vector de 10 elemente, fiecare element de tip char, 10 * sizeof(char) bytes = 10 bytes
@@ -57,5 +57,81 @@ void main()
 	// alocare memorie la run-time
 	pv = (char*)malloc(10 * sizeof(char));
 
-	free(pv);
+	for (unsigned char j = 0; j < 10; j++)
+	{
+		pv[j] = j*10 + 1;
+	}
+
+	free(pv); // nu rescrie pv cu NULL
+	pv = NULL;
+
+	// *pv = 1;
+
+	// &pv = &a; // adresele de stack segment sunt constante (nu pot fi modificate la run-time)
+
+
+	char mat[2][3], ** pmat;
+
+	for (unsigned char j = 0; j < 2; j++)
+	{
+		for (unsigned char k = 0; k < 3; k++)
+		{
+			mat[j][k] = j * 10 + k;
+		}		
+	}
+
+	for (unsigned char j = 0; j < 2; j++)
+	{
+		for (unsigned char k = 0; k < 3; k++)
+		{
+			printf("mat[%u][%u] = %d ", j + 1, k + 1, mat[j][k]);
+		}
+		printf("\n");
+	}
+
+	pmat = (char**)malloc(sizeof(char*) * 2); // vector de pointeri la linii (2 linii)
+	for (unsigned char j = 0; j < 2; j++)
+		pmat[j] = (char*)malloc(sizeof(char) * 3); // 3 nr de coloane ale matricei
+
+
+	for (unsigned char j = 0; j < 2; j++)
+	{
+		for (unsigned char k = 0; k < 3; k++)
+		{
+			pmat[j][k] = j * 16 + k;
+		}
+	}
+
+	for (unsigned char j = 0; j < 2; j++)
+	{
+		for (unsigned char k = 0; k < 3; k++)
+		{
+			printf("pmat[%u][%u] = %d ", j + 1, k + 1, pmat[j][k]);
+		}
+		printf("\n");
+	}
+
+	// dezalocare matrice pmat
+	for (unsigned char j = 0; j < 2; j++)
+		free(pmat[j]); // dezalocare linie j
+	free(pmat); // dezalocare structura intermediara (vector de pointeri la linii)
+	pmat = NULL;
+
+
+	char s1[] = "Structuri";
+	char s2[] = "de";
+	char s3[] = "Date";
+
+	pmat = (char**)malloc(sizeof(char*) * 3); // 3 linii, fiecare linie un string de lungime diferita
+	
+	pmat[0] = (char*)malloc(sizeof(char) * (strlen(s1) + 1));
+	pmat[1] = (char*)malloc(sizeof(char) * (strlen(s2) + 1));
+	pmat[2] = (char*)malloc(sizeof(char) * (strlen(s3) + 1));
+
+	strcpy(pmat[0], s1);
+	strcpy(pmat[1], s2);
+	strcpy(pmat[2], s3);
+
+
+	// dezalocare matrice de string-uri
 }
