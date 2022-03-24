@@ -1,5 +1,6 @@
 #include <stdio.h>
-
+#include <malloc.h>
+#include <string.h>
 
 typedef char boolean;
 #define TRUE 1
@@ -72,4 +73,66 @@ void main()
 	// v = (unsigned char*)&a; // adresele de stack seg nu pot fi modificate!!!! eroare de compilare
 
 	// alocare memorie la run-time
+
+	pv = (unsigned char*)malloc(DIMENSIUNE_VECTOR * sizeof(unsigned char));
+
+	for (unsigned char i = 0; i < DIMENSIUNE_VECTOR; i++)
+	{
+		pv[i] = v[i] + 1; // initializare elemente vector alocat in seg heap
+	}
+
+	printf("Elemente vector v: \n");
+	for (unsigned char i = 0; i < DIMENSIUNE_VECTOR; i++)
+	{
+		printf("Element %u: Adresa_element = 0x%p, Continut_element = %u\n", i, v + i, v[i]); // v[i] ---> *(v + i)
+	}
+	printf("Elemente vector pv: \n");
+	for (unsigned char i = 0; i < DIMENSIUNE_VECTOR; i++)
+	{
+		printf("Element %u: Adresa_element = 0x%p, Continut_element = %u\n", i, pv + i, pv[i]); // pv[i] ---> *(pv + i)
+	}
+
+	free(pv);
+	// pv[0] = 1;
+
+	char mat[2][3], ** pmat;
+
+	for (unsigned char i = 0; i < 2; i++)
+	{
+		for (unsigned char j = 0; j < 3; j++)
+		{
+			mat[i][j] = i * 10 + j;
+		}
+	}
+
+	// alocare matrice heap
+	pmat = (char**)malloc(sizeof(char*) * 2); // 2 este nr de linii matrice pmat
+	for (unsigned char i = 0; i < 2; i++)
+	{
+		pmat[i] = (char*)malloc(3 * sizeof(char));
+	}
+
+
+	for (unsigned char i = 0; i < 2; i++)
+	{
+		for (unsigned char j = 0; j < 3; j++)
+		{
+			pmat[i][j] = mat[i][j] + 1;
+		}
+	}
+
+
+	// dezalocare matrice heap
+	for (unsigned char i = 0; i < 2; i++)
+	{
+		free(pmat[i]);
+	}
+	free(pmat);
+	pmat = NULL; // rescriere explicita pmat cu valoare nula
+	// pmat[0][0] += 1; // eroare run-time; incercare acces la adresa 0xdddddddd pt pmat[i]
+
+	char str[] = "Structuri";
+	printf("\n String = %s\n", str);
+	str[strlen(str)] = 'X';
+	printf("\n String = %s\n", str);
 }

@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <malloc.h>
+#include <string.h>
 
 typedef char boolean;
 
@@ -44,4 +46,55 @@ void main()
 	printf("Adrese si continuturi dupa modificare pentru variabilele pv si a:\n");
 	printf("Adresa_stack_pv = %p, Adresa_continuta_pv = %p, Adresa_stack_a = %p, Continut_a = %d\n", &pv, pv, &a, a);
 
+
+	pv = v;
+	pv = &v;
+
+	printf("Adrese si continuturi initiale pentru variabilele pv si v:\n");
+	printf("Adresa_stack_pv = %p, Adresa_continuta_pv = %p, Adresa_stack_v = %p\n", &pv, pv, v);
+	for (unsigned char i = 0; i < VECTOR_SIZE; i++)
+	{
+		pv[i] = v[i] + 1;
+	}
+	printf("Adrese si continuturi initiale pentru variabilele pv si v:\n");
+	printf("Adresa_stack_pv = %p, Adresa_continuta_pv = %p, Adresa_stack_v = %p\n", &pv, pv, v);
+
+	// v = &a; // eroare de compilare --> adresele de stack seg nu pot fi modificate
+
+	pv = (unsigned char*)malloc(VECTOR_SIZE * sizeof(unsigned char));
+
+	for (unsigned char i = 0; i < VECTOR_SIZE; i++)
+	{
+		pv[i] = v[i] + 1;
+	}
+
+	free(pv);
+
+	pv = NULL;
+	// pv[0] = 1; // eroare la run-time; acces la pointer null
+
+	unsigned char mat[2][3], ** pmat;
+
+	pmat = (unsigned char**)malloc(2 * sizeof(unsigned char*));
+	for (unsigned char i = 0; i < 2; i++)
+		pmat[i] = (unsigned char*)malloc(3 * sizeof(unsigned char));
+
+	for (unsigned char i = 0; i < 2; i++)
+	{
+		for (unsigned char j = 0; j < 3; j++)
+		{
+			pmat[i][j] = i * 10 + j;
+		}
+	}
+
+	// dezalocare matrice heap seg
+	for (unsigned char i = 0; i < 2; i++)
+		free(pmat[i]);
+	free(pmat);
+	pmat = NULL;
+
+	unsigned char str[] = "Structuri";
+	printf("\nString = %s", str);
+	str[strlen(str)] = 'Z';
+	printf("\nString = %s", str);
 }
