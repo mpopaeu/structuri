@@ -1,6 +1,9 @@
 #include <stdio.h>
+#include <malloc.h>
+#include <string.h>
 
 #define DIM_VECTOR 10
+
 
 void main()
 {
@@ -61,6 +64,35 @@ void main()
 		printf("Element %u --> Adresa_stack = %p, Continut = %u\n", i, v + i, v[i]);
 	}
 
-	// v = &a; // eroare de compilare deoarece adresele de stack seg nu pot fi modificate (constante)
+	//v = &a; // eroare de compilare deoarece adresele de stack seg nu pot fi modificate (constante)
 
+	// alocare vector la run-time
+	pv = (unsigned char*)malloc(sizeof(v));
+
+	printf("/////////\n");
+	printf("Adrese si continuturi la alocare memorie dinamica \"pv\"\n");
+	printf("Adresa_stack_pv = %p, Adresa_continuta(heap)_pv = %p\n", &pv, pv);
+	for (unsigned char i = 0; i < DIM_VECTOR; i++)
+	{
+		pv[i] = v[i] * 10;
+		printf("Element pv[%u] --> Adresa_heap = %p, Continut = %u\n", i, pv + i, pv[i]);
+	}
+
+	free(pv);
+	pv = NULL;
+	// pv[0] = 1;
+
+	char str1[] = "Structuri";
+	
+	pv = (unsigned char*)malloc(sizeof(str1) * sizeof(unsigned char));
+	strcpy(pv, str1);
+
+	printf("\n String in pv in mem heap #1: %s\n", pv);
+	
+	pv[strlen(pv)] = 'A'; // rescriere terminator string cu valoare ne-nula
+
+	printf("\n String in pv in mem heap #2: %s\n", pv);
+
+	free(pv);
+	pv = NULL;
 }
