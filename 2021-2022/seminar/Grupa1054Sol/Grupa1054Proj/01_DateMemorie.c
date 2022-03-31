@@ -8,8 +8,65 @@ struct Angajat
 	unsigned short int cod;
 	float salariu;
 
-	struct Angajat *ang;
+	// struct Angajat *ang;
 };
+
+// [in] va_angajati - vector cu adrese de tip Angajat
+// [in] va_size - numarul de elemente vector va_angajati
+// [out] linii_size - vector cu nr de Angajat pe fiecare linie din matricea construita
+// [out] nr_linii - numarul de linii pentru vectorul linii_size; este identic cu nr de linii din matricea construita
+// [in] prag_salariu - criteriul de clasificare elemente Angajat din vectorul va_angajati in matricea construita
+// return - matrice construita pentru elemente de tip Angajat clasificate pe baza prag_salariu
+struct Angajat** imparte_angajati(struct Angajat* *va_angajati, unsigned char va_size, 
+									unsigned char **linii_size, unsigned char *nr_linii, 
+									float prag_salariu)
+{
+	struct Angajat** mat_angajati;
+	*nr_linii = 2; // doua clase de Angajat pe baza de prag_salariu
+	*linii_size = (unsigned char *)malloc(*nr_linii * sizeof(unsigned char)); // alocare 2 elem in vectorul de dimensiuni linii matrice
+
+	// initializare elemente vector dimensiuni linii ale matricei
+	for (unsigned char i = 0; i < *nr_linii; i++)
+		(*linii_size)[i] = 0;
+
+
+	for (unsigned char i = 0; i < va_size; i++)
+	{
+		if (va_angajati[i]->salariu <= prag_salariu)
+			(*linii_size)[0]++; // prima linie din matrice cu elem Angajat sub prag
+		else
+			(*linii_size)[1]++; // a doua linie din matrice cu elem Angajat peste prag
+	}
+
+	// alocare matrice de Angajat
+	mat_angajati = (struct Angajat**)malloc(*nr_linii * sizeof(struct Angajat*));
+	for (unsigned char i = 0; i < *nr_linii; i++)
+		mat_angajati[i] = (struct Angajat*)malloc((*linii_size)[i] * sizeof(struct Angajat));
+
+	// populare matrice cu date Angajat; nu se partajeaza zone de heap cu structuri existente
+	unsigned char k = 0, l = 0;
+	for (unsigned char i = 0; i < va_size; i++)
+	{
+		if (va_angajati[i]->salariu <= prag_salariu)
+		{
+			mat_angajati[0][k].cod = va_angajati[i]->cod;
+			mat_angajati[0][k].salariu = va_angajati[i]->salariu;
+			mat_angajati[0][k].nume = (char*)malloc((strlen(va_angajati[i]->nume) + 1) * sizeof(char));
+			strcpy(mat_angajati[0][k].nume, va_angajati[i]->nume);
+			k += 1;
+		}
+		else
+		{
+			mat_angajati[1][l].cod = va_angajati[i]->cod;
+			mat_angajati[1][l].salariu = va_angajati[i]->salariu;
+			mat_angajati[1][l].nume = (char*)malloc((strlen(va_angajati[i]->nume) + 1) * sizeof(char));
+			strcpy(mat_angajati[1][l].nume, va_angajati[i]->nume);
+			l += 1;
+		}
+	}
+
+	return mat_angajati;
+}
 
 void main()
 {
@@ -147,12 +204,47 @@ void main()
 	pang->nume = malloc((strlen(vangs[2].nume) + 1) * sizeof(char));
 	strcpy(pang->nume, vangs[2].nume);
 	pang->cod = vangs[2].cod;
-	pang->salariu = vangs[2].salariu * 1.11f;
+	// pang->salariu = vangs[2].salariu * 1.11f;
+	pang->salariu = 3500.0f;
 
 	// functie alocare si initializare matrice in heap pentru cei 12 Angajati de mai sus
 	// criteriu de organizare: salariu
 	// return functie: matrice + vector gestionare dimensiuni linii
 
+	struct Angajati** v_angajati;
+	unsigned char nr_angajati;
+
+	// determinare numar de Angajat definiti si utilizati in app
+	nr_angajati = (sizeof(ang) + sizeof(vangs) + sizeof(*pang)) / sizeof(struct Angajat);
+
+	// alocare spatiu mem heap pentru stocare adrese de Angajat
+	v_angajati = (struct Angajat**)malloc(nr_angajati * sizeof(struct Angajat*));
+
+	// populare vectior cu adrese de Angajat in vederea construirii matricei
+	unsigned char k = 0;
+	v_angajati[k++] = &ang;
+	v_angajati[k++] = pang;
+	for (unsigned char i = 0; i < (sizeof(vangs) / sizeof(struct Angajat)); i++)
+	{
+		v_angajati[k++] = vangs + i; // adresa stack seg a elem i din vectorul vangs
+	}
+
+	// apel functie de clasificare elem Angajat
+	struct Angajat** mat_clasificare;
+	unsigned char* dim_linii = NULL, nr_linii = 0;
+	mat_clasificare = imparte_angajati(v_angajati, nr_angajati, &dim_linii, &nr_linii, 4500.01f);
+
+	// afisare continut matrice
+	for (unsigned char i = 0; i < nr_linii; i++)
+	{
+		printf("\n Angajati linia %u (4500.01):", i);
+		for (unsigned char j = 0; j < dim_linii[i]; j++)
+			printf("\n       %u %.2f", mat_clasificare[i][j].cod, mat_clasificare[i][j].salariu);
+	}
+
 	// dezalocare memorie heap pentru toatre structurile aferente Angajat
+
+	// creare lista simpla cu angajati
+	// date preluate din fisier
 
 }
