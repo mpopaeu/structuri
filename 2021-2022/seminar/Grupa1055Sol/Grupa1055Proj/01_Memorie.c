@@ -19,9 +19,70 @@ struct Angajat
 // [out] nr_linii - numarul de linii al matricei construite
 // [return] - matricea construita cu angajatii clasificati pe linii
 struct Angajat** clasificare_angajati(struct Angajat ** va_ang, unsigned char nr_ang,
-										unsigned char * linii_size, unsigned char * nr_linii)
+										unsigned char * *linii_size, unsigned char * nr_linii)
 {
 	// 3 clase: cod %2, %3 si restul
+	*nr_linii = 3; // numarul de linii corespunzator numarului de clase de angajati
+
+	*linii_size = (unsigned char*)malloc(*nr_linii * sizeof(unsigned char)); // alocare vector cu dimensiuni ale liniilor
+	// initializare elemente vector
+	for (unsigned char i = 0; i < *nr_linii; i++)
+		(*linii_size)[i] = 0;
+
+
+	// determinare numar de angajati pe fiecare clasa (fiecare linie din matrice)
+	for (unsigned char i = 0; i < nr_ang; i++)
+	{
+		if (va_ang[i]->id % 2)
+		{
+			if (va_ang[i]->id % 3)
+			{
+				(*linii_size)[2] += 1; // id nu este divibil cu 2 nici cu 3
+			}
+			else
+			{
+				(*linii_size)[1] += 1; // id divizibil cu 3
+			}
+		}
+		else
+		{
+			// id angajat divizibil cu 2; 
+			(*linii_size)[0] += 1;
+		}
+	}
+
+	struct Angajat** pmat;
+	pmat = (struct Angajat**)malloc(*nr_linii * sizeof(struct Angajat*));
+	for (unsigned char i = 0; i < *nr_linii; i++)
+		pmat[i] = (struct Angajat*)malloc((*linii_size)[i] * sizeof(struct Angajat));
+
+	unsigned char idx1 = 0, idx2 = 0, idx3 = 0;
+	for (unsigned char i = 0; i < nr_ang; i++)
+	{
+		struct Angajat temp;
+		temp.id = va_ang[i]->id;
+		temp.salariu = va_ang[i]->salariu;
+		temp.nume = (char*)malloc(sizeof(char) * (strlen(va_ang[i]->nume) + 1));
+		strcpy(temp.nume, va_ang[i]->nume);
+
+		if (va_ang[i]->id % 2)
+		{
+			if (va_ang[i]->id % 3)
+			{
+				pmat[2][idx3++] = temp;
+			}
+			else
+			{
+				pmat[1][idx2++] = temp;
+			}
+		}
+		else
+		{
+			pmat[0][idx1++] = temp;
+		}
+	}
+
+	return pmat;
 }
 
 void main()
@@ -151,7 +212,7 @@ void main()
 	for (unsigned char i = 0; i < VECTOR_SIZE; i++)
 	{
 		vang[i].id = ang.id + i * 10 + i;
-		vang[i].nume = malloc(sizeof(char) * (streln(ang.nume) + 1));
+		vang[i].nume = malloc(sizeof(char) * (strlen(ang.nume) + 1));
 		strcpy(vang[i].nume, ang.nume);
 		vang[i].nume[0] = ang.nume[0] + i + 1;
 
@@ -175,4 +236,33 @@ void main()
 	va_ang[k++] = pang;
 	for (unsigned char i = 0; i < VECTOR_SIZE; i++)
 		va_ang[k++] = vang + i;
+
+	unsigned char* dim_linii = NULL, nr_linii = 0;
+	mang = clasificare_angajati(va_ang, nr_angajati, &dim_linii, &nr_linii);
+
+	for (unsigned char i = 0; i < nr_linii; i++)
+	{
+		printf("\n Linia #%u", i);
+		for (unsigned char j = 0; j < dim_linii[i]; j++)
+			printf("\n %u %s", mang[i][j].id, mang[i][j].nume);
+	}
+
+	// dezalocari zone heap cu angajati
+	free(ang.nume);
+	for (unsigned char i = 0; i < VECTOR_SIZE; i++)
+		free(vang[i].nume);
+	free(pang->nume);
+	free(pang);
+
+	free(va_ang);
+
+	for (unsigned char i = 0; i < nr_linii; i++)
+	{
+		for (unsigned char j = 0; j < dim_linii[i]; j++)
+			free(mang[i][j].nume);
+		free(mang[i]);
+	}
+	free(mang);
+
+	free(dim_linii);
 }

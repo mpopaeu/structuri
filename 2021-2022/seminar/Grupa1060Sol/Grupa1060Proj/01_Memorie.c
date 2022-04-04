@@ -15,11 +15,56 @@ struct Angajat
 	float salariu;
 };
 
+// [in] va_ang - vector de adrese de Angajat (transfer prin valoare)
+// [in] nr_anagajti - nr de elemente din va_ang (transfer prin valoare)
+// [in] prag_salariu - criteriu de clasificare (transfer prin valoare)
+// [out] linii_size - vector cu dimensiuni ale liniilor din matrice (transfer prin adresa)
+// [out] nr_linii - dimensiune linii_size, nr de linii din matricea construita (transfer prin adresa)
+// [return] - adresa matricei cu angajati clasificati in functie de prag_salariu
 struct Angajat** clasificare_ang(struct Angajat** va_ang, unsigned char nr_angajati,
 								float prag_salariu,
-								unsigned char * linii_size, unsigned char* nr_linii)
+								unsigned char * * linii_size, unsigned char* nr_linii)
 {
+	struct Angajat** pmat = NULL;
 
+	*nr_linii = 2; // doua clase de angajati (sub/peste prag_salariu)
+	*linii_size = (unsigned char*)malloc(*nr_linii * sizeof(unsigned char));
+
+	for (unsigned char i = 0; i < *nr_linii; i++)
+		(*linii_size)[i] = 0;
+
+	// determinare nr de angajati din fiecare clasa
+	for (unsigned char i = 0; i < nr_angajati; i++)
+	{
+		if (va_ang[i]->salariu < prag_salariu)
+			(*linii_size)[0] += 1;
+		else
+			(*linii_size)[1] += 1;
+	}
+
+	// alocare si populare matrice cu angajati clasificati in functie de prag_salariu
+	pmat = (struct Angajat**)malloc(*nr_linii * sizeof(struct Angajat*));
+	for (unsigned char i = 0; i < *nr_linii; i++)
+		pmat[i] = (struct Angajat*)malloc((*linii_size)[i] * sizeof(struct Angajat));
+
+
+	unsigned char l1 = 0, l2 = 0;
+	// populare matrice cu angajati; nu se partajeaza zone de heap cu input-urile
+	for (unsigned char i = 0; i < nr_angajati; i++)
+	{
+		struct Angajat temp;
+		temp.cod = va_ang[i]->cod;
+		temp.salariu = va_ang[i]->salariu;
+		temp.nume = (char*)malloc(sizeof(char) * (strlen(va_ang[i]->nume) + 1));
+		strcpy(temp.nume, va_ang[i]->nume);
+
+		if (va_ang[i]->salariu < prag_salariu)
+			pmat[0][l1++] = temp;
+		else
+			pmat[1][l2++] = temp;
+	}
+
+	return pmat;
 }
 
 void main()
@@ -218,5 +263,37 @@ void main()
 		va_ang[k++] = vang + i; // adresa element i din vang
 	va_ang[k++] = pang;
 
+	unsigned char* dim_linii = NULL, nr_linii;
 
+	// clasificare angajati ij functie de salariu
+	mang = clasificare_ang(va_ang, nr_amgajati, (float)4905.01, &dim_linii, &nr_linii);
+
+	for (unsigned char i = 0; i < nr_linii; i++)
+	{
+		printf("\n Linia #%u", i);
+		for (unsigned char j = 0; j < dim_linii[i]; j++)
+		{
+			printf("\n %u %f", mang[i][j].cod, mang[i][j].salariu);
+		}
+	}
+
+	// dezalocari memorie heap
+
+	free(ang.nume);
+	free(pang->nume);
+	for (unsigned char i = 0; i < DIMENSIUNE_VECTOR; i++)
+		free(vang[i].nume);
+
+	free(va_ang); // vector de pointeri la Angajat
+
+	for (unsigned char i = 0; i < nr_linii; i++)
+	{
+		for (unsigned char j = 0; j < dim_linii[i]; j++)
+		{
+			free(mang[i][j].nume);
+		}
+		free(mang[i]);
+	}
+	free(mang);
+	free(dim_linii); // vector dimensiuni linii clase de angajati
 }
