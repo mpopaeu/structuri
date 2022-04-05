@@ -7,8 +7,6 @@ struct Angajat
 	char* nume;
 	unsigned short int cod;
 	float salariu;
-
-	// struct Angajat *ang;
 };
 
 // [in] va_angajati - vector cu adrese de tip Angajat
@@ -193,7 +191,7 @@ void main()
 		vangs[i].nume = (char*)malloc((strlen(ang.nume) + 1) * sizeof(char));
 		strcpy(vangs[i].nume, ang.nume);
 		vangs[i].cod = ang.cod;
-		vangs[i].salariu = ang.salariu;
+		vangs[i].salariu = ang.salariu * (i*0.02 + i);
 	}
 
 	pang = vangs;
@@ -243,8 +241,28 @@ void main()
 	}
 
 	// dezalocare memorie heap pentru toatre structurile aferente Angajat
+	free(ang.nume);
+	free(pang->nume);
+	free(pang);
+	pang = NULL;
 
-	// creare lista simpla cu angajati
-	// date preluate din fisier
+	for (unsigned char i = 0; i < (sizeof(vangs) / sizeof(struct Angajat)); i++)
+		free(vangs[i].nume);
 
+	// dezalocare vector de pointeru la Angajat
+	free(v_angajati);
+
+	// dezalocare matrice de angajati
+	for (unsigned char i = 0; i < nr_linii; i++)
+	{
+		for (unsigned char j = 0; j < dim_linii[i]; j++)
+			free(mat_clasificare[i][j].nume); // dezalocare nume Angajat de pe pozitia i,j
+		free(mat_clasificare[i]); // dezalocare linie i
+	}
+	free(mat_clasificare);
+	mat_clasificare = NULL;
+
+	// dezalocare vector de dimensiuni ale liniilor din matricea mang
+	free(dim_linii);
+	dim_linii = NULL;
 }

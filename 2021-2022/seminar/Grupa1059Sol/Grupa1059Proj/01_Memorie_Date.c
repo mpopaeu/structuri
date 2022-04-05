@@ -201,7 +201,7 @@ void main()
 	{
 		vang[i].nume = (char*)malloc((strlen(ang.nume) + 1) * sizeof(char));
 		strcpy(vang[i].nume, ang.nume);
-		vang[i].cod = ang.cod + 1 * 10;
+		vang[i].cod = ang.cod + i * 10;
 		vang[i].salariu = ang.salariu + i * 100;
 	}
 
@@ -227,7 +227,7 @@ void main()
 
 
 	unsigned char* dim_linii_mat = NULL, nr_clase;
-	mang = clasificare_angajati(v_ang, nr_angajati, &dim_linii_mat, &nr_clase, 0x0100);
+	mang = clasificare_angajati(v_ang, nr_angajati, &dim_linii_mat, &nr_clase, 4450);
 
 	for (unsigned char i = 0; i < nr_clase; i++)
 	{
@@ -237,5 +237,28 @@ void main()
 	}
 
 	// dezalocare mem heap
+	free(ang.nume);
+	free(pang->nume);
+	free(pang);
+	pang = NULL;
 
+	for (unsigned char i = 0; i < (sizeof(vang) / sizeof(struct Angajat)); i++)
+		free(vang[i].nume);
+
+	free(v_ang); // dezalocare vector de pointeri la Angajat
+	v_ang = NULL;
+
+	// dezalocare matrice de angajati (nr diferit de angajati pe linii)
+	for (unsigned char i = 0; i < nr_clase; i++)
+	{
+		for (unsigned char j = 0; j < dim_linii_mat[i]; j++)
+			free(mang[i][j].nume); // dezalocare nume angajat [i, j]
+		free(mang[i]); // dezalocare linie i
+	}
+	free(mang);
+	mang = NULL;
+
+	// dezalocare vector dimensiuni linii matrice
+	free(dim_linii_mat);
+	dim_linii_mat = NULL;
 }

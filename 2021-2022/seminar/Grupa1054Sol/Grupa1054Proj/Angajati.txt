@@ -1,0 +1,3 @@
+Ionescu George,1789,4599.03
+Popescu Alex,1963,4999.90
+Georgescu Maria,7889,4350.00

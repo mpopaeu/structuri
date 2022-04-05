@@ -139,7 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="01_DateMemorie.c" />
+    <ClCompile Include="02_ListeSimple.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Angajati.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

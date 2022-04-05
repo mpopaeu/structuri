@@ -1,0 +1,3 @@
+2904,Popescu Marian,4450.00
+2888,Ionescu Alex,5100.99
+1999,Georgescu Mihai,4999.10
