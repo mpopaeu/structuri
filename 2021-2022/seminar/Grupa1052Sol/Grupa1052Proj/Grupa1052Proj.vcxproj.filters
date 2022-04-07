@@ -18,5 +18,8 @@
     <ClCompile Include="01_Memorie.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="02_ListeSimpla.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
