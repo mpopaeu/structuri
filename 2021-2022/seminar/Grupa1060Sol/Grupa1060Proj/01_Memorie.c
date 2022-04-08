@@ -281,10 +281,13 @@ void main()
 
 	free(ang.nume);
 	free(pang->nume);
+	free(pang);
+	pang = NULL;
 	for (unsigned char i = 0; i < DIMENSIUNE_VECTOR; i++)
 		free(vang[i].nume);
 
 	free(va_ang); // vector de pointeri la Angajat
+	va_ang = NULL;
 
 	for (unsigned char i = 0; i < nr_linii; i++)
 	{
@@ -295,5 +298,7 @@ void main()
 		free(mang[i]);
 	}
 	free(mang);
+	mang = NULL;
 	free(dim_linii); // vector dimensiuni linii clase de angajati
+	dim_linii = NULL;
 }

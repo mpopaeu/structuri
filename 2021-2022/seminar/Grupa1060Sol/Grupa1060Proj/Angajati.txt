@@ -1,0 +1,3 @@
+1050,Ionescu Alex,4501.05
+2009,Popescu Vasile,4999.01
+996,Georgescu Maria,5500.00
