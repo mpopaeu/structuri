@@ -18,6 +18,59 @@ struct angajat
 	struct data data_angajare;
 };
 
+// [in] vadr - vector cu adrese angajati care se clasifica
+// [in] nr_angajati - numarul de angajati care se clasifica; dimensiune vector vadr
+// [in] v_prag_salarii - vector cu praguri salarii
+// [in] nr_praguri - dimensiune vector v_prag_salarii
+// [out] nr_linii - nr de linii din matricea rezultat; nr de elemente vector linii_size
+// [out] linii_size - vector cu dimensiuni ale liniilor din matricea rezultat
+// [return] - adresa mem heap unde se afla matricea rezultat (vectorul de pointeri la linii)
+struct angajat** clasificare_angajati(struct angajat** vadr, unsigned char nr_angajati,
+									float* v_prag_salarii, unsigned char nr_praguri,
+									unsigned char* nr_linii, unsigned char* linii_size)
+{
+	*nr_linii = nr_praguri + 1; // nr de clase de angajati; nr de linii din matrice
+	linii_size = (unsigned char*)malloc(*nr_linii * sizeof(unsigned char));
+	for (unsigned char i = 0; i < *nr_linii; i++)
+		linii_size[i] = 0;
+
+	// calcul numar de elemente de pe fiecare linie din matrice
+	for (unsigned char i = 0; i < nr_angajati; i++)
+	{
+		unsigned char vb = 0; // nu s-a facut clasificare
+		for (unsigned char j = 0; j < nr_praguri && vb == 0; j++)
+		{
+			if (vadr[i]->salariu < v_prag_salarii[j])
+			{
+				linii_size[j] += 1; // incrementez nr de angajati de pe linia j
+				vb = 1;
+			}
+		}
+		if (vb == 0)
+		{
+			linii_size[nr_praguri] += 1;
+		}
+	}
+
+	// alocare matrice
+	struct angajat** pmat = (struct angajat**)malloc(*nr_linii * sizeof(struct angajat*));
+	for (unsigned char i = 0; i < *nr_linii; i++)
+		pmat[i] = (struct angajat*)malloc(linii_size[i] * sizeof(struct angajat));
+
+	unsigned char k = 0;
+	for (unsigned char i = 0; i < *nr_linii; i++)
+	{
+		for (unsigned char j = 0; j < linii_size[i]; j++)
+		{
+			pmat[i][j].id = vadr[k]->id;
+			//...
+			k += 1;// acces la urmatorul angajat din vetorul vadr
+		}
+	}
+
+	return pmat;
+}
+
 void main()
 {
 	//// variabile/constante
@@ -137,7 +190,69 @@ void main()
 
 	printf("\n Dimensiune structura angajat = %d Bytes\n", sizeof(struct angajat));
 
-	struct angajat ang;
+	struct angajat ang, vang[DIM_VECTOR], *pang,  **mang;
 
-	ang.id
+	// initializare date din ang
+	ang.id = 1555;
+	ang.nume = (char*)malloc(sizeof(char) * (strlen("Ionescu Vasile") + 1));
+	strcpy(ang.nume, "Ionescu Vasile");
+	ang.salariu = 4999.50f;
+	ang.data_angajare.zi = 10;
+	ang.data_angajare.luna = 7;
+	ang.data_angajare.an = 2019;
+
+	// initializare date din vector vang
+	for (unsigned char i = 0; i < DIM_VECTOR; i++)
+	{
+		vang[i].id = ang.id + (i * 10 + 1);
+		vang[i].nume = (char*)malloc(sizeof(char) * (strlen(ang.nume) + 1));
+		strcpy(vang[i].nume, ang.nume);
+		vang[i].nume[0] += i + 1;
+		vang[i].salariu = ang.salariu * (i * 0.05f + 1);
+		vang[i].data_angajare.zi = ang.data_angajare.zi + (i + 1);
+		if ((ang.data_angajare.luna + (i + 1)) % 12 == 0)
+			vang[i].data_angajare.luna = 1;
+		else
+			vang[i].data_angajare.luna = (ang.data_angajare.luna + (i + 1)) % 12;
+		vang[i].data_angajare.an = ang.data_angajare.an - (i + 1);
+	}
+
+	// alocare si initializare date pointer
+	pang = (struct angajat*)malloc(1 * sizeof(struct angajat));
+	pang->id = ang.id - 1;
+	pang->nume = (char*)malloc(sizeof(char) * (strlen(ang.nume) + 1));
+	strcpy(pang->nume, ang.nume);
+	pang->nume[0] -= 1;
+	pang->salariu = ang.salariu * 0.96f;
+	pang->data_angajare.zi = ang.data_angajare.zi - 1;
+	pang->data_angajare.luna = ang.data_angajare.luna - 1;
+	pang->data_angajare.an = ang.data_angajare.an + 1;
+
+	// clasificare angajati pe baza de lista prag salarii
+	// centralizare angajati de clasificat
+	struct angajat** vadr_ang; // vector de adrese de tip angajat
+	unsigned char nr_angajati; // nr de angajati care se clasifica; dimensiune vector vadr_ang
+	nr_angajati = (sizeof(ang) + sizeof(vang) + (sizeof(*pang) *  1)) / sizeof(struct angajat);
+	vadr_ang = (struct angajat**)malloc(nr_angajati * sizeof(struct angajat*));
+
+	unsigned char k = 0;
+	vadr_ang[k++] = &ang;
+	for (unsigned char i = 0; i < DIM_VECTOR; i++)
+	{
+		vadr_ang[k++] = vang + i; // adresa elementului vang[i] se scrie pe pozitia k in vectorul de pointeri
+	}
+	vadr_ang[k++] = pang;
+
+	// definire praguri de clasificare
+	float* v_prag_salariu, nr_praguri;
+	nr_praguri = 4;
+	v_prag_salariu = (float*)malloc(nr_praguri * sizeof(float));
+	for (unsigned char i = 0; i < nr_praguri; i++)
+		v_prag_salariu[i] = (i + 1) * 1500.00f;
+
+	mang = clasificare_angajati(...);
+
+	// afisare continu matrice mang
+
+	// dezalocare zone de memorie utilizate in app
 }
