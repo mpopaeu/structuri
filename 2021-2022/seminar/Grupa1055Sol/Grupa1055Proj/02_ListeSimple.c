@@ -15,17 +15,6 @@ struct Nod
 	struct Nod* next;
 };
 
-struct NodD
-{
-	struct Angajat ang;
-	struct NodD * prev,* next;
-};
-
-struct ListaD
-{
-	struct NodD * prim, * ultim;
-};
-
 // operatii de baza cu liste simple
 
 // inserare nod la inceput
@@ -61,15 +50,9 @@ void main()
 	struct Angajat tmp;
 	struct Nod* pList = NULL;
 
-	struct ListaD listDubla;
-
-	// lista dubla cu 0 noduri (empty)
-	listDubla.prim = NULL;
-	listDubla.ultim = NULL; 
-
 	f = fopen("Angajati.txt", "r");
 
-	fscanf(f, "%u,", &tmp.id);
+	fscanf(f, "%hu,", &tmp.id);
 	while (!feof(f))
 	{
 		char nn[64];
@@ -81,7 +64,7 @@ void main()
 		// inserare tmp in lista simpla
 		pList = inserare_inceput(pList, tmp);
 
-		fscanf(f, "%u,", &tmp.id);
+		fscanf(f, "%hu,", &tmp.id);
 	}
 
 	tmp.nume = NULL;
