@@ -139,8 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="01_Memorie.c" />
     <ClCompile Include="02_ListeSimpla.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Angajati.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
