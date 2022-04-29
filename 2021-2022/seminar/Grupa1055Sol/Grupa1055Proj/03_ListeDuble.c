@@ -86,13 +86,75 @@ struct Angajat* export_angajati(struct ListaD *list, unsigned char * vector_size
 }
 
 // stergere noduri cu cod divizibil cu o valoare specificata
-struct ListaD stergere_criteriu(struct ListaD list, unsigned char cod)
+struct ListaD stergere_criteriu(struct ListaD list, unsigned short int cod)
 {
+	if (list.prim)
+	{
+		struct NodD* tmp = list.prim;
+		while (tmp)
+		{
+			if (tmp->ang.id % cod == 0)
+			{
+				// a fost identificat nod de sters (tmp)
+				if (tmp->prev && tmp->next)
+				{
+					// nodul este in interiorul LD
+					struct NodD* aux = tmp->next;
+					tmp->prev->next = aux;
+					aux->prev = tmp->prev;
 
+					free(tmp->ang.nume);
+					free(tmp);
+
+					tmp = aux; // punctul din care se continua cautarea nodurilor de sters
+				}
+				else
+				{
+					if (!tmp->next && !tmp->prev)
+					{
+						// LD are un singur nod care trebuie sters
+						free(tmp->ang.nume);
+						free(tmp);
+						list.prim = list.ultim = NULL;
+						tmp = NULL;
+					}
+					else
+					{
+						if (!tmp->prev)
+						{
+							// tmp este primul nod in LD
+							list.prim = list.prim->next;
+							list.prim->prev = NULL; 
+							free(tmp->ang.nume);
+							free(tmp);
+
+							tmp = list.prim; // se continua cautarea nodurilor de sters incepand cu noul start de LD
+						}
+						else
+						{
+							// tmp este ultimul nod in LD
+							list.ultim = list.ultim->prev;
+							list.ultim->next = NULL;
+
+							free(tmp->ang.nume);
+							free(tmp);
+							tmp = NULL; // nu mai exista noduri de verificat/sters
+						}
+					}
+				}
+			}
+			else
+				tmp = tmp->next;
+		}
+	}
+
+	return list;
 }
 
 // completare cu implementari operatii de baza preluate de la liste simple
 // operatii de baza cu liste circulare
+
+// interschimbare noduri adiacente in LS si LD (modificare adrese de legatura)
 
 void main()
 {
@@ -127,25 +189,48 @@ void main()
 	struct Angajat* vang;
 	unsigned char size;
 
-	vang = export_angajati(&listDubla, &size);
-	printf("\nContinut vector de angajati:\n");
-	for (unsigned char i = 0; i < size; i++)
-		printf("\t%s\n", vang[i].nume);
+	//vang = export_angajati(&listDubla, &size);
+	//printf("\nContinut vector de angajati:\n");
+	//for (unsigned char i = 0; i < size; i++)
+	//	printf("\t%s\n", vang[i].nume);
 
-	printf("\nLista dubla dupa export angajati:\n");
-	struct NodD* t;
-	t = listDubla.prim;
+	//printf("\nLista dubla dupa export angajati:\n");
+	//struct NodD* t;
+	//t = listDubla.prim;
+	//while (t)
+	//{
+	//	printf("\t%s\n", t->ang.nume);
+
+	//	t = t->next;
+	//}
+
+	// listDubla = stergere_criteriu(listDubla, 5); // dezalocare v1: cod = 1 pentru dezalocarea intregii LD
+
+	// dezalocare v2: apel repatat functie stergere nod cu precizare cod angajat din nodul #1
+	while (listDubla.prim)
+	{
+		listDubla = stergere_criteriu(listDubla, listDubla.prim->ang.id);
+	}
+
+	printf("\nLista dubla dupa stergere (inceput->sfarsit):\n");
+	struct NodD* t = listDubla.prim;
 	while (t)
 	{
 		printf("\t%s\n", t->ang.nume);
-
 		t = t->next;
 	}
+	printf("\nLista dubla dupa stergere (sfarsit->inceput):\n");
+	t = listDubla.ultim;
+	while (t)
+	{
+		printf("\t%s\n", t->ang.nume);
+		t = t->prev;
+	}
 
-	// dezalocare vector de angajati
-	for (unsigned char i = 0; i < size; i++)
-		free(vang[i].nume);
-	free(vang);
+	//// dezalocare vector de angajati
+	//for (unsigned char i = 0; i < size; i++)
+	//	free(vang[i].nume);
+	//free(vang);
 	vang = NULL;
 	
 }
