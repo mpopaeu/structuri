@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="02_ListeSimpla.c" />
+    <ClCompile Include="03_ListeDuble.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Angajati.txt" />
