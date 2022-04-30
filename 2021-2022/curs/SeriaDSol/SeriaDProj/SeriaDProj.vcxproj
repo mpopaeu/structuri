@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="02_ListeDuble.c" />
     <ClCompile Include="02_ListeSimple.c" />
+    <ClCompile Include="03_TabeleHash.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Studenti.txt" />
