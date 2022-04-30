@@ -252,7 +252,7 @@ void main()
 
 	mang = clasificare_angajati(...);
 
-	// afisare continu matrice mang
+	// afisare continut matrice mang
 
 	// dezalocare zone de memorie utilizate in app
 }
