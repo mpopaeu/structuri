@@ -15,18 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="02_ListeSimple.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="02_ListeDuble.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="03_TabeleHash.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Studenti.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Students.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
