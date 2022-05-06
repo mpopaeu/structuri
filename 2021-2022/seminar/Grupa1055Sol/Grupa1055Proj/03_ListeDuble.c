@@ -155,6 +155,73 @@ struct ListaD stergere_criteriu(struct ListaD list, unsigned short int cod)
 // operatii de baza cu liste circulare
 
 // interschimbare noduri adiacente in LS si LD (modificare adrese de legatura)
+struct ListaD interschimb_adiacente(struct ListaD list, unsigned short int i)
+{
+	if (list.prim != list.ultim)
+	{
+		// exista cel putin 2 noduri in LD
+		unsigned short int k = 1;
+		struct NodD* temp = list.prim;
+		while (temp != list.ultim && k < i)
+		{
+			k += 1;
+			temp = temp->next;
+		}
+
+		if (temp != list.ultim)
+		{
+			struct NodD* p, * q, * r;
+			p = temp->prev;
+			q = temp->next;
+			r = q->next;
+
+			temp->next = r;
+			temp->prev = q;
+			q->next = temp;
+			q->prev = p;
+
+			if (temp == list.prim)
+			{
+				// interschimb noduri (1, 2)
+				list.prim = q;
+				if (list.ultim == q)
+				{
+					// exista doar 2 noduri in LD
+					list.ultim = temp;
+				}
+				else
+				{
+					// exista cel putin 3 noduri in lista, deci r nu este NULL
+					r->prev = temp;
+				}
+			}
+			else
+			{	
+				p->next = q;
+				if (q == list.ultim)
+				{
+					// interschimb noduri (n-1, n)					
+					list.ultim = temp;
+				}
+				else
+				{
+					// cazul general
+					r->prev = temp;
+				}
+			}
+		}
+	}
+
+	return list;
+}
+
+// interschimbare noduri oarecare in LD (modificare adrese de legatura)
+struct ListaD interschimb_oarecare(struct ListaD list, unsigned short int i, unsigned short int j)
+{
+}
+
+// BubbleSort
+// sortare prin selectie
 
 void main()
 {
@@ -185,9 +252,25 @@ void main()
 	}
 	tmp.nume = NULL;
 
+	printf("\nLista dubla dupa creare (prim->ultim)\n");
+	struct NodD* t;
+	t = listDubla.prim;
+	while (t)
+	{
+		printf("\t%s\n", t->ang.nume);
+		t = t->next;
+	}
+	printf("\nLista dubla dupa creare (ultim->prim)\n");
+	t = listDubla.ultim;
+	while (t)
+	{
+		printf("\t%s\n", t->ang.nume);
+		t = t->prev;
+	}
+
 
 	struct Angajat* vang;
-	unsigned char size;
+	//unsigned char size;
 
 	//vang = export_angajati(&listDubla, &size);
 	//printf("\nContinut vector de angajati:\n");
@@ -206,6 +289,24 @@ void main()
 
 	// listDubla = stergere_criteriu(listDubla, 5); // dezalocare v1: cod = 1 pentru dezalocarea intregii LD
 
+
+	listDubla = interschimb_adiacente(listDubla, 5);
+	printf("\nLista dubla dupa interschimb adiacente (prim->ultim)\n");
+	t = listDubla.prim;
+	while (t)
+	{
+		printf("\t%s\n", t->ang.nume);
+		t = t->next;
+	}
+	printf("\nLista dubla dupa interschimb adiacente (ultim->prim)\n");
+	t = listDubla.ultim;
+	while (t)
+	{
+		printf("\t%s\n", t->ang.nume);
+		t = t->prev;
+	}
+
+
 	// dezalocare v2: apel repatat functie stergere nod cu precizare cod angajat din nodul #1
 	while (listDubla.prim)
 	{
@@ -213,7 +314,7 @@ void main()
 	}
 
 	printf("\nLista dubla dupa stergere (inceput->sfarsit):\n");
-	struct NodD* t = listDubla.prim;
+	t = listDubla.prim;
 	while (t)
 	{
 		printf("\t%s\n", t->ang.nume);
