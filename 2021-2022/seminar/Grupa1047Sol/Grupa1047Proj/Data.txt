@@ -1,10 +1,10 @@
-10001,Popescu Marian,Marketing,1500.9,		5
+10101,Popescu Marian,Marketing,1500.9,		5
 10002,Ionescu Maria,HR,1300.8,				1
-10003,Popa Mihai,Production,1800.5,			6
+10031,Popa Mihai,Production,1800.5,			6
 10004,Cazacu Robert,Testing,2000.2,			3
 10005,Mihailescu Valentin,Design,2200.8,	4
-10006,Dobrogeanu Iulian,Marketing,900.9,	2
-10007,Pacurar Alexandra,HR,300.8,			8
+10204,Dobrogeanu Iulian,Marketing,900.9,	2
+10231,Pacurar Alexandra,HR,300.8,			8
 10008,Neacsu Ruxandra,Production,1400.5,	7
-10009,Ionescu Vasiliu,Testing,3000.2,		15
+10931,Ionescu Vasiliu,Testing,3000.2,		15
 10010,Togan Bogdan,Design,2700.8,			9
