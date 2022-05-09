@@ -138,8 +138,103 @@ struct ListaDubla interschimb_adiacente(struct ListaDubla list, unsigned char i)
 }
 
 // interschimb noduri oarecare (cu modificare adrese de legatura)
+struct ListaDubla interschimb_oarecare(struct ListaDubla list, unsigned char i, unsigned char j)
+{
+	if (list.first && list.first->next && i != j)
+	{
+		if (i > j)
+		{
+			unsigned char aux = i;
+			i = j;
+			j = aux;
+		}
 
-// LS/LD circularen
+		struct NodD* tempi = list.first;
+		unsigned char k = 1;
+
+		while (tempi->next && k < i)
+		{
+			k += 1;
+			tempi = tempi->next;
+		}
+
+		if (tempi->next)
+		{
+			// tempi este pe pozitie valida in LD
+
+			struct NodD* tempj = tempi;
+			while (tempj && k < j)
+			{
+				k += 1;
+				tempj = tempj->next;
+			}
+
+			if (tempj)
+			{
+				// tempi si tempj sunt plasate pe nodurile i, respectiv j
+				// interschimbul se poate efectua
+
+				if (tempj == tempi->next)
+				{
+					// interschimb noduri adiacente
+					list = interschimb_adiacente(list, i);
+				}
+				else
+				{
+					struct NodD* p, * q, * r, * s;
+					p = tempi->prev;
+					q = tempi->next;
+					r = tempj->prev;
+					s = tempj->next;
+
+					tempi->next = s;
+					tempi->prev = r;
+					q->prev = tempj;
+
+					tempj->next = q;
+					tempj->prev = p;
+					r->next = tempi;
+
+					if (tempi == list.first && tempj == list.last)
+					{
+						// interschimb primul cu ultimul
+						// se actualizeaza ambele capete
+						list.first = tempj;
+						list.last = tempi;
+					}
+					else
+					{
+						if (tempi == list.first)
+						{
+							// interschimb nodul 1 cu j; se actualizeaza inceputul de LD
+							list.first = tempj;
+							s->prev = tempi;
+						}
+						else
+						{
+							if (tempj == list.last)
+							{
+								// interschimb nodul i cu n; se actualizeaza sfarsitul de LD
+								list.last = tempi;
+								p->next = tempj;
+							}
+							else
+							{
+								// caz general; interschimb nodul i cu j; nu se actualizeaza capete de LD
+								p->next = tempj;
+								s->prev = tempi;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return list;
+}
+
+// LS/LD circulare
 
 void main()
 {
@@ -183,7 +278,8 @@ void main()
 		tmp = tmp->prev;
 	}
 
-	listD = interschimb_adiacente(listD, 2);
+	// listD = interschimb_adiacente(listD, 2);
+	listD = interschimb_oarecare(listD, 7, 5);
 	printf("\nLista dubla dupa interschimb (first->last):");
 	tmp = listD.first;
 	while (tmp)

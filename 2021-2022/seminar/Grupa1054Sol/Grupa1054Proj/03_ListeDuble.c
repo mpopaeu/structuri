@@ -70,6 +70,106 @@ struct ListaDubla dezalocare_lista_dubla(struct ListaDubla list)
 	return list;
 }
 
+// stergere nod din interior LD
+// intreschimb noduri oarecare in LD (prin modificare adrese de legatura)
+struct ListaDubla interschimb_oarecare(struct ListaDubla list, unsigned short int i, unsigned short int j)
+{
+	if (list.first && list.first->next)
+	{
+		if (i > j)
+		{
+			// interschimb pentru a avea situatie de tip i<j
+			unsigned short int aux = i;
+			i = j;
+			j = aux;
+		}
+
+		struct NodD* tempi = list.first;
+		unsigned short int k = 1;
+		while (tempi->next && k < i)
+		{
+			k += 1;
+			tempi = tempi->next;
+		}
+		if (tempi->next)
+		{
+			// exista cel putin 1 nod dupa tempi
+			// tempi este nodul de pe pozitia i
+			struct NodD* tempj = tempi;
+			while (tempj->next && k < j)
+			{
+				k += 1;
+				tempj = tempj->next;
+			}
+
+			if (k == j)
+			{
+				// exista nodurile i si j in LD
+				struct NodD* p, * q, * r, * s;
+				p = tempi->prev;
+				r = tempi->next;
+				s = tempj->prev;
+				q = tempj->next;
+
+				if (tempi == list.first && tempj == list.last)
+				{					
+					// se interschimba 1 cu n; se actualizeaza ambele capete
+					// se trateaza diferit cazul 1 cu 2 si 2 noduri in LD (vezi caz general)
+					;
+				}
+				else
+				{
+					if (tempi == list.first)
+					{
+						// se interschimba 1 cu j; se actualizeaza inceputul LD
+						;
+					}
+					else
+					{
+						if (tempj == list.last)
+						{
+							// se interschimba i cu n; se actualizeaza sfarsitul LD
+							;
+						}
+						else
+						{
+							// caz general, inclusiv j == i+1							
+							if (tempj != tempi->next)
+							{
+								// tempi si tempj nu sunt adiacente
+								p->next = tempj;
+								tempi->next = q;
+								tempj->prev = p;
+								q->prev = tempi;
+
+								tempi->prev = s;
+								r->prev = tempj;
+								tempj->next = r;
+								s->next = tempi;
+							}
+							else
+							{
+								// noduri adiacente
+								p->next = tempj;
+								tempi->next = q;
+								tempj->prev = p;
+								q->prev = tempi;
+
+								tempi->prev = tempj;
+								tempj->next = tempi;
+							}
+							
+						}
+					}
+				}
+			}
+
+		}
+	}
+
+	return list;
+}
+
 void main()
 {
 	FILE* f;
@@ -100,6 +200,23 @@ void main()
 		tmp = tmp->next;
 	}
 	printf("\n\nContinut lista dubla de angajati (last->first):");
+	tmp = listD.last; // initializare tmp cu adresa ultimului nod din LD
+	while (tmp)
+	{
+		printf("\n%s", tmp->ang.nume);
+		tmp = tmp->prev;
+	}
+
+	// interschimb noduri oarecare
+	listD = interschimb_oarecare(listD, 2, 4);
+	printf("\n\nContinut lista dubla dupa interschimb (first->last):");
+	tmp = listD.first; // initializare tmp cu adresa primului nod din LD
+	while (tmp)
+	{
+		printf("\n%s", tmp->ang.nume);
+		tmp = tmp->next;
+	}
+	printf("\n\nContinut lista dubla dupa interschimb (last->first):");
 	tmp = listD.last; // initializare tmp cu adresa ultimului nod din LD
 	while (tmp)
 	{
