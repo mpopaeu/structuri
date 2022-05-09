@@ -88,6 +88,10 @@ NodeInfo* search_employee(Node** ht, unsigned ht_size, unsigned short int key)
 	return NULL; // nu exista angajat cu cheia cautata key
 }
 
+// stergere angajat in tabela hash dupa cod
+// dezalocare tabela hash cu chaining
+// export angajati in vector; se selecteaza angajatii cu cod in interval specificat; export cu stergere angajati din tabela hash
+
 void main()
 {
 	FILE* pFile = fopen("Data.txt", "r");
