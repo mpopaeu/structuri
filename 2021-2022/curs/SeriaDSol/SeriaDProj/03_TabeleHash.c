@@ -203,4 +203,13 @@ void main() {
 	}
 
 	// dezalocarea structurii tabela de dispersie
+	for (unsigned int i = 0; i < size; i++)
+	{
+		if (HTable[i].name)
+		{
+			free(HTable[i].name);
+		}
+	}
+	free(HTable);
+	HTable = NULL;
 }

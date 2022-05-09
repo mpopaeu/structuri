@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="03_HashTables.c" />
+    <ClCompile Include="04_Trees.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Studenti.txt" />
