@@ -57,7 +57,63 @@ void inserare_hashtable_chain(struct Nod** ht, unsigned char ht_size, struct Ang
 }
 
 // cautare angajat dupa cheie de cautare
+struct Angajat* cauta_angajat_cheie(struct Nod** ht, unsigned char ht_size, unsigned short int key)
+{
+	unsigned char poz = hash_function(key, ht_size);
+
+	struct Nod* tmp = ht[poz]; // adresa primului nod din lista simpla ht[poz]
+	while (tmp)
+	{
+		if (key == tmp->ang.cod)
+			return &tmp->ang;
+
+		tmp = tmp->next;
+	}
+
+	return NULL;
+}
+
 // stergere angajat dupa cheie de cautare
+void sterge_angajat_cheie(struct Nod** ht, unsigned char ht_size, unsigned short int key)
+{
+	unsigned char poz = hash_function(key, ht_size);
+
+	if (ht[poz]) // exista cel putin 1 nod in lista ht[poz]
+	{
+		struct Nod* tmp = ht[poz];
+
+		if (tmp->ang.cod == key)
+		{
+			// angajatul de sters este primul nod din lista
+			ht[poz] = tmp->next;
+
+			free(tmp->ang.nume);
+			free(tmp);
+		}
+		else
+		{
+			while (tmp->next)
+			{
+				if (tmp->next->ang.cod == key)
+				{
+					struct Nod* q = tmp->next;
+
+					tmp->next = q->next;
+
+					free(q->ang.nume);
+					free(q);
+
+					return; // oprire executie functie deoarece exista un singur angajat cu codul cautat
+				}
+
+				tmp = tmp->next;
+			}
+		}
+	}
+}
+
+// cautare angajat(i) dupa nume
+// stergere angajat(i) dupa interval salarii
 
 void main()
 {
@@ -87,6 +143,34 @@ void main()
 	fclose(f);
 
 	printf("Tabela de dispersie dupa creare:\n");
+	for (unsigned char i = 0; i < HASH_TABLE_SIZE; i++)
+	{
+		if (HTable[i])
+		{
+			printf("\nLista %u:", i);
+			struct Nod* tmp = HTable[i];
+			while (tmp)
+			{
+				printf("\n\t %hu %s", tmp->ang.cod, tmp->ang.nume);
+				tmp = tmp->next;
+			}
+		}
+	}
+
+	struct Angajat* pang;
+	pang = cauta_angajat_cheie(HTable, HASH_TABLE_SIZE, 1789);
+
+	printf("\n\nOperatia de cautare in tabela de dispersie, folosind cheia de cautare");
+	if (pang)
+	{
+		printf("\nAngaja identificat in tabela de dispersie: %hu %s", pang->cod, pang->nume);
+	}
+	else
+		printf("\nAngajatul cautat nu este identificat in tabela de dispersie.");
+	
+	// stergerea unui angajat pe baza de cheie de cautare (cod angajat)
+	sterge_angajat_cheie(HTable, HASH_TABLE_SIZE, 7889);
+	printf("\n\nTabela de dispersie dupa stergere angajat:\n");
 	for (unsigned char i = 0; i < HASH_TABLE_SIZE; i++)
 	{
 		if (HTable[i])

@@ -1,5 +1,5 @@
 2904,Popescu Marian,4450.00
 2888,Ionescu Alex,5100.99
 1999,Georgescu Mihai,4999.10
-1299,Vasilescu Mircea,4799.10
-1099,Cazacu Dumitru,4388.10
+1099,Vasilescu Mircea,4799.10
+1299,Cazacu Dumitru,4388.10

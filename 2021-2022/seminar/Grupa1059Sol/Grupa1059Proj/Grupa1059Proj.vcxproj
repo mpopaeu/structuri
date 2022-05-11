@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="04_HashTable_chain.c" />
+    <ClCompile Include="05_ArbBinari.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Angajati.txt" />

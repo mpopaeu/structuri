@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="04_TabelaHash_chain.c">
+    <ClCompile Include="05_ArbBin.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
