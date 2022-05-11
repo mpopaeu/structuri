@@ -1,4 +1,4 @@
 1333,Ionescu Pavel,4980.00
-1899,Popescu Virgil,5555.10
+2666,Popescu Virgil,5555.10
 290,Georgescu Maria,5001.99
-330,Vasilescu Alex,5777.99
+33,Vasilescu Alex,5777.99

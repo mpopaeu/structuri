@@ -216,10 +216,13 @@ struct ListaDubla interschimb_adiacente(struct ListaDubla list, unsigned short i
 // [in] list - lista dubla in care se aplica interschimb adiacente
 // [in] poz1 - pozitia primului nod care se interschimba in lista dubla list
 // [in] poz2 - pozitia celui de al doilea nod care se interschimba in lista dubla list
-// [return] - lista dubla actualizata (adresele primului, respectiv ultimulu nod posibil modificate)
+// [return] - lista dubla actualizata (adresele primului, respectiv ultimului nod posibil modificate)
 struct ListaDubla interschimb_oarecare(struct ListaDubla list, unsigned short int poz1, unsigned short int poz2)
 {
 }
+
+// BubbleSort
+// sortare prin selectie
 
 void main()
 {
