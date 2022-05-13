@@ -218,6 +218,99 @@ struct ListaD interschimb_adiacente(struct ListaD list, unsigned short int i)
 // interschimbare noduri oarecare in LD (modificare adrese de legatura)
 struct ListaD interschimb_oarecare(struct ListaD list, unsigned short int i, unsigned short int j)
 {
+	if (list.prim != list.ultim)
+	{
+		// exista cel putin 2 noduri in LD
+		if (i > j)
+		{
+			unsigned short int aux = i;
+			i = j;
+			j = aux;
+		}
+
+		if (i != j)
+		{
+			struct NodD* temp1, * temp2;
+			unsigned short int k = 0;
+
+			temp1 = list.prim;
+			k = 1;
+			while (temp1->next && k < i)
+			{
+				k += 1;
+				temp1 = temp1->next;
+			}
+
+			if (temp1->next)
+			{
+				// exista temp1 pe pozitia i in LD
+				temp2 = temp1;
+				while (temp2 && k < j)
+				{
+					k += 1;
+					temp2 = temp2->next;
+				}
+
+				if (temp2)
+				{
+					// exista temp2 pe pozitia j in LD
+					if (temp2 == temp1->next)
+					{
+						// temp1 si temp2 sunt adiacente
+						list = interschimb_adiacente(list, i);
+					}
+					else
+					{
+						struct NodD* p, * q, * r, * s;
+						p = temp1->prev;
+						q = temp1->next;
+						r = temp2->prev;
+						s = temp2->next;
+
+						temp1->next = s;
+						temp1->prev = r;
+						q->prev = temp2;
+
+						temp2->next = q;
+						temp2->prev = p;
+						r->next = temp1;
+
+						if (temp1 == list.prim)
+						{
+							// temp1 este primul nod
+							list.prim = temp2;
+							if (temp2 == list.ultim)
+							{
+								// interschimb (1, n), n ultimul nod
+								list.ultim = temp1;
+							}
+							else
+							{
+								// interschimb (1, j), j < n (pozitie ultimul nod)
+								s->prev = temp1;
+							}
+						}
+						else
+						{
+							p->next = temp2;
+							if (temp2 == list.ultim)
+							{
+								// interschimb (i, n), n ultimul nod
+								list.ultim = temp1;
+							}
+							else
+							{
+								// caz general (i, j), i < n, j < n
+								s->prev = temp1;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return list;
 }
 
 // BubbleSort
@@ -290,15 +383,16 @@ void main()
 	// listDubla = stergere_criteriu(listDubla, 5); // dezalocare v1: cod = 1 pentru dezalocarea intregii LD
 
 
-	listDubla = interschimb_adiacente(listDubla, 5);
-	printf("\nLista dubla dupa interschimb adiacente (prim->ultim)\n");
+	// listDubla = interschimb_adiacente(listDubla, 5);
+	listDubla = interschimb_oarecare(listDubla, 9, 6);
+	printf("\nLista dubla dupa interschimb (prim->ultim)\n");
 	t = listDubla.prim;
 	while (t)
 	{
 		printf("\t%s\n", t->ang.nume);
 		t = t->next;
 	}
-	printf("\nLista dubla dupa interschimb adiacente (ultim->prim)\n");
+	printf("\nLista dubla dupa interschimb (ultim->prim)\n");
 	t = listDubla.ultim;
 	while (t)
 	{

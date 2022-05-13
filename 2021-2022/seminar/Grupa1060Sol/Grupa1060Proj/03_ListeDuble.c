@@ -234,26 +234,55 @@ struct ListaDubla interschimb_oarecare(struct ListaDubla list, unsigned short in
 				if (temp2 == temp1->next)
 				{
 					// interschimb adiacente (temp1, temp2); se apeleaza functia interschimb_adiacente cu poz = poz1
+					list = interschimb_adiacente(list, poz1);
 				}
 				else
 				{
 					struct NodD* p, * q, * r, * s;
 					// initializare p, q, r, s
+					p = temp1->prev;
+					q = temp1->next;
+					r = temp2->prev;
+					s = temp2->next;
+
 					// actualizare 6 adrese comune tuturor situatiile ramase
+					temp1->next = s;
+					temp1->prev = r;
+					q->prev = temp2;
+
+					temp2->next = q;
+					temp2->prev = p;
+					r->next = temp1;
 
 					if (temp1 == list.prim)
 					{
 						// poz1 = 1
+						list.prim = temp2;
+						if (temp2 == list.ultim)
+						{
+							// poz2 = n (ultimul nod)
+							// interschimb (1, n)							
+							list.ultim = temp1;
+						}
+						else
+						{
+							// interschimb (1, poz2)
+							s->prev = temp1;
+						}
 					}
 					else
 					{
+						p->next = temp2;
 						if (temp2 == list.ultim)
 						{
-							// poz2 = n
+							// poz2 = n (ultimul nod)
+							// interschimb (poz1, n)
+							list.ultim = temp1;
 						}
 						else
 						{
 							// caz general
+							s->prev = temp1;
 						}
 					}
 				}
@@ -311,7 +340,8 @@ void main()
 	}
 
 	// interschimb noduri adiacente
-	listD = interschimb_adiacente(listD, 1);
+	// listD = interschimb_adiacente(listD, 1);
+	listD = interschimb_oarecare(listD, 6, 8);
 	printf("\nLista dubla dupa interschimb (inceput->sfarsit):\n");
 	temp = listD.prim;
 	while (temp)
