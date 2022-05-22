@@ -70,7 +70,7 @@ void inserare_hash_table(Node** ht, unsigned char ht_size, NodeInfo* emp)
 // [in] ht_size - nr de elemente vector ht
 // [in] key - cheia de cautare a unui angajat
 // [return] - adresa angajat identificat; daca nu exista in tabela hash, atunci este NULL
-NodeInfo* search_employee(Node** ht, unsigned ht_size, unsigned short int key)
+NodeInfo* search_employee(Node** ht, unsigned char ht_size, unsigned short int key)
 {
 	unsigned char poz = hash_function(ht_size, key);
 
@@ -91,6 +91,68 @@ NodeInfo* search_employee(Node** ht, unsigned ht_size, unsigned short int key)
 // stergere angajat in tabela hash dupa cod
 // dezalocare tabela hash cu chaining
 // export angajati in vector; se selecteaza angajatii cu cod in interval specificat; export cu stergere angajati din tabela hash
+// [in] ht - tabela hash implementata cu chaining
+// [in] size - nr de elemente tabela hash ht
+// [in] inf - limita inferioara a intervalului de coduri pentru care se cauta angajati in tabela hash ht
+// [in] sup - limita superioara a intervalului de coduri pentru care se cauta angajati in tabela hash ht
+// [out] vemp_size - numarul de angajati identificati in tabela ht pe baza interval coduri; este calculat in functie
+// [out] result - cod de eroare cu privire la validarea input-ului
+// [return] adresa de mem heap unde incepe vectorul de angajati identificati in intervalul [inf, sup]; vectorul nu partajeaza zone de heap cu tabela hash
+struct Employee* export_employees(Node** ht, unsigned char size, unsigned short int inf, unsigned short int sup, 
+									unsigned int *vemp_size, unsigned char *result)
+{
+	*vemp_size = 0; // intializare dimensiune vector
+	struct Employee* vemp = NULL; // vectorul de angajati care se creeaza si populeaza in functie
+
+	*result = 0; // operatie efectuata cu succes, nu exista erori de I/O
+	if (inf > sup)
+	{
+		*result = 1; // cod de eroare pentru limite incorecte [inf, sup]
+	}
+	else
+	{
+
+		for (unsigned short int i = inf; i <= sup; i++)
+		{
+			NodeInfo* pemp = search_employee(ht, size, i); // caut angajat cu codul i
+			if (pemp != NULL)
+			{
+				// exista angajat cu codul i
+				*vemp_size += 1; // incrementez nr de angajati identificati in tabela hash
+			}
+		}
+
+		if (*vemp_size != 0)
+		{
+			// exista cel putin 1 angajat identificat in tabela hash
+			unsigned int k = 0;
+			// alocare vector de angajati
+			vemp = (struct Employee*)malloc(*vemp_size * sizeof(struct Employee));
+
+			for (unsigned short int i = inf; i <= sup; i++)
+			{
+				NodeInfo* pemp = search_employee(ht, size, i);
+				if (pemp != NULL)
+				{
+					// exista angajat cu codul i
+					vemp[k].code = pemp->code;
+					vemp[k].salary = pemp->salary;
+
+					vemp[k].name = (char*)malloc(strlen(pemp->name) + 1);
+					strcpy(vemp[k].name, pemp->name);
+
+					vemp[k].dept = (char*)malloc(strlen(pemp->dept) + 1);
+					strcpy(vemp[k].dept, pemp->dept);
+
+					k += 1;
+				}
+			}
+		}
+	}
+
+	return vemp;
+}
+
 
 void main()
 {
@@ -122,6 +184,7 @@ void main()
 			
 			inserare_hash_table(HTable, HASH_TABLE_SIZE, info); // inserare angajat info in tabela hash
 		}
+		fclose(pFile);
 
 		// parsare tabela hash pentr validare continut
 		printf("\nContinut tabela de dispersie:");
@@ -149,6 +212,87 @@ void main()
 		else
 			printf("\nAngajatul nu a fost identificat");
 
-		fclose(pFile);
+		unsigned int v_size;
+		struct Employee* v_emp;
+		unsigned char result;
+
+		v_emp = export_employees(HTable, HASH_TABLE_SIZE, (unsigned int)10100, (unsigned int)10001, &v_size, &result);
+
+		if (result == 0)
+		{
+			if (v_emp)
+			{
+				// exista cel putin 1 angajat identificat
+				printf("\nVector angajati exportati din tabela hash:");
+				for (unsigned int i = 0; i < v_size; i++)
+					printf("\n\t%hu  %s", v_emp[i].code, v_emp[i].name);
+			}
+			else
+			{
+				printf("\nVector empty cu angajati \"filtrati\" din tabela hash\n");
+			}
+		}
+		else
+		{
+			printf("\nInterval coduri angajati este specificat eronat.\n");
+		}
+
+		// dezalocare tabela hash
+		for (unsigned char i = 0; i < HASH_TABLE_SIZE; i++)
+		{
+			if (HTable[i])
+			{
+				// exista cel putin 1 nod in lista simpla HTable[i]
+				while (HTable[i])
+				{
+					Node* tmp = HTable[i];
+
+					HTable[i] = HTable[i]->pNext; // noul inceput de lista simpla HTable[i]
+
+					free(tmp->info->name);
+					free(tmp->info->dept);
+					free(tmp->info);
+					free(tmp);
+					// tmp = NULL;
+				}
+			}
+		}
+		free(HTable); // dezalocare vector de liste (empty)
+		HTable = NULL;
+
+		printf("\nContinut tabela de dispersie dupa dezalocare:");
+		if (HTable)
+		{
+			for (unsigned char i = 0; i < HASH_TABLE_SIZE; i++)
+			{
+				if (HTable[i])
+				{
+					printf("\nLista de coliziuni %u", i);
+					Node* tmp = HTable[i];
+					while (tmp)
+					{
+						printf("\n\t%hu %s", tmp->info->code, tmp->info->name);
+
+						tmp = tmp->pNext;
+					}
+				}
+			}
+		}
+
+		// dezalocare vector de angajati
+		for (unsigned int i = 0; i < v_size; i++)
+		{
+			free(v_emp[i].name);
+			free(v_emp[i].dept);
+		}
+		free(v_emp);
+		v_emp = NULL;
+
+		printf("\nVector angajati exportati din tabela hash dupa dezalocare:");
+		if (v_emp)
+		{
+			for (unsigned int i = 0; i < v_size; i++)
+				printf("\n\t%hu  %s", v_emp[i].code, v_emp[i].name);
+		}
 	}
 }
