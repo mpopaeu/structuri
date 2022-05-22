@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="04_Trees.c" />
+    <ClCompile Include="05_AVLTress.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Studenti.txt" />

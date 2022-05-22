@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="04_Trees.c">
+    <ClCompile Include="05_AVLTress.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -19,11 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="04_Trees.c" />
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="Studenti.txt" />
     <Text Include="Students.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="05_AVLTrees.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
