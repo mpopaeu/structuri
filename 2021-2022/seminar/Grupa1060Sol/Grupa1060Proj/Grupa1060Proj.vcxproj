@@ -139,10 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="04_ArbBin.c" />
+    <ClCompile Include="05_Graf.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Angajati.txt" />
+    <Text Include="Graf.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
