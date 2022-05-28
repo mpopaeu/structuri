@@ -1,5 +1,5 @@
 Ionescu George,1789,4599.03
 Popescu Alex,1963,4999.90
-Georgescu Maria,7889,4350.00
-Vasilescu Marian,7819,4750.00
-Sturza Calin,9719,4990.00
+Georgescu Maria,1801,4350.00
+Vasilescu Marian,1633,4750.00
+Sturza Calin,1771,4990.00

@@ -56,6 +56,76 @@ void inordine(struct NodArb* r)
 	}
 }
 
+struct NodArb* stergere_nod(struct NodArb* r, unsigned short int cheie, struct Angajat *a)
+{
+	a->nume = NULL; // ipoteza: angajatul nu exista
+	if (r)
+	{
+		if (cheie < r->ang.cod)
+		{
+			r->stanga = stergere_nod(r->stanga, cheie, a);
+		}
+		else
+		{
+			if (cheie > r->ang.cod)
+			{
+				r->dreapta = stergere_nod(r->dreapta, cheie, a);
+			}
+			else
+			{
+				// nodul de sters (r) a fost identificat
+				*a = r->ang;
+				if (r->stanga == NULL && r->dreapta == NULL)
+				{
+					// nodul r are 0 descendenti (frunza)
+					// nodul r se dezaloca logic si fizic
+					free(r);
+					r = NULL;
+				}
+				else
+				{
+					if (r->stanga != NULL && r->dreapta != NULL)
+					{
+						// nodul de sters (r) are 2 descendenti
+						struct NodArb* r_ss, * r_sd, * temp;
+						// salvare adrese subarbori
+						r_ss = r->stanga;
+						r_sd = r->dreapta;
+
+						// dezalocare nod curent
+						// nodul r se dezaloca logic si fizic
+						free(r);
+
+						//identificare nod cu cheia minima (temp) din subarbore dreapta 
+						temp = r_sd;
+						while (temp->stanga)
+							temp = temp->stanga;
+
+						temp->stanga = r_ss; // subarbore stanga se adauga la subarbore dreapta
+
+						r = r_sd;
+					}
+					else
+					{
+						// nodul r are 1 descendent
+						struct NodArb* temp;
+						if (r->stanga)
+							temp = r->stanga;
+						else
+							temp = r->dreapta;
+
+						// nodul r se dezaloca logic si fizic
+						free(r);
+						r = temp;
+					}
+				}
+			}
+		}
+	}
+
+	return r;
+}
+
 void main()
 {
 	FILE* f;
@@ -91,6 +161,36 @@ void main()
 
 	printf("\nArborele dupa creare:");
 	inordine(root);
+
+	root = stergere_nod(root, 2, &fang);
+	if (fang.nume != NULL)
+	{
+		printf("\n\nAngajat %hu %s eliminat din arbore", fang.cod, fang.nume);
+		free(fang.nume);
+	}
+	else
+	{
+		printf("\n\nAngajatul NU a fost identificat in arbore.");
+	}
+
+	printf("\nArborele dupa stergere angajat:");
+	inordine(root);
+
+	// dezalocare arbore
+	while (root)
+	{
+		root = stergere_nod(root, root->ang.cod, &fang);
+		if (fang.nume)
+			free(fang.nume);
+	}
+
+	printf("\n\nArborele dupa dezalocare:");
+	inordine(root);
+
+	// noduri plasate pe un nivel specificat
+	// numarul de noduri frunza de pe fiecare nivel
+	// determinare echilibru arbore
+	// stergere noduri pe baza nume angajat
 
 	fclose(f);
 }
