@@ -19,9 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="05_AVLTress.c" />
+    <ClCompile Include="06_Graf_LA.c" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Graf.txt" />
     <Text Include="Studenti.txt" />
     <Text Include="Students.txt" />
   </ItemGroup>

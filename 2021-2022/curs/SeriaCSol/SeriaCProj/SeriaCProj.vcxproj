@@ -19,11 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Studenti.txt" />
-    <Text Include="Students.txt" />
+    <Text Include="Graf.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="05_AVLTrees.c" />
+    <ClCompile Include="06_Graf_LA.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
