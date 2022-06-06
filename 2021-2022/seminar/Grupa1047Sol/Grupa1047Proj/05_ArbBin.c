@@ -180,12 +180,32 @@ void main()
 	if (pemp)
 	{
 		printf("\nAngajatul %hu %s a fost extras din arbore.", pemp->code, pemp->name);
+		// dezalocare angajat extras
+		free(pemp->dept);
+		free(pemp->name);
+		free(pemp);
 	}
 	else
 	{
 		printf("\nAngajatul NU exista in arbore!");
 	}
 
-	printf("\nArborele BST dupa stergere nod:\n");
+	printf("\n\nArborele BST dupa stergere nod:");
 	inordine(root);
+
+	// dezalocare arbore
+	printf("\n\nDezalocare arbore BST:");
+	while (root)
+	{
+		root = delete_node_BST(root, root->info->code, &pemp);
+		printf("\nAngajatul %hu %s a fost extras din arbore.", pemp->code, pemp->name);
+		// dezalocare angajat extras
+		free(pemp->dept);
+		free(pemp->name);
+		free(pemp);
+	}
+
+	printf("\nArborele BST dupa dezalocare:\n");
+	inordine(root);
+
 }
