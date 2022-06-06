@@ -20,9 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Graf.txt" />
+    <Text Include="heapKeys.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_Graf_LA.c" />
+    <ClCompile Include="08_StrBiti.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

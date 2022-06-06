@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_Graf_LA.c">
+    <ClCompile Include="07_Heap.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -27,6 +27,9 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="Graf.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="HeapKeys.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
