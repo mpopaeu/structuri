@@ -1,5 +1,0 @@
-43,escu GigelPop,8.45
-12,Ionescu George,7.64
-374,Pop Gigelescu,9.33
-1,Popescu Gigel,8.80
-13,pescu PoGigel,6.57

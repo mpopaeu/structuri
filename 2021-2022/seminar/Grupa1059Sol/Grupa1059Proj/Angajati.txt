@@ -1,5 +1,0 @@
-29,Popescu Marian,4450.00
-51,Ionescu Alex,5100.99
-19,Georgescu Mihai,4999.10
-47,Vasilescu Mircea,4799.10
-22,Cazacu Dumitru,4388.10

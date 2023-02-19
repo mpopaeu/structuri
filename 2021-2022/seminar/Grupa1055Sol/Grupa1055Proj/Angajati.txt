@@ -1,5 +1,0 @@
-1099,Ionescu Vasile,4599.01
-2555,Popescu George,5001.00
-1165,Georgescu Maria,5200.49
-1938,Marinescu Alex,5550.49
-1038,Marinescu Mihai,5540.49
