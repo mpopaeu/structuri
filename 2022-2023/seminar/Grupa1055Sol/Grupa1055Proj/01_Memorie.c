@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <malloc.h>
 
 #define VECTOR_SIZE 10
 
@@ -26,5 +27,20 @@ int main()
 	pi = (short int *)v;
 
 	for (i = 0; i < VECTOR_SIZE / 2; i++)
-		printf("pi[%d]=%d ", i + 1, pi[i]);
+		printf("pi[%d] = %04X ", i + 1, pi[i]);
+
+
+	pi = (short int*)malloc(VECTOR_SIZE * 2);
+
+	for (i = 0; i < VECTOR_SIZE; i++)
+		pi[i] = i * 10 + i;
+
+
+	pc = (short int*)malloc(VECTOR_SIZE * 2);
+
+	for (i = 0; i < VECTOR_SIZE * 2; i++)
+		pc[i] = i * 10 + i;
+
+	free(pi);
+	free(pc);
 }
