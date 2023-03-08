@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <malloc.h>
 
 #define VECTOR_SIZE 8
 
@@ -29,10 +30,22 @@ int main()
 
 	pi = (short int *)v;
 
-	printf("Mapare pointer int peste vectorul v si acces la elemente de tip short int: \n")
+	printf("Mapare pointer int peste vectorul v si acces la elemente de tip short int: \n");
 	for (i = 0; i < VECTOR_SIZE / 2; i++)
 		printf("pi[%d]=%d ", i + 1, pi[i]);
 	printf("\n\n");
+
+	pc = (char*)malloc(VECTOR_SIZE * 2); // alocare mem la runtime (heap seg)
+
+	for (i = 0; i < VECTOR_SIZE * 2; i++)
+		pc[i] = i * 10 + 1; // acces la elemente alocate la runtime
+
+	pi = (short int *)malloc(VECTOR_SIZE * 2);
+	for (i = 0; i < VECTOR_SIZE; i++)
+		pi[i] = 10 + i;
+
+	free((void*)pc);
+	free((void*)pi);
 
 	return 0; 
 }
