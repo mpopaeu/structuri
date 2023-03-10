@@ -15,10 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="01_Limbaj.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="fImpl.c">
+    <ClCompile Include="02_Pointeri.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
