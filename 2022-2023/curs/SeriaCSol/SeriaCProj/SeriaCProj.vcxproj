@@ -139,8 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="01_Limbaj.c" />
-    <ClCompile Include="fImpl.c" />
+    <ClCompile Include="02_Pointeri.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers.h" />
