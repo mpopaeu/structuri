@@ -15,7 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="02_Functii.c">
+    <Text Include="Conturi.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="03_Structs.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
