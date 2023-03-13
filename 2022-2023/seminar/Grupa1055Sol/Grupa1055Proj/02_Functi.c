@@ -29,7 +29,7 @@ void suma4(char a, char b, short int* c)
 	*c = a + b + 1;
 }
 
-short int * suma5(char a, char b)
+short int* suma5(char a, char b)
 {
 	a += 1;
 	b -= 2;

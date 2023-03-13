@@ -139,7 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="02_Functi.c" />
+    <ClCompile Include="03_Structs.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="conturi.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
