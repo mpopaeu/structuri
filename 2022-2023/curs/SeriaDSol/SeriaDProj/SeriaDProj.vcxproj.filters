@@ -15,7 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="02_Pointeri.c">
+    <ClCompile Include="05_Functii_main_args.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="04_Functii_vlen_args.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

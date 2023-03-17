@@ -19,7 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="02_Pointeri.c" />
+    <ClCompile Include="04_Functii_vlen_args.c" />
+    <ClCompile Include="05_Functii_main_args.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
