@@ -15,11 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="05_Functii_main_args.c">
+    <ClCompile Include="07_ListeSimple.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="04_Functii_vlen_args.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Studenti.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
