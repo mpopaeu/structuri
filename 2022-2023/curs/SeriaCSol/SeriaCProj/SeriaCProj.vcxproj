@@ -142,7 +142,10 @@
     <ClInclude Include="headers.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_Preprocesare.c" />
+    <ClCompile Include="07_ListeSimple.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Studenti.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
