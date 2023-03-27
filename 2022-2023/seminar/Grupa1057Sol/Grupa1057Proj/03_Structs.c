@@ -22,6 +22,13 @@ struct Nod
 	struct Nod *next;
 };
 
+struct Nodt
+{
+	char* titular;
+	unsigned int nr_carduri;
+	struct Nodt* next;
+};
+
 struct Nod* inserare_inceputLS(struct Nod* p, struct ContBancar cb)
 {
 	struct Nod* nou = (struct Nod*)malloc(sizeof(struct Nod));
@@ -67,10 +74,99 @@ struct Nod* solduri_conturi(struct ContBancar* vcb, unsigned char nr_conturi)
 }
 
 // functie determinare numar de carduri per titular cont
+struct Nodt* titulari_carduri(struct ContBancar* vcb, unsigned char nr_conturi)
+{
+	// pentru fiecare cont bancar din vector:
+	// 1. se verifica daca titular este in lista Nodt
+	// 2. DA, se incrementeaza nr carduri din nod aferent listei Nodt
+	// 3. NU, se adauga titular in lista Nodt si se initializeaza nr carduri din noul nod
+
+	// se face return pe adresa de inceput a nii liste
+}
+
+
 // "inchidere" conturi bancare cu sold nul (se efectueaza pe vector)
+unsigned char inchidere_conturi_sold_nul(struct ContBancar* vcb, unsigned char nr_conturi)
+{
+	// pentru fiecare cont bancar din vector:
+	// 1. se verifica daca sold este nul
+	// 2. DA, se dezaloca titular cont, se shift-eaza la stanga conturile ramase (i+1, n), 
+	// se actualizeaza numar de conturi
+	// 3. NU, se trece la verificarea urmatorului cont din vector
+
+	// se face return pe valoarea actualizata a numarul de conturi din vector
+}
 
 // stergere nod din lista simpla (2 cerinte)
-// stergere lista simpla
+struct Nod* stergere_nod(struct Nod* p)
+{
+	if (p) // exista cel putin 1 nod in lista simpla
+	{
+		struct Nod* t = p;
+		p = p->next;
+
+		free(t);
+	}
+
+	return p;
+}
+
+struct Nodt* stergere_nodt(struct Nodt* p)
+{
+	if (p) // exista cel putin 1 nod in lista simpla
+	{
+		struct Nodt* t = p;
+		p = p->next;
+
+		free(t->titular);
+		free(t);
+	}
+
+	return p;
+}
+
+// stergere lista simpla (2 versiuni pentru 2 tipuri de liste simpla)
+struct Nod* sterege_lista_nod(struct Nod* p)
+{
+	while (p)
+	{
+		p = stergere_nod(p);
+	}
+
+	return p;
+}
+
+
+struct Nodt* sterege_lista_nodt(struct Nodt* p)
+{
+	while (p)
+	{
+		p = stergere_nodt(p);
+	}
+
+	return p;
+}
+
+// inserare cont bancar in lista simpla (de conturi bancare) astfel incat
+// nodurile sa fie sortate crescator in functie de sold
+// inserare de nod in interiorul listei simple
+struct NodCB* inserare_interior_sort_sold(struct NodCB* p, struct ContBancar cb)
+{
+
+}
+
+// varianta cu sold descrescator
+// crearea si consumarea oneshot a unei structuri de tip stiva
+// LiFo - inserarea si stergerea unui nod la inceputul listei simple (structura suport pentru stiva)
+struct NodCB* push(struct NodCB* stiva)
+{
+	// inserare cont bancar la inceputul structurii suport (lista simpla)
+}
+
+struct NodCB* pop(struct NodCB* stiva)
+{
+	// stergere nod la inceputul structurii suport (lista simpla)
+}
 
 int main()
 {
@@ -111,6 +207,14 @@ int main()
 	struct Nod* primNod = NULL;
 
 	primNod = solduri_conturi(vcb, nr_conturi); // i este ultima valoare din secventa de preluare date din fisier
+
+	struct Nodt* primTit = NULL;
+	primTit = titulari_carduri(vcb, nr_conturi); // creare lista de titulari cu ne carduri asociate
+
+	nr_conturi = inchidere_conturi_sold_nul(vcb, nr_conturi);
+	printf("Vector conturi bancare dupa eliminare conturi cu sold nul:\n");
+	for (i = 0; i < nr_conturi; i++)
+		printf("%s %f\n", vcb[i].titular, vcb[i].sold);
 
 	fclose(f);
 	return 0;
