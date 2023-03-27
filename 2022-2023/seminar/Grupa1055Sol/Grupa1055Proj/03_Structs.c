@@ -24,8 +24,14 @@ struct Nod
 	struct Nod *next;
 };
 
+struct NodCA // nod conturi active per moneda
+{
+	enum UM moneda;
+	unsigned int nr_conturi_active;
+	struct NodCA* next;
+};
 
-// inserare nod in LS simpla de titulari (pe prima pozitie)
+// inserare nod in lista simpla de titulari (pe prima pozitie)
 struct Nod* inserare_titular_inceputLS(struct Nod* p, char* nume)
 {
 	struct Nod* nou = (struct Nod*)malloc(sizeof(struct Nod));
@@ -59,16 +65,16 @@ struct Nod* dezalocare_titulariLS(struct Nod* p)
 // functia determina numarul de titulari "unici" din vector de conturi bancare
 unsigned int nr_titulari(struct ContBancar v[], unsigned int nr_conturi)
 {
-	struct Nod* primNod = NULL;
+	struct Nod* primNod = NULL; // variabila de acces la lista simpla (adresa primului nod)
 
-	for (unsigned int i = 0; i < nr_conturi; i++)
+	for (unsigned int i = 0; i < nr_conturi; i++) // acces la un cont bancar (offset i on vector)
 	{
-		struct Nod* t = primNod;
+		struct Nod* t = primNod; // variabila temporare de parsare a listei primNod
 		char gasit = 0;
-		while (t && (gasit == 0))
+		while (t && (gasit == 0)) // gasit flag de semnalare a unui titular deja prezent in lista primNod
 		{
 			if (strcmp(v[i].titular, t->nume_titular) == 0)
-				gasit = 1;
+				gasit = 1; // titularul v[i].titular este deja prezent in lista primNod
 
 			t = t->next;
 		}
@@ -83,7 +89,7 @@ unsigned int nr_titulari(struct ContBancar v[], unsigned int nr_conturi)
 
 	// calcul numar de titulari diferitei == nr de noduri din lista simpla
 	struct Nod* t = primNod;
-	unsigned int nrt = 0;
+	unsigned int nrt = 0; // contor numarare titulari == nr de noduri in lista primNod
 
 	while (t)
 	{
@@ -93,13 +99,74 @@ unsigned int nr_titulari(struct ContBancar v[], unsigned int nr_conturi)
 	}
 
 	// dezalocare lista simpla; structura locala functiei
-	primNod = dezalocare_titulariLS(primNod);
+	primNod = dezalocare_titulariLS(primNod); // dezalocare lista simpla primNod
 
-	return nrt;
+	return nrt; // numar de titulari "unici" in vectorul de conturi bancare
 }
 
 
 // functia determinare numar de conturi bancare active pe fiecare moneda
+struct NodCA* conturi_active_pe_moneda(struct ContBancar v[], unsigned int nr_conturi)
+{
+	struct NodCA* primNodLCA = NULL;
+	for (unsigned int i = 0; i < nr_conturi; i++)
+	{
+		struct NodCA* p = primNodLCA;
+		char gasit = 0;
+		while (p && gasit==0)
+		{
+			if (v[i].moneda == p->moneda)
+			{	
+				gasit = 1;
+				if (v[i].activ) {
+					p->nr_conturi_active++;
+				}
+			}
+			p = p->next;
+		}
+		if (gasit == 0)
+		{
+			struct NodCA* nou = (struct NodCA*)malloc(sizeof(struct NodCA));
+			nou->moneda = v[i].moneda;
+			nou->nr_conturi_active = 0;
+			if (v[i].activ) {
+				nou->nr_conturi_active = 1;
+			}
+			nou->next = primNodLCA;
+			primNodLCA = nou;
+		}
+		
+	}
+
+	// pentru fiecare element din vector:
+	// 1. verificare existenta moneda in lista primNodCA
+	// 2. DA, se verifica daca contul bancar curent este activ
+	//		2.1 DA, se adauga la nr de conturi active pentru moneda identificata (incrementare nr conturi active)
+	//		2.2 NU, nu se efectueaza nici o prelucrare pe contul bancar curent
+	// 3. NU, se adauga moneda in lista ca element/nod nou; 
+	// se initializeaza nr conturi bancare active cu 1 daca contul curent este activ sau 0 pentru inactiv
+
+	return primNodLCA;
+}
+
+void get_nume_moneda(enum UM moneda, char nume_moneda[])
+{
+	switch (moneda) {
+	case RON:
+		strcpy(nume_moneda, "RON");
+		break;
+	case USD:
+		strcpy(nume_moneda, "USD");
+		break;
+	case EUR:
+		strcpy(nume_moneda, "EUR");
+		break;
+	}
+}
+
+// inserare nod (cont bancar) in lista simpla cu ordine crescatoare a soldurilor
+
+// creare stiva pentru prelucrarea in ordine descrescatoare a nodurilor create intr-o lista simpla de conturi
 
 int main()
 {
@@ -148,4 +215,15 @@ int main()
 
 	fclose(f);
 
+	struct NodCA* listCA = conturi_active_pe_moneda(v, nr_conturi);
+	struct NodCA* t = listCA;
+
+	while (t) {
+		char nume_moneda[4];
+		get_nume_moneda(t->moneda, nume_moneda);
+		printf("Moneda: %s, Conturi active: %u\n", nume_moneda, t->nr_conturi_active);
+		t = t->next;
+	}
+
+	// dezalocare lista listCA
 }
