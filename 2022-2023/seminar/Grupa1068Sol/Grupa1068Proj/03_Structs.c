@@ -59,6 +59,9 @@ struct Node* compute_balances_per_currency(struct BankAccount v[], unsigned int 
 	return first; // it stores the mem address of the 1st item in the list of currencies
 }
 
+// insert a node into a simple list ensuring an ascending sorting of the nodes based on balance
+
+
 int main()
 {
 
@@ -103,6 +106,8 @@ int main()
 	}
 
 	fclose(f);
+
+	// create a list pf bank accounts (from vba) where the nodes are sorted
 
 
 	// deallocate simple list firstNode
