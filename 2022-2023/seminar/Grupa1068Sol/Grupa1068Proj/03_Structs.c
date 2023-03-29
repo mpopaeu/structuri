@@ -13,8 +13,51 @@ struct BankAccount {
 	char currency[4];
 };
 
+struct Node
+{
+	char currency[4];
+	double total_balance;
+	struct Node *next;
+};
+
 // write the function to compute total balance per currency
 // input is taken from a bank account array
+// output ???
+
+struct Node* compute_balances_per_currency(struct BankAccount v[], unsigned int vba_size)
+{
+	struct Node* first = NULL;
+
+	for (unsigned int i = 0; i < vba_size; i++)
+	{
+		struct Node* t = first;
+		unsigned char is_currency = 0;
+
+		while (t && (is_currency == 0))
+		{
+			if (strcmp(v[i].currency, t->currency) == 0) // v[i].currency already stored by the simple list
+			{
+				t->total_balance += v[i].balance; //update the current total balance
+				is_currency = 1; // change the flag to enforce the exit from while
+			}
+
+			t = t->next;
+		}
+
+		if (is_currency == 0)
+		{
+			struct Node* newNode = (struct Node*)malloc(sizeof(struct Node)); // alocation of a new Node in heap mem
+
+			strcpy(newNode->currency, v[i].currency); // copy the currency into the new node
+			newNode->total_balance = v[i].balance; // initialize the balance of the new node
+			newNode->next = first; // the next node is the current starting node of the list
+
+			first = newNode; // update the starting node of the list
+		}
+	}
+
+	return first; // it stores the mem address of the 1st item in the list of currencies
+}
 
 int main()
 {
@@ -47,8 +90,21 @@ int main()
 		vba[i++] = ba;
 	}
 
+	unsigned int size = i;
+
+	struct Node* firstNode = compute_balances_per_currency(vba, size);
+	printf("Total balance per currency:\n");
+	struct Node* t = firstNode;
+	while (t)
+	{
+		printf("Currency: %s, Total balance: %.2lf\n", t->currency, t->total_balance);
+
+		t = t->next;
+	}
 
 	fclose(f);
 
+
+	// deallocate simple list firstNode
 	return 0;
 }
