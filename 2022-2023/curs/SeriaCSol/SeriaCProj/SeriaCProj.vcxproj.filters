@@ -20,12 +20,15 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="07_ListeSimple.c">
+    <ClCompile Include="09_Tokenizare_altfel.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Studenti.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Test.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

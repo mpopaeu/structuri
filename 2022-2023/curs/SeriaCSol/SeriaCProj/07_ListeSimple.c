@@ -50,7 +50,7 @@ struct Student stergereStudent(struct Nod** p) {
 			s = tmp->st;  // salvare student din cap lista
 
 			free(tmp);  // dezalocare cap de lista
-			*p = 0;
+			*p = 0; // *p = NULL;
 		}
 	}
 
@@ -93,7 +93,7 @@ int main() {
 
 
 	if (prim)   // stergere student (dezalocare ultim nod)
-		stud = stergereStudent(&prim);
+		stud = stergereStudent(&prim); // prim se modifica daca lista contine 1 singur nod
 
 	printf("\nLista dupa stergere student:\n");
 	parseList(prim);
