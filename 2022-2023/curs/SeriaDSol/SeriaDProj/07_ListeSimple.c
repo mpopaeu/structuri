@@ -34,7 +34,7 @@ void parseList(struct Nod* p) {
 	}
 }
 
-struct Student stergereStudent(struct Nod** p) {
+struct Student stergereStudent(struct Nod* * p) {
 	struct Nod* tmp = *p;
 	struct Student s;
 	if (tmp) {
@@ -43,7 +43,7 @@ struct Student stergereStudent(struct Nod** p) {
 				tmp = tmp->next;
 			s = tmp->next->st;  // salvare student in var locala s
 
-			free(tmp->next);  // dezalocare nod lista simpla
+			free(tmp->next);  // dezalocare ultimul nod din lista simpla
 			tmp->next = 0; // actualizare adresa legatura 
 		}
 		else {  // caz particular; un singur nod in lista
@@ -59,7 +59,7 @@ struct Student stergereStudent(struct Nod** p) {
 
 int main() {
 
-	struct Nod* prim = 0; // pointer adresa nod inceput lista -> gestionare
+	struct Nod* prim = NULL; // pointer adresa nod inceput lista -> gestionare
 				   // structura de date lista simpla
 
 	struct Student stud; // buffer incarcare date din fisier
@@ -78,7 +78,7 @@ int main() {
 		strcpy(stud.nume, token); // nu are loc conversie
 
 		token = strtok(NULL, sep_list);
-		stud.medie = atof(token); // conversie ASCII-to-float
+		stud.medie = (float)atof(token); // conversie ASCII-to-float
 
 		token = strtok(NULL, sep_list);
 		if (token)
@@ -95,13 +95,18 @@ int main() {
 	if (prim)   // stergere student (dezalocare ultim nod)
 		stud = stergereStudent(&prim);
 
-	printf("\nLista dupa stergere student:\n");
+	printf("\nLista dupa stergere student din lista:\n");
 	parseList(prim);
-	printf("Student extras: %d %s\n", stud.id, stud.nume);
+	printf("Student extras din lista: %d %s\n", stud.id, stud.nume);
+	// dezalocare nume student
+	free(stud.nume);
 
 	// dezalocare structura lista simpla
-	while (prim)
+	while (prim) {
 		stud = stergereStudent(&prim);
+		printf("Student extras la dezalocare lista: %d %s\n", stud.id, stud.nume);
+		free(stud.nume);
+	}
 
 	printf("Lista dupa dezalocare:\n");
 	parseList(prim);
