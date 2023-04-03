@@ -11,7 +11,7 @@ enum UM {RON, EUR, USD};
 
 struct ContBancar
 {
-	char iban[24];
+	char iban[25];
 	char* titular;
 	float sold;
 	enum UM moneda;
@@ -29,6 +29,18 @@ struct NodCA // nod conturi active per moneda
 	enum UM moneda;
 	unsigned int nr_conturi_active;
 	struct NodCA* next;
+};
+
+struct NodCB
+{
+	struct ContBancar cb;
+	struct NodCB* next;
+};
+
+struct NodStack
+{
+	struct NodCB* pcb;
+	struct NodStack* next;
 };
 
 // inserare nod in lista simpla de titulari (pe prima pozitie)
@@ -164,9 +176,60 @@ void get_nume_moneda(enum UM moneda, char nume_moneda[])
 	}
 }
 
+struct NodCB* inserare_NodCB_Sold(struct NodCB* p, struct ContBancar cb) {
+	struct NodCB* nou = (struct NodCB*) malloc(sizeof(struct NodCB));
+	nou->cb = cb;
+	nou->cb.titular = (char*) malloc(strlen(cb.titular) + 1);
+	strcpy(nou->cb.titular, cb.titular);
+
+	if (p == NULL || p->cb.sold > cb.sold) {
+		nou->next = p;
+		p = nou;
+	}
+	else {
+		struct NodCB* t = p;
+		while (t->next != NULL && t->next->cb.sold < nou->cb.sold) {
+			t = t->next;
+		}
+		nou->next = t->next;
+		t->next = nou;
+	}
+
+	return p;
+}
+
 // inserare nod (cont bancar) in lista simpla cu ordine crescatoare a soldurilor
 
 // creare stiva pentru prelucrarea in ordine descrescatoare a nodurilor create intr-o lista simpla de conturi
+struct NodStack* push(struct NodStack *stiva, struct NodCB *nod)
+{
+	struct NodStack* nou = (struct NodStack*)malloc(sizeof(struct NodStack));
+
+	nou->pcb = nod;
+	nou->next = stiva;
+
+	return nou;
+}
+
+struct NodStack* pop(struct NodStack* stiva, struct NodCB** out)
+{
+	if (stiva)
+	{
+		*out = stiva->pcb; // salvez adresa de nod lista simpla de conturi bancare
+		struct NodStack* t = stiva;
+		stiva = stiva->next;
+		free(t);
+	}
+
+	return stiva;
+}
+
+// inserare nod in LD la sfarsit
+
+// inserare nod in LD pentru sortare crescatoare pe baza de sold
+
+// dezalocare/stergere/extragere nod de pe pozitie data; 
+// contul bancar din nodul extras este salvat si utilizat in apelator
 
 int main()
 {
@@ -223,6 +286,35 @@ int main()
 		get_nume_moneda(t->moneda, nume_moneda);
 		printf("Moneda: %s, Conturi active: %u\n", nume_moneda, t->nr_conturi_active);
 		t = t->next;
+	}
+
+	// creeare lista conturi bancare + sortare cresc
+	struct NodCB* listCB = NULL;
+	for (i = 0; i < nr_conturi; i++) {
+		listCB = inserare_NodCB_Sold(listCB, v[i]);
+	}
+
+	printf("Lista conturi bancare sortate crescator dupa sold:\n");
+	struct NodCB* temp = listCB;
+	while (temp) {
+		printf("%s %.2f \n", temp->cb.iban, temp->cb.sold);
+		temp = temp->next;
+	}
+
+	// creare stiva 
+	temp = listCB;
+	struct NodStack* stiva = NULL;
+	while (temp)
+	{
+		stiva = push(stiva, temp);
+		temp = temp->next;
+	}
+
+	printf("Prelucare conturi bancare sortate descrescator dupa sold:\n");
+	while (stiva)
+	{
+		stiva = pop(stiva, &temp);
+		printf("%s %.2f\n", temp->cb.iban, temp->cb.sold);
 	}
 
 	// dezalocare lista listCA
