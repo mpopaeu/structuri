@@ -7,7 +7,7 @@
 #define BA_ARRAY_SIZE 20
 
 struct BankAccount {
-	char iban[24];
+	char iban[25];
 	char* owner;
 	float balance;
 	char currency[4];
@@ -18,6 +18,16 @@ struct Node
 	char currency[4];
 	double total_balance;
 	struct Node *next;
+};
+struct NodeBankAccount {
+	struct BankAccount bankAccount;
+	struct NodeBankAccount* next;
+};
+
+struct NodeStack
+{
+	struct NodeBankAccount* node_address;
+	struct NodeStack* next;
 };
 
 // write the function to compute total balance per currency
@@ -60,7 +70,60 @@ struct Node* compute_balances_per_currency(struct BankAccount v[], unsigned int 
 }
 
 // insert a node into a simple list ensuring an ascending sorting of the nodes based on balance
+struct NodeBankAccount* insertAscending(struct NodeBankAccount* first, struct BankAccount bankAccount) {
+	struct NodeBankAccount* newNode = (struct NodeBankAccount*)malloc(sizeof(struct NodeBankAccount));
+	newNode->bankAccount = bankAccount;
+	newNode->bankAccount.owner = (char*)malloc(sizeof(char) * (strlen(bankAccount.owner) + 1));
+	strcpy(newNode->bankAccount.owner, bankAccount.owner);
+	if (first) {
+		if (newNode->bankAccount.balance < first->bankAccount.balance) {
+			newNode->next = first;
+			first = newNode;
+		}
 
+		else {
+			struct NodeBankAccount* t = first;
+
+			while (t->next && t->next->bankAccount.balance < newNode->bankAccount.balance) {
+				t = t->next;
+			}
+
+			newNode->next = t->next;
+			t->next = newNode;
+
+		}
+	}
+	else {
+		newNode->next = NULL;
+		first = newNode;
+	}
+	return first;
+}
+
+struct NodeStack* push(struct NodeStack* stack, struct NodeBankAccount* add_NBA)
+{
+	struct NodeStack* newNode = (struct NodeStack*)malloc(sizeof(struct NodeStack));
+	newNode->node_address = add_NBA;
+	newNode->next = stack;
+
+	return newNode; // new top of the stack
+}
+
+struct NodeStack* pop(struct NodeStack* stack, struct NodeBankAccount* *get_NBA)
+{
+	if (stack)
+	{
+		*get_NBA = stack->node_address;
+		struct NodeStack* t = stack;
+		stack = stack->next; // new top of the stack
+
+		free(t);
+	}
+	return stack;
+}
+
+
+// all operations above on double lists
 
 int main()
 {
@@ -104,10 +167,38 @@ int main()
 
 		t = t->next;
 	}
+	struct NodeBankAccount* listBA = NULL;
+	for (i = 0; i < size; i++) {
+		listBA = insertAscending(listBA, vba[i]);
+	}
+	struct NodeBankAccount* t2 = listBA;
+	printf("ascending list of bank accounts: \n");
+	while (t2) {
+		printf("%s, %.2f\n", t2->bankAccount.iban, t2->bankAccount.balance);
+		t2 = t2->next;
+		
+	}
+
+
+	// build the stack of addresses of node in listBA
+	t2 = listBA;
+	struct NodeStack* stack = NULL;
+	while (t2)
+	{
+		stack = push(stack, t2);
+		t2 = t2->next;
+	}
+
+	printf("descending processing of nodes in list of bank accounts: \n");
+	while (stack)
+	{
+		stack = pop(stack, &t2);
+		printf("%s, %.2f\n", t2->bankAccount.iban, t2->bankAccount.balance);
+	}
 
 	fclose(f);
 
-	// create a list pf bank accounts (from vba) where the nodes are sorted
+	// create a list of bank accounts (from the array vba) where the nodes are sorted ascending
 
 
 	// deallocate simple list firstNode
