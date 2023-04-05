@@ -148,7 +148,12 @@ void attach_currencies_to_owners(struct OwnerNode* list, struct BankAccount v[],
 	}
 }
 
-// compute number of currencies per each owner
+// compute number of currencies per each owner in simple list
+
+// create double linked list of bank accounts from the vector vba
+// the nodes are ascending sorted (field balance) in the double linked list
+
+// deallocation of a double list of bank accounts
 
 int main()
 {
@@ -184,7 +189,7 @@ int main()
 
 	struct OwnerNode* owner_list, *towner;
 	owner_list = create_owner_list(vba, array_size);
-	printf("List of bank acount owners: \n");
+	printf("List of bank account owners: \n");
 	towner = owner_list;
 	while (towner)
 	{
@@ -195,7 +200,7 @@ int main()
 
 	struct CurrencyNode* currency_list, *tcurrency;
 	currency_list = create_currency_list(vba, array_size);
-	printf("List of bank acoount currencies: \n");
+	printf("List of bank account currencies: \n");
 	tcurrency = currency_list;
 	while (tcurrency)
 	{
@@ -206,7 +211,7 @@ int main()
 
 	// attach currencies to the owners' list
 	attach_currencies_to_owners(owner_list, vba, array_size);
-	printf("List of bank acount owners + currencies: \n");
+	printf("List of bank account owners + currencies: \n");
 	towner = owner_list;
 	while (towner)
 	{
@@ -223,6 +228,52 @@ int main()
 	printf("\n\n");
 
 	// deallocate all structures created in heap mem
+
+	while (owner_list) {
+		while (owner_list->currency_list) {
+			struct CurrencyNode* temp = owner_list->currency_list;
+			owner_list->currency_list = temp->next;
+			free(temp);
+		}
+		struct OwnerNode* temp2 = owner_list;
+		owner_list = temp2->next;
+		free(temp2->name);
+		free(temp2);
+
+	}
+
+	while (currency_list) {
+	
+		struct CurrencyNode* temp = currency_list;
+		currency_list = temp->next;
+		free(temp);
+
+	}
+	printf("List of bank account owners + currencies after deallocation: \n");
+	towner = owner_list;
+	while (towner)
+	{
+		printf("\nName: %s", towner->name);
+		tcurrency = towner->currency_list;
+		while (tcurrency)
+		{
+			printf(" %s ", tcurrency->currency);
+			tcurrency = tcurrency->next;
+		}
+
+		towner = towner->next;
+	}
+	printf("\n\n");
+
+	printf("List of bank account currencies after deallocation: \n");
+	tcurrency = currency_list;
+	while (tcurrency)
+	{
+		printf("Currency: %s\n", tcurrency->currency);
+
+		tcurrency = tcurrency->next;
+	}
+
 
 	fclose(f);
 	return 0;
