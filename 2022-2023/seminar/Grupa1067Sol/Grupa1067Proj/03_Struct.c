@@ -79,7 +79,7 @@ struct CurrencyNode* create_currency_list(struct BankAccount v[], unsigned int v
 		{
 			if (strcmp(v[i].currency, t->currency) == 0)
 			{
-				is_there = 1; // the owner is already placed in the list
+				is_there = 1; // the currency is already placed in the list
 			}
 
 			t = t->next;
@@ -87,8 +87,8 @@ struct CurrencyNode* create_currency_list(struct BankAccount v[], unsigned int v
 
 		if (is_there == 0)
 		{
-			// the owner was not found out in the owners' list
-			// a new node is added to the owners' list
+			// the currency was not found out in the currency list
+			// a new node is added to the currency list
 			struct CurrencyNode* new_node = (struct CurrencyNode*)malloc(sizeof(struct CurrencyNode));
 			strcpy(new_node->currency, v[i].currency);
 			new_node->next = first; // next item of the new node is the existing starting itemt
@@ -114,8 +114,33 @@ void attach_currencies_to_owners(struct OwnerNode* list, struct BankAccount v[],
 				// t is the node in the list of owners to be check against the list of currencies
 				struct CurrencyNode* tcurrency = t->currency_list;
 				// parse the list of currencies
-				// check each node agaisnt the v[i]. currency
-				// add a new node in this list if the case
+				unsigned char is_currency = 0;
+				while (tcurrency && (is_currency == 0))
+				{
+					// check each node agaisnt the v[i]. currency
+					if (strcmp(tcurrency->currency, v[i].currency) == 0)
+					{
+						// there is the v[i] currency in the list of currencies attached t the node t (t->name)
+						is_currency = 1;
+					}
+					else
+					{
+						tcurrency = tcurrency->next;
+					}
+				}
+				
+				if (is_currency == 0)
+				{
+					// add a new node in this list currencies 
+					// (the currency coming from v[i] is not yet associated to currency list 
+					// for the owner t->name)
+
+					// the new currency node will be added at the beginning of the currency list
+					struct CurrencyNode* newCurrencyNode = (struct CurrencyNode*)malloc(sizeof(struct CurrencyNode));
+					strcpy(newCurrencyNode->currency, v[i].currency);
+					newCurrencyNode->next = t->currency_list;
+					t->currency_list = newCurrencyNode;
+				}
 			}
 
 			t = t->next;
@@ -159,7 +184,7 @@ int main()
 
 	struct OwnerNode* owner_list, *towner;
 	owner_list = create_owner_list(vba, array_size);
-	printf("List of bank acoount owners: \n");
+	printf("List of bank acount owners: \n");
 	towner = owner_list;
 	while (towner)
 	{
@@ -178,6 +203,24 @@ int main()
 
 		tcurrency = tcurrency->next;
 	}
+
+	// attach currencies to the owners' list
+	attach_currencies_to_owners(owner_list, vba, array_size);
+	printf("List of bank acount owners + currencies: \n");
+	towner = owner_list;
+	while (towner)
+	{
+		printf("\nName: %s", towner->name);
+		tcurrency = towner->currency_list;
+		while (tcurrency)
+		{
+			printf(" %s ", tcurrency->currency);
+			tcurrency = tcurrency->next;
+		}
+
+		towner = towner->next;
+	}
+	printf("\n\n");
 
 	// deallocate all structures created in heap mem
 
