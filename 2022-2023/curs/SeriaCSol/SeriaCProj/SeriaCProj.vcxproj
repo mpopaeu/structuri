@@ -142,11 +142,11 @@
     <ClInclude Include="headers.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="09_Tokenizare_altfel.c" />
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="Studenti.txt" />
     <Text Include="Test.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="09_Tokenizare_altfel.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
