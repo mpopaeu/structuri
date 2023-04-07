@@ -14,7 +14,6 @@ int main() {
 
 	printf("\n\nUtilizare fgets:\n"); // atentie la continut fisier pe linii
 	while (fgets(str, sizeof(str), fp) != NULL) {
-		/* writing content to stdout */
 		puts(str);
 		sscanf(str, "%d %d %[^\n]", &a, &b, c);
 		printf("a= %d, b= %d, c= %s\n", a, b, c);
