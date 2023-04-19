@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="03_Structs.c" />
+    <ClCompile Include="04_DoubleLists.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Account.txt" />

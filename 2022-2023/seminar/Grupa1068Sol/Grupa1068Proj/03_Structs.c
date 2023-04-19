@@ -123,6 +123,11 @@ struct NodeStack* pop(struct NodeStack* stack, struct NodeBankAccount* *get_NBA)
 }
 
 
+//struct BankAccount function_1()
+//{
+//	//....
+//}
+
 // all operations above on double lists
 
 int main()
@@ -167,6 +172,9 @@ int main()
 
 		t = t->next;
 	}
+
+
+	// create a list of bank accounts (from the array vba) where the nodes are sorted ascending
 	struct NodeBankAccount* listBA = NULL;
 	for (i = 0; i < size; i++) {
 		listBA = insertAscending(listBA, vba[i]);
@@ -175,8 +183,8 @@ int main()
 	printf("ascending list of bank accounts: \n");
 	while (t2) {
 		printf("%s, %.2f\n", t2->bankAccount.iban, t2->bankAccount.balance);
-		t2 = t2->next;
 		
+		t2 = t2->next;
 	}
 
 
@@ -186,6 +194,7 @@ int main()
 	while (t2)
 	{
 		stack = push(stack, t2);
+
 		t2 = t2->next;
 	}
 
@@ -193,14 +202,13 @@ int main()
 	while (stack)
 	{
 		stack = pop(stack, &t2);
+
 		printf("%s, %.2f\n", t2->bankAccount.iban, t2->bankAccount.balance);
 	}
 
 	fclose(f);
 
-	// create a list of bank accounts (from the array vba) where the nodes are sorted ascending
 
-
-	// deallocate simple list firstNode
+	// deallocate all needed dynamic data structures
 	return 0;
 }
