@@ -74,6 +74,10 @@ struct DoubleList insertAscending(struct DoubleList list, struct BankAccount ba)
 	return list;
 }
 
+// delete a node in double list by specifying the owner's name
+
+// switch two nodes in double list based on postion
+
 int main()
 {
 
@@ -104,6 +108,7 @@ int main()
 		strcpy(ba.currency, token); // no conversion for currency
 
 		// insert the bank account into a double list node
+		DList = insertAscending(DList, ba);
 	}
 
 	fclose(f);
