@@ -20,9 +20,6 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="03_Structs.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="04_ListeDuble.c">
       <Filter>Source Files</Filter>
     </ClCompile>

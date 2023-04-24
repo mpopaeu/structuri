@@ -142,7 +142,6 @@
     <Text Include="Conturi.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="03_Structs.c" />
     <ClCompile Include="04_ListeDuble.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

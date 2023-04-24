@@ -59,6 +59,143 @@ struct ListaDubla inserare_inceputLD(struct ListaDubla lst, struct ContBancar cb
 
 // interschimbare noduri oarecare in lista dubla (cu modificarea adreselor de legatura/succesiunii de noduri) 
 
+struct ListaDubla insterschimb_noduri(struct ListaDubla lst, unsigned char poz1, unsigned char poz2)
+{
+	if (poz1 && poz2 && poz1 != poz2)
+	{
+		// poz1 si poz2 nu sunt nuli
+		// poz1 si poz 2 nu sunt egale
+		if (poz1 > poz2)
+		{
+			// interschimb poz1 cu poz2 pentru a avea in poz1 prima pozitie de interschimb
+			unsigned char t = poz1;
+			poz1 = poz2;
+			poz2 = t;
+		}
+
+		// traversare lista si pozitionare pe poz1 si poz2
+		struct NodD_CB* temp, *q = NULL, *t = NULL;
+		unsigned char i = 1;
+		temp = lst.p;
+		while (!q && temp)
+		{
+			if (i == poz1)
+			{
+				q = temp;
+			}
+
+			temp = temp->next;
+			i += 1;
+		}
+		if (temp)
+		{
+			// exista poz1
+			while (!t && temp)
+			{
+				if (i == poz2)
+				{
+					t = temp;
+				}
+
+				temp = temp->next;
+				i += 1;
+			}
+
+			if (t && q)
+			{
+				// exista poz1 si poz2
+				struct NodD_CB* p, * r, * s, * u;
+
+				p = q->prev;
+				r = q->next;
+
+				s = t->prev;
+				u = t->next;
+
+				if (poz2 != poz1 + 1)
+				{
+					// q si t nu sunt adiacente
+					// modificari comune adrese de legatura 
+					t->next = r;
+					t->prev = p;
+
+					r->prev = t;
+					s->next = q;
+
+					q->next = u;					
+					q->prev = s;
+					if (p == NULL)
+					{
+						lst.p = t; // poz1 este 1
+						if (u == NULL)
+						{
+							// se interschimba primul cu ultimul nod
+							lst.u = q;
+						}
+						else
+						{
+							// se interschimba primul cu oarecare
+							u->prev = q;
+						}
+					}
+					else
+					{
+						p->next = t; // exista p
+						if (u == NULL)
+						{
+							// poz2 este pe ultimul nod din lista
+							lst.u = q;
+						}
+						else
+						{
+							// cazul general; noduri oarecare din lista
+							u->prev = q;
+						}
+					}
+				}
+				else
+				{
+					// q si t sunt adiacente
+					t->next = q;
+					t->prev = p;
+					q->prev = t;
+					q->next = u;
+					if (p == NULL)
+					{
+						lst.p = t; // poz1 este 1
+						if (u == NULL)
+						{
+							// se interschimba primul cu ultimul nod
+							lst.u = q;
+						}
+						else
+						{
+							// se interschimba primul cu oarecare
+							u->prev = q;
+						}
+					}
+					else
+					{
+						p->next = t; // exista p
+						if (u == NULL)
+						{
+							// poz2 este pe ultimul nod din lista
+							lst.u = q;
+						}
+						else
+						{
+							// cazul general; noduri oarecare din lista
+							u->prev = q;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return lst;
+}
+
 int main()
 {
 
@@ -104,6 +241,41 @@ int main()
 	}
 
 	// parsare lista dubla in ambele sensuri
+	struct NodD_CB* temp = lista.p;
+	printf("Traversare lista dubla 1 -> n: \n");
+	while (temp)
+	{
+		printf("%s %.2f\n", temp->cb.titular, temp->cb.sold);
 
-	struct ListaDubla lst;
+		temp = temp->next;
+	}
+
+	temp = lista.u;
+	printf("Traversare lista dubla n -> 1: \n");
+	while (temp)
+	{
+		printf("%s %.2f\n", temp->cb.titular, temp->cb.sold);
+
+		temp = temp->prev;
+	}
+
+	lista = insterschimb_noduri(lista, 1, 2);
+	printf("\n\nLista dupa interschimb noduri:\n");
+	temp = lista.p;
+	printf("Traversare lista dubla 1 -> n: \n");
+	while (temp)
+	{
+		printf("%s %.2f\n", temp->cb.titular, temp->cb.sold);
+
+		temp = temp->next;
+	}
+
+	temp = lista.u;
+	printf("Traversare lista dubla n -> 1: \n");
+	while (temp)
+	{
+		printf("%s %.2f\n", temp->cb.titular, temp->cb.sold);
+
+		temp = temp->prev;
+	}
 }
