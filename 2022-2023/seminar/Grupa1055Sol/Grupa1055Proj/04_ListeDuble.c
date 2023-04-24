@@ -71,6 +71,57 @@ void traversare_bi(struct ListaDubla lista)
 	}
 }
 
+// inserare cont bancar in lista dubla sortata crescator dupa sold
+struct ListaDubla inserare_NodCB_Sold(struct ListaDubla lista, struct ContBancar cont) {
+	struct NodCB* nou = (struct NodCB*)malloc(sizeof(struct NodCB));
+	nou->cb = cont;
+	
+
+	if (lista.p == NULL || lista.p->cb.sold > cont.sold) {
+		nou->next = lista.p; // succesor nou inceput de lista
+		nou->prev = NULL;	 // predecesor nou inceput de lista
+		if (lista.p != NULL)
+		{
+			// exista cel putin 1 nod in lista dubla
+			lista.p->prev = nou; // update legatura inceput curent de lista
+		}
+		else
+		{
+			// lista dubla este empty
+			lista.u = nou;
+		}
+		
+		lista.p = nou;		 // update inceput de lista noua (cu nod inserat)
+	}
+	else {
+		struct NodCB* t = lista.p;
+		while (t->next != NULL && t->next->cb.sold < nou->cb.sold) {
+			t = t->next;
+		}
+		if (t->next)
+		{
+			// t nu este ultimul nod
+			struct NodCB* q = t->next;
+			nou->next = q;
+			nou->prev = t;
+			t->next = nou;
+			q->prev = nou;
+		}
+		else
+		{
+			// t este ultimul nod (t->next == NULL)
+			lista = inserare_LD_sfarsit(lista, cont);
+		}
+
+	}
+
+	return lista;
+}
+
+
+// stergere nod de pe pozitie specificata
+
+// stergere noduri cu stare (activ/inactiv) precizata ca parametru de intrare
 
 int main()
 {
@@ -111,7 +162,8 @@ int main()
 				cb.activ = 0;
 
 		// inserare cont bancar cb in lista dubla listaD
-		listaD = inserare_LD_sfarsit(listaD, cb);
+		// listaD = inserare_LD_sfarsit(listaD, cb); // inserare nod in lista dubla la sfarsit
+		listaD = inserare_NodCB_Sold(listaD, cb); // inserare nod in lista dubla sortata crescator dupa sold
 	}
 
 	printf("Lista dubla dupa creare:\n");
