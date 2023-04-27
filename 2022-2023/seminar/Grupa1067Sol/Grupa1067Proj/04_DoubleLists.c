@@ -79,9 +79,88 @@ struct DoubleList insertSortedList(struct DoubleList list, struct BankAccount ba
 }
 
 // deletion of a node by specifing the currency
+struct DoubleList delete_currency(struct DoubleList list, char curr[])
+{
+	struct BankAccountNode* temp;
+
+	while (list.head && strcmp(list.head->ba.currency, curr) == 0)
+	{
+		temp = list.head;
+		list.head = list.head->next; // the 2nd node is the new head
+		list.head->prev = NULL;		// the previous node of the new head must be NULL
+
+		free(temp->ba.owner); // deallocate the heap mem for the owner string
+		free(temp);			  // deallocate the node
+	}
+
+	if (list.head == NULL)
+	{
+		// double list bacame an empty one
+		// tail must be updated
+		list.tail = NULL;
+	}
+	else
+	{
+		temp = list.head->next; // the head does not containt the targeted currency for sure (see previous while)
+		while (temp)
+		{
+			if (strcmp(temp->ba.currency, curr) == 0)
+			{
+				// temp node must be deleted
+				struct BankAccountNode* p, * q;
+				p = temp->prev;
+				q = temp->next;
+
+				p->next = q;
+				if (q != NULL)
+				{
+					// temp is not the last node in the double
+					q->prev = p;
+				}
+				else
+				{
+					// temp is the last node in the list
+					list.tail = p;
+				}
+
+				// temp node is isolated
+				free(temp->ba.owner);
+				free(temp);
+				temp = q;
+			}
+			else
+			{
+				temp = temp->next; // next node to be checked of the current temp is not deleted
+			}
+		}
+	}
+
+	return list;
+}
+
 
 // switch 2 nodes based on their positions in the list
 // switch implemented by changing the next and prev relations
+
+// parse double linked list
+void parse_dlist(struct DoubleList list)
+{
+	struct BankAccountNode* t = list.head;
+	printf("\nDouble list head to tail:\n");
+	while (t)
+	{
+		printf(" %s %.2f\n", t->ba.owner, t->ba.balance);
+		t = t->next;
+	}
+
+	t = list.tail;
+	printf("\nDouble list tail to head:\n");
+	while (t)
+	{
+		printf(" %s %.2f\n", t->ba.owner, t->ba.balance);
+		t = t->prev;
+	}
+}
 
 int main()
 {
@@ -117,21 +196,13 @@ int main()
 	fclose(f);
 
 	// parsing the double list
-	struct BankAccountNode* t = dList.head;
-	printf("Double list head to tail:\n");
-	while (t)
-	{
-		printf(" %s %.2f\n", t->ba.owner, t->ba.balance);
-		t = t->next;
-	}
+	printf("Double list after creation:\n");
+	parse_dlist(dList);
 
-	t = dList.tail;
-	printf("\nDouble list tail to head:\n");
-	while (t)
-	{
-		printf(" %s %.2f\n", t->ba.owner, t->ba.balance);
-		t = t->prev;
-	}
+	// delete nodes having the same currency in the double list
+	dList = delete_currency(dList, "EUR");
+	printf("Double list after deletion of nodes with same currency:\n");
+	parse_dlist(dList);
 
 	// deallocate the double list
 
