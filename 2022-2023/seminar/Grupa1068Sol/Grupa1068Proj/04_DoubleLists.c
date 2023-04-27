@@ -75,8 +75,86 @@ struct DoubleList insertAscending(struct DoubleList list, struct BankAccount ba)
 }
 
 // delete a node in double list by specifying the owner's name
+struct DoubleList delete_node_string(struct DoubleList list, char* name)
+{
+	struct NodeBankAccount* temp;
+	while (list.head && strcmp(list.head->bankAccount.owner, name) == 0)
+	{
+		temp = list.head;
+		list.head = list.head->next;
+		list.head->prev = NULL;
 
-// switch two nodes in double list based on postion
+		free(temp->bankAccount.owner);
+		free(temp);
+	}
+
+	if (list.head)
+	{
+		// stiil there are some nodes in my double list
+		// the first node does not contain the bank account with searched owner to be deleted
+		temp = list.head->next; // starting with the 2nd node
+		while (temp)
+		{
+			if (strcmp(temp->bankAccount.owner, name) == 0)
+			{
+				struct NodeBankAccount* p, * q;
+				p = temp->prev;
+				q = temp->next;
+
+				p->next = q;
+				if (q != NULL)
+				{
+					// temp is not the last node (not on tail of the double list)
+					q->prev = p;
+				}
+				else
+				{
+					// temp is the last node
+					list.tail = p;
+				}
+
+				free(temp->bankAccount.owner);
+				free(temp);
+
+				temp = q;
+			}
+			else
+			{
+				temp = temp->next;
+			}
+		}
+	}
+	else
+	{
+		list.tail = NULL; // the list became empty
+	}
+
+	return list;
+}
+
+// switch two nodes in double list based on their position
+
+// double list parsing on bi-directional way
+void parsing_biway(struct DoubleList list)
+{
+	struct NodeBankAccount* temp = list.head;
+	printf("\nDouble list parsing head->to->tail:\n");
+	while (temp)
+	{
+		printf("%s %.2f\n", temp->bankAccount.owner, temp->bankAccount.balance);
+
+		temp = temp->next;
+	}
+
+	temp = list.tail;
+	printf("\nDouble list parsing tail->to->head:\n");
+	while (temp)
+	{
+		printf("%s %.2f\n", temp->bankAccount.owner, temp->bankAccount.balance);
+
+		temp = temp->prev;
+	}
+}
 
 int main()
 {
@@ -112,5 +190,12 @@ int main()
 	}
 
 	fclose(f);
+
+	parsing_biway(DList);
+
+	DList = delete_node_string(DList, "Popescu George");
+	printf("\nDouble list after deletion:\n");
+	parsing_biway(DList);
+
 	return 0;
 }
