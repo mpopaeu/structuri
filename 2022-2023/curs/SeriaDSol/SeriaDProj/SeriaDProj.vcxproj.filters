@@ -15,16 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="09_Consultare_fisier_text.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="Studenti.txt">
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="Test.txt">
       <Filter>Resource Files</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="10_HashTable_lin.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

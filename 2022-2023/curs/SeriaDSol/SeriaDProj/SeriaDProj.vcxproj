@@ -19,11 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="09_Consultare_fisier_text.c" />
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="Studenti.txt" />
     <Text Include="Test.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="10_HashTable_lin.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
