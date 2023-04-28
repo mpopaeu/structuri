@@ -28,7 +28,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="09_Tokenizare_altfel.c">
+    <ClCompile Include="10_HashTable_lin.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
