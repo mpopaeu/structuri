@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="04_DoubleLists.c">
+    <ClCompile Include="05_HashTables_chain.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
