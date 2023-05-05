@@ -199,13 +199,13 @@ void main() {
 	if (pozitie != -1)
 		printf("Student %s identificat: %d %.2f\n", studName, HTable[pozitie].id, HTable[pozitie].avg);
 	else
-		printf("Studentul %s nu exista in tabela de dispersie:\n", studName);
+		printf("Studentul %s nu exista in tabela de dispersie.\n", studName);
 
 
 	// stergere student din tabela de dispersie
 	char deleted = deleteStudent(HTable, size, studName);
 
-	printf("\n Tabela de dispesie dupa stergere: %d elemente\n", size);
+	printf("\n Tabela de dispersie dupa stergere %d elemente:\n", size);
 	for (int i = 0; i < size; i++) {
 		if (HTable[i].name) {
 			printf("Pozitie: %d, Student: %d %s\n", i, HTable[i].id, HTable[i].name);
