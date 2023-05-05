@@ -142,11 +142,12 @@
     <ClInclude Include="headers.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="HeapKeys.txt" />
     <Text Include="Studenti.txt" />
     <Text Include="Test.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="10_HashTable_lin.c" />
+    <ClCompile Include="11_Struct_Heap.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
