@@ -34,5 +34,8 @@
     <ClCompile Include="11_Struct_Heap.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="12_ArboreOarecare_din.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
