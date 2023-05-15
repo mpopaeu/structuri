@@ -142,7 +142,7 @@
     <Text Include="Conturi.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="05_TabelaHash_chain.c" />
+    <ClCompile Include="06_ABC.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
