@@ -15,12 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="05_HashTable_chain.c">
+    <ClCompile Include="06_ArboreBin.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="conturi.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="conturi_abc.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
