@@ -9,7 +9,7 @@
 struct BankAccount
 {
 	char* owner;
-	char iban[25]; // + 1 for string standard terminat (the byte 0x00 at phisical level)
+	char iban[25]; // + 1 for string standard terminator (the byte 0x00 at the end of the string)
 	float balance;
 	char currency[4];
 };
