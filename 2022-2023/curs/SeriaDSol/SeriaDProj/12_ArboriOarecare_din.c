@@ -6,6 +6,9 @@ struct NodTree {
 	struct NodTree* fiu, * frate;
 };
 
+// [in] r - nod curent in arbore oarecare; poate fi orice nod in functie de lantul de apeluri recursive
+// [in] id - cheia nodului care se cauta in arborele oarecare
+// [in,out] gasit - pointer catre nodul identificat; NULL daca nodul nu este gasit
 void cautaNod(struct NodTree* r, int id, struct NodTree** gasit) {
 	if (r) {
 		printf("Nod curent este: %d\n", r->key);
@@ -28,10 +31,10 @@ void cautaNod(struct NodTree* r, int id, struct NodTree** gasit) {
 	}
 }
 
-
+// [in] r - nod curent in arbore oarecare; poate fi orice nod in functie de lantul de apeluri recursive
 void preordine(struct NodTree* r) {
 	if (r) {
-		printf("%d  ", r->key);
+		printf("%d  ", r->key); // prelucrare nod curent
 
 		preordine(r->fiu); // parsez primul subarbore descendent lui r	
 
@@ -45,23 +48,19 @@ void preordine(struct NodTree* r) {
 	}
 }
 
-
+// [in] r - radacina de arbore oarecare
+// [in] cheie - cheia de inserat in arborele r
+// [in] idParinte - cheia pentru nodul parinte al nodului de inserat cu cheie
+// [out] radacina de arbore oarecare, eventul diferita fata de [in] r daca idParinte este 0
 struct NodTree* inserare(struct NodTree* r, int cheie, int idParinte) {
 	struct NodTree* nou = (struct NodTree*)malloc(sizeof(struct NodTree)); // nodul care se insereaza devine nod radacina
 	nou->key = cheie;
 	nou->frate = NULL;
 
 	if (!idParinte) { // nodul nou (cu cheie) va deveni noua radacina de arbore
-
-		if (r) {
-			// arborele contine cel putin1 nod
-			nou->fiu = r;
-		}
-		else
-		{
-			// arbore empty
-			nou->fiu = NULL;
-		}
+		// arborele contine cel putin 1 nod SAU este EMPTY (0 noduri)
+		printf("\n Inserare nod radacina %d:\n", cheie);
+		nou->fiu = r;
 
 		r = nou;
 	}
@@ -69,20 +68,21 @@ struct NodTree* inserare(struct NodTree* r, int cheie, int idParinte) {
 		nou->fiu = NULL;
 
 		struct NodTree* p = NULL;
+		printf("\n Cauta nod parinte %d pentru nodul %d:\n", idParinte, cheie);
 		cautaNod(r, idParinte, &p);
 		if (p && !p->fiu)
-			p->fiu = nou;
+			p->fiu = nou; // nodul este gasit, dar nu are prim descendent (fiu); var nou devine primul frate pentru fiu
 		else {
 			if (p)
 			{
 				if (!p->fiu->frate)
-					p->fiu->frate = nou;
+					p->fiu->frate = nou; // nodul de inserat (var nou) devine frate pentru fiu
 				else {
 					struct NodTree* tmp = p->fiu;
 					while (tmp->frate)
 						tmp = tmp->frate;
 
-					tmp->frate = nou;
+					tmp->frate = nou; // nodul de inserat este ultimul nod in lista de descendenti ai lui idParinte (var p)
 				}
 			}
 			else

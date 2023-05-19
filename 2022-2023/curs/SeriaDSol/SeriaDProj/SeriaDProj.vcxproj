@@ -24,7 +24,6 @@
     <Text Include="Test.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="11_Struct_Heap.c" />
     <ClCompile Include="12_ArboriOarecare_din.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
