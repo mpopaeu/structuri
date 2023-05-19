@@ -31,7 +31,7 @@ void cautaNod(struct NodTree* r, int id, struct NodTree** gasit) {
 
 void preordine(struct NodTree* r) {
 	if (r) {
-		printf("%d  ", r->key);
+		printf("%d  ", r->key); // prelucrare nod curent
 
 		preordine(r->fiu); // parsez primul subarbore descendent lui r	
 
@@ -45,28 +45,26 @@ void preordine(struct NodTree* r) {
 	}
 }
 
-
+// [in] r - arbore oarecare in care se face inserare
+// [in] cheie - cheia nodului care se insereaza
+// [in] idParinte - cheie nod parinte pentru nodul cu cheie care se insereaza
+// [out] arborele cu eventual noua radacina
 struct NodTree* inserare(struct NodTree* r, int cheie, int idParinte) {
-
+	struct NodTree* nou = (struct NodTree*)malloc(sizeof(struct NodTree)); // nodul care se insereaza devine nod radacina
+	nou->key = cheie;
+	nou->frate = NULL;
 	if (!idParinte) { // nodul nou (cu cheie) va deveni noua radacina de arbore
-		struct NodTree* nou = (struct NodTree*)malloc(sizeof(struct NodTree)); // nodul care se insereaza devine nod radacina
-		nou->key = cheie;
-		nou->fiu = NULL;
-		nou->frate = NULL;
-
-		if (r) {
-			nou->fiu = r;
-		}
+		// arborele contine cel putin 1 nod SAU este EMPTY (0 noduri)
+		printf("\n Inserare nod radacina %d:\n", cheie);
+		nou->fiu = r;
 
 		r = nou;
 	}
 	else { // se cauta nodul cu idParinte care va primi descendent pe nou cu cheie
-		struct NodTree* nou = (struct NodTree*)malloc(sizeof(struct NodTree));
-		nou->key = cheie;
 		nou->fiu = NULL;
-		nou->frate = NULL;
 
 		struct NodTree* p = NULL;
+		printf("\n Cauta nod parinte cu cheie %d:\n", idParinte);
 		cautaNod(r, idParinte, &p);
 		if (p && !p->fiu)
 			p->fiu = nou;
@@ -74,14 +72,20 @@ struct NodTree* inserare(struct NodTree* r, int cheie, int idParinte) {
 			if (p)
 			{
 				if (!p->fiu->frate)
-					p->fiu->frate = nou;
+					p->fiu->frate = nou; // legare nod nou ca prim frate a primului fiu pentru p
 				else {
 					struct NodTree* tmp = p->fiu;
 					while (tmp->frate)
 						tmp = tmp->frate;
 
-					tmp->frate = nou;
+					tmp->frate = nou; // legare nod nou la lista de frati ai lui p->fiu
 				}
+			}
+			else
+			{
+				// nodul parinte nu a fost identificat
+				// se dezaloca nou
+				free(nou);
 			}
 		}
 	}
