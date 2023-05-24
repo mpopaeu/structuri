@@ -139,10 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="05_HashTable_chain.c" />
+    <Text Include="Account.txt" />
+    <Text Include="HeapKeys.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Account.txt" />
+    <ClCompile Include="08_AVL.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
