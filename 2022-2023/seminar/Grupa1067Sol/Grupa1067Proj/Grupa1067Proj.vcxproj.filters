@@ -15,7 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_HeapStruct.c">
+    <ClCompile Include="07_BST.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="08_AVL.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
