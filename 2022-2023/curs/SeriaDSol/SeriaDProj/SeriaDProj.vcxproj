@@ -24,7 +24,8 @@
     <Text Include="Test.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="12_ArboriOarecare_din.c" />
+    <ClCompile Include="13_ABC.c" />
+    <ClCompile Include="14_AVL.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

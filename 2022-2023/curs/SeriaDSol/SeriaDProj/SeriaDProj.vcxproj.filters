@@ -26,7 +26,10 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="12_ArboriOarecare_din.c">
+    <ClCompile Include="13_ABC.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="14_AVL.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
