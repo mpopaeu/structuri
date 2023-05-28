@@ -1,3 +1,6 @@
 43,Vasilescu Mihai,8.45
 12,Ionescu George,7.64
 374,Popescu Gigel,9.33
+37,Georgescu Alex,7.89
+175,Marinescu Mihai,9.73
+374,Vasilescu Grigore,8.63

@@ -147,7 +147,8 @@
     <Text Include="Test.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="12_ArboreOarecare_din.c" />
+    <ClCompile Include="13_ABC.c" />
+    <ClCompile Include="14_AVL.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
