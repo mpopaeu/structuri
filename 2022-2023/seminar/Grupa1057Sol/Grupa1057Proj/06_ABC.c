@@ -22,6 +22,10 @@ struct NodABC
 	struct NodABC *st, *dr ;
 };
 
+struct Nod_Coada{
+	struct NodABC* nod_arbore;
+	struct Nod_Coada* next;
+};
 
 struct NodABC* inserare_NodABC(struct NodABC* r, struct ContBancar cont_bancar, 
 							   unsigned int key, unsigned char* er)
@@ -101,6 +105,67 @@ struct NodABC* stergere_nod_ABC(struct NodABC* r, unsigned int k, struct ContBan
 				r->dr = stergere_nod_ABC(r->dr, k, cont_bancar);
 		}
 	}
+
+	return r;
+}
+
+struct Nod_Coada* get(struct Nod_Coada* coada, struct NodABC** nod_abc)
+{
+	if (coada)
+	{
+		*nod_abc = coada->nod_arbore;
+		struct Nod_Coada* temp = coada;
+		coada = coada->next;
+		free(temp);
+	}
+
+	return coada;
+}
+
+struct Nod_Coada* put(struct Nod_Coada* coada, struct NodABC* nod_abc)
+{
+	if (nod_abc)
+	{
+		struct Nod_Coada* nou = (struct Nod_Coada*)malloc(sizeof(struct Nod_Coada));
+		nou->next = NULL;
+		nou->nod_arbore = nod_abc;
+		if (!coada)
+			return nou;
+		else
+		{
+			struct Nod_Coada* temp = coada;
+			while (temp->next)
+				temp = temp->next;
+
+			temp->next = nou;
+		}
+	}
+
+	return coada;
+}
+
+void traversare_niveluri(struct NodABC* r)
+{
+	struct Nod_Coada* q = NULL;
+	q = put(q, r); // initializare structura coada
+
+	// determinare numar noduri din arbore
+	// alocare vector pe numar noduri din arbore
+
+	while (q) // cat timp coada not-empty
+	{
+		struct NodABC* nod_abc;
+		q = get(q, &nod_abc);
+
+		printf(" %d ", nod_abc->cheie); // prelucrare nod "extras" din coada
+		// adaugati nod la sfarsitul curent al vectorului
+		// printf se va suprima in cazul in care se returneaza vector
+
+		q = put(q, nod_abc->st);
+		q = put(q, nod_abc->dr);
+	}
+
+	// return vector in apelator
 }
 
 int main()
@@ -135,7 +200,7 @@ int main()
 		strcpy(cb.moneda, token);
 
 		token = strtok(NULL, seps);
-		cb.sold = atof(token);
+		cb.sold = (float)atof(token);
 
 		token = strtok(NULL, seps);
 		cb.nr_carduri = atoi(token);
@@ -155,6 +220,11 @@ int main()
 	unsigned int nr_niveluri = 0;
 	calcul_noduri_niveluri(root, 2, &nr_niveluri);
 	printf("\n\nNumar de noduri de pe nivel specificat = %u\n", nr_niveluri);
+
+	// traversare pe niveluri
+	printf("\nTraversare arbore binar de cautare pe niveluri: ");
+	traversare_niveluri(root);
+	printf("\n\n");
 
 	// stergere nod in ABC
 

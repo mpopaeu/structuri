@@ -18,6 +18,9 @@
     <Text Include="Conturi.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Conturi_ABC.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="06_ABC.c">
