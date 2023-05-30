@@ -142,13 +142,13 @@
     <ClInclude Include="headers.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Graf.txt" />
     <Text Include="HeapKeys.txt" />
     <Text Include="Studenti.txt" />
     <Text Include="Test.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="13_ABC.c" />
-    <ClCompile Include="14_AVL.c" />
+    <ClCompile Include="15_Grafuri_lista.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
