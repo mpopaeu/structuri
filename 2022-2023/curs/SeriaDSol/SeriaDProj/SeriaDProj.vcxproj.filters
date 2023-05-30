@@ -24,12 +24,12 @@
     <Text Include="HeapKeys.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Graf.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="13_ABC.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="14_AVL.c">
+    <ClCompile Include="15_Grafuri_lista.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

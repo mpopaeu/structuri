@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define LINESIZE 128
 
 struct  Student {
 	int id;
@@ -144,12 +145,54 @@ NodAVL* insNodAVL(NodAVL* r, Student s, int* err) {
 void InordineAVL(NodAVL* rAVL) {
 	if (rAVL) {
 		InordineAVL(rAVL->st);
-		printf(" %d %d ", rAVL->stud.id, rAVL->GE);
+		printf(" %d %d \n", rAVL->stud.id, rAVL->GE);
 		InordineAVL(rAVL->dr);
 	}
 }
 
 int main() {
+	struct Student stud;
+	struct NodAVL* root = NULL;
+
+	FILE* f;
+	f = fopen("Studenti.txt", "r");
+
+	char* token, file_buf[LINESIZE], sep_list[] = ",\n";
+
+	while (fgets(file_buf, sizeof(file_buf), f)) {
+		token = strtok(file_buf, sep_list);
+		stud.id = atoi(token);
+
+		token = strtok(NULL, sep_list);
+		stud.nume = (char*)malloc((strlen(token) + 1) * sizeof(char));
+		strcpy(stud.nume, token);
+
+		token = strtok(NULL, sep_list);
+		stud.medie = (float)atof(token);
+
+		token = strtok(NULL, sep_list);
+		if (token)
+			printf("\nEroare preluare token!");
+
+		// inserare student in AVL
+		int err = 0;
+
+		root = insNodAVL(root, stud, &err);
+		if (err) {
+			printf("\nStudentul cu id %d exista in arbore.\n", stud.id);
+			free(stud.nume);
+		}
+		else
+			printf("\nStudentul %s a fost inserat\n", stud.nume);
+	}
+
+	fclose(f);
+
+	// traversare in inordine (ordine crescatoare id-uri studenti)
+	printf("\nTraversare arbore inordine:\n\n");
+	InordineAVL(root);
+
+	// dezalocare arbore AVL
 
 	return 0;
 }
