@@ -28,5 +28,26 @@ int main()
 
 	free(pa);
 	pa = NULL;
+
+	char v[] = {0x0a, 0x0b, 0x0c, 0x0d, 0x0e};
+	pa = v;
+	printf("Elemente vector:");
+	for (unsigned char i = 0; i < sizeof(v); i++)
+		printf(" %d", pa[i]);
+	printf("\n");
+	
+	pa = (char*)malloc((sizeof(v) * 2) * sizeof(char));
+	for (unsigned char i = 0; i < sizeof(v) * 2; i++)
+	{
+		unsigned char j = i % sizeof(v);
+		pa[i] = v[j] * 10 + 1;
+	}
+	printf("Elemente vector din heap:");
+	for (unsigned char i = 0; i < sizeof(v) * 2; i++)
+		printf(" %d", pa[i]);
+	printf("\n");
+
+	free(pa);
+	pa = NULL;
 	return 0;
 }
