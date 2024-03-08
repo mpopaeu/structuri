@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <malloc.h>
+#include <string.h>
 
 int main()
 {
@@ -23,6 +24,24 @@ int main()
 	printf("String(pa) = %s\n", pa);
 
 	free(pa);
+	pa = NULL;
 
+	char v[] = {0x31, 0x32, 0x33, 0x34, 0x35, 0x00};
+	pa = v;
+
+	printf("String(v) = %s\n", pa);
+
+	pa = (char*)malloc(sizeof(v));
+	strcpy(pa, v);
+
+	*pa = *pa + 1;
+	printf("String(v) = %s\n", v);
+	printf("String(pa) = %s\n", pa);
+
+	printf("One item: %c\n", pa[3]);
+	printf("Other item outside the boundaries: %c\n", pa[13]);
+	printf("Second item outside the boundaries: %c\n", pa[-5]);
+
+	free(pa);
 	return 0;
 }
