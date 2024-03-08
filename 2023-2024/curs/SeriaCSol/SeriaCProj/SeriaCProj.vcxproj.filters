@@ -15,10 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="fImpl_ex2.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="App_ex2.c">
+    <ClCompile Include="02_Pointers.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

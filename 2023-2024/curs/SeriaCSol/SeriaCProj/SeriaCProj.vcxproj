@@ -19,8 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="App_ex2.c" />
-    <ClCompile Include="fImpl_ex2.c" />
+    <ClCompile Include="02_Pointers.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
