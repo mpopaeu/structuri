@@ -25,7 +25,7 @@ short int suma2(char x, char* y)
 	return z;
 }
 
-int allocaHeap1(char* p, char size)
+int allocHeap1(char* p, char size)
 {
 	p = (char*)malloc(sizeof(size));
 	if (p != NULL)
@@ -33,7 +33,7 @@ int allocaHeap1(char* p, char size)
 	return 0;
 }
 
-int allocaHeap2(char* *p, char size)
+int allocHeap2(char* *p, char size)
 {
 	*p = (char*)malloc(sizeof(size));
 	if (*p != NULL)
@@ -55,11 +55,11 @@ int main()
 	char* p = NULL;
 	char size = 10;
 	printf("p = 0x%p\n", p);
-	char rez = allocaHeap1(p, size); // memory leak; alocare adresa heap vizibila doar in functie
+	char rez = allocHeap1(p, size); // genereaza memory leak; alocare adresa heap vizibila doar in functie
 	printf("p = 0x%p, alocare confirmata: %d\n", p, rez);
-	rez = allocaHeap2(&p, size);
-	printf("p = 0x%p, alocare confirmata: %d\n", p, rez);
+	rez = allocHeap2(&p, size);		// adresa de heap este salvata in p;
+	printf("p = 0x%p, alocare confirmata: %d\n", p, rez); // confirmare adresa heap in p si efectuarea alocarii
 
-	free(p);
+	free(p); // dezalocare memorie heap a carei adresa a fost salvata in p din functia allocHeap2
 	return 0;
 }

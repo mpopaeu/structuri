@@ -18,5 +18,13 @@
     <ClCompile Include="02_Functii.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="03_Fisiere.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Conturi.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

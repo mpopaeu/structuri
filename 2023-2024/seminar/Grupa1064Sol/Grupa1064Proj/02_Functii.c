@@ -41,8 +41,20 @@ char allocHeap2(char* *pc, unsigned char size)
 char* allocStack(unsigned char* size)
 {
 	char v[] = {1, 2, 3, 4, 5, 6};
-	*size = sizeof(v);
+	*size = sizeof(v) / sizeof(char);
 	return v;
+}
+
+char* allocStack2(unsigned char* size)
+{
+	char v[] = { 1, 2, 3, 4, 5, 6 };
+	*size = sizeof(v) / sizeof(char);
+	char* pv = (char*)malloc(sizeof(v));
+
+	for (unsigned char i = 0; i < sizeof(v) / sizeof(char); i++)
+		pv[i] = v[i];
+
+	return pv;
 }
 
 int main()
@@ -58,14 +70,15 @@ int main()
 
 	char* p = NULL;
 	printf("p = 0x%p\n", p);
-	char rez = allocHeap1(p, (unsigned char)a);
+	char rez = allocHeap1(p, (unsigned char)a); // genereaza mem leak
 	printf("p = 0x%p, rezultate functie = %d\n", p, rez);
 	rez = allocHeap2(&p, (unsigned char)a);
 	printf("p = 0x%p, rezultate functie = %d\n", p, rez);
 
-
 	free(p);
 	p = NULL;
+
+
 	unsigned char dim = 0;
 	p = allocStack(&dim);
 	printf("Vector alocat in stack seg in functie:");
@@ -73,5 +86,12 @@ int main()
 		printf(" %d", p[i]);
 	printf("\n");
 
+	p = allocStack2(&dim);
+	printf("Vector alocat in heap seg in functie:");
+	for (unsigned char i = 0; i < dim; i++)
+		printf(" %d", p[i]);
+	printf("\n");
+
+	free(p);
 	return 0;
 }

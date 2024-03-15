@@ -140,6 +140,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="02_Functii.c" />
+    <ClCompile Include="03_Fisiere.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Conturi.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

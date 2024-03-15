@@ -39,10 +39,24 @@ int allocHeap2(int* *pi, char size)
 		return 0;
 }
 
-int* allocStack()
+int* allocStack(unsigned char *size) // size - nr de bytes
 {
 	int v[] = {1, 2, 3, 4};
+	*size = sizeof(v);
+
 	return v;
+}
+
+int* allocStackCorect(unsigned char* size) // size - nr de bytes
+{
+	int v[] = { 1, 2, 3, 4 };
+	*size = sizeof(v);
+
+	int* pv = (int*)malloc(sizeof(v));
+	for (unsigned char i = 0; i < sizeof(v) / sizeof(int); i++)
+		pv[i] = v[i];
+
+	return pv;
 }
 
 int main()
@@ -63,6 +77,22 @@ int main()
 	printf("pv=%p, rezultat alocare=%d\n", pv, rez);
 	rez = allocHeap2(&pv, a);
 	printf("pv=%p, rezultat alocare=%d\n", pv, rez);
+
+	free(pv);
+	pv = NULL;
+
+	unsigned char nr_bytes = 0;
+	pv = allocStack(&nr_bytes); // adresa temporara de vector (var locala) este returnata
+	printf("Elemente vector v:");
+	for (unsigned char i = 0; i < nr_bytes / sizeof(int); i++)
+		printf(" %d", pv[i]);
+	printf("\n");
+
+	pv = allocStackCorect(&nr_bytes); // adresa de heap unde eleme v au fost copiata in functie
+	printf("Elemente vector pv:");
+	for (unsigned char i = 0; i < nr_bytes / sizeof(int); i++)
+		printf(" %d", pv[i]);
+	printf("\n");
 
 
 	free(pv);
