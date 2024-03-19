@@ -15,10 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="02_Functii.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="03_Fisiere.c">
+    <ClCompile Include="04_Liste_simple.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="03_Fisiere.c" />
+    <ClCompile Include="04_Liste_simple.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Conturi.txt" />
