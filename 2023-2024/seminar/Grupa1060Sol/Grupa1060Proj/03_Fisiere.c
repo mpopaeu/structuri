@@ -50,8 +50,27 @@ int main()
 		idx_current += 1;
 	}
 
+	printf("Vector de user-i:\n");
+	for (unsigned char i = 0; i < nr_conturi; i++)
+		printf("%s %s\n", user_array[i].nume_user, user_array[i].deschis_la);
+
 
 	// dezalocare vector user_array
+	for (unsigned char i = 0; i < nr_conturi; i++)
+	{
+		free(user_array[i].nume_cont);
+		free(user_array[i].nume_user);
+	}
+	free(user_array); // dezalocare vector de User
+	user_array = NULL;
+
+	printf("Vector de user-i dupa dezalocare:\n");
+	for (unsigned char i = 0; i < nr_conturi; i++)
+	{
+		if(user_array != NULL)
+			printf("%s %s\n", user_array[i].nume_user, user_array[i].deschis_la);
+	}
+
 	fclose(f);
 	return 0;
 }
