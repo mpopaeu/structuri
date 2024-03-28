@@ -30,6 +30,30 @@ Node* insert_start(Node* list, BankAccount acc)
 	return newNode;
 }
 
+Node* deallocate_list(Node* list)
+{
+	while (list != NULL)
+	{
+		// there is one node (at least) in the simpla list
+		Node* temp = list; // save the heap address of the 1st node into a temporary local variable
+		list = list->next; // list stores the address of the 2nd node in the list
+
+		free(temp->info.owner_name); // release the 2nd level heap allocated location (string for owner's name)
+		free(temp);					// release the 1st level heap allocated location (Node)
+	}
+
+	return list;
+}
+
+// swap nodes [i, i+1]
+Node* swap_nodes(Node* list, unsigned char i)
+{
+	if (list == NULL || list->next == NULL)
+		return list;
+
+
+}
+
 int main()
 {
 	FILE* f = fopen("Accounts.txt", "r");
@@ -60,8 +84,27 @@ int main()
 	}
 
 	// parsing the simple list
+	printf("Simpla list after creation:\n");
+	Node* temp;
+	temp = head;
+	while (temp != NULL)
+	{
+		printf("%s %s\n", temp->info.iban, temp->info.owner_name);
+		temp = temp->next;
+	}
 
 	// deallocation of the simple list
+	head = deallocate_list(head);
+	//head = NULL; // pay attention to possible/potential memory leaks
+
+	printf("Simpla list after deallocation:\n");
+	temp = head;
+	while (temp != NULL)
+	{
+		printf("%s %s\n", temp->info.iban, temp->info.owner_name);
+		temp = temp->next;
+	}
+	
 
 	fclose(f);
 	return 0;
