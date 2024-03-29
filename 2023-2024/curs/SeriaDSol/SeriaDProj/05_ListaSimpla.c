@@ -57,6 +57,15 @@ void parseList(struct Nod* p) {
 	}
 }
 
+void parseListReverse(struct Nod* p)
+{
+	if (p)
+	{
+		parseListReverse(p->next); // acces la nodul succesor
+		printf("%d %s %5.2f\n", p->st.id, p->st.nume, p->st.medie); // prelucrare nod curent p
+	}
+}
+
 
 int main() {
 
@@ -85,6 +94,11 @@ int main() {
 		// inserare nod la inceputul listei
 		prim = inserareLista(prim, stud);
 	}
+
+	printf("Lista simpla parsata normal:\n");
+	parseList(prim);
+	printf("\nLista simpla parsata invers:\n");
+	parseListReverse(prim);
 
 	struct Student student_salvat = stergereStudent(&prim);
 	printf("Student extras din lista simpla: %d %s\n", student_salvat.id, student_salvat.nume);

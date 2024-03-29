@@ -23,6 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Studenti.txt" />
+    <Text Include="Test.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
