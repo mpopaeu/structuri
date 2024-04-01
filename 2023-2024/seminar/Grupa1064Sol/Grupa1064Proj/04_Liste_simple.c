@@ -160,6 +160,8 @@ Nod* interschimb_iban_oarecare(Nod* prim, char* cIBAN1, char* cIBAN2)
 		}
 	}
 }
+
+
 int main()
 {
 	FILE* f = fopen("Conturi.txt", "r");
