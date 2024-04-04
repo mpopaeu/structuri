@@ -20,3 +20,18 @@ struct Node
 };
 
 typedef struct Node Node;
+
+struct NodeD
+{
+	struct BankAccount *pdata;
+	struct NodeD * next, * prev;
+};
+
+typedef struct NodeD NodeD;
+
+struct DoubleList
+{
+	NodeD* head, * tail;
+};
+
+typedef struct DoubleList DoubleList;
