@@ -25,7 +25,23 @@ DoubleList insert_begining(DoubleList list, BankAccount *pba)
 
 DoubleList swap(DoubleList list, char* sIBAN)
 {
+	if (list.head == NULL || list.head->next == NULL)
+		return list; // 0 or 1 node in the list; no swap operation to be applied
 
+	NodeD* temp = list.head;
+	while (temp->next)
+	{
+		// particular situations:
+		// 1. swap [1,2] and the list has 3 nodes at least (head must be updated)
+		// 2. swap [1,2] and the list has 2 nodes only (both head and tail must be updated)
+		// 3. swap [n-1, n] and the list has n nodes (tail must be updated)
+	}
+
+	return list;
+}
+
+DoubleList swap_general(DoubleList list, char* sIBAN1, char* sIBAN2)
+{
 }
 
 int main()
