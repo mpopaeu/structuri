@@ -19,10 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_ListaDubla.c" />
+    <Text Include="Studenti.txt" />
+    <Text Include="Test.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Studenti.txt" />
+    <ClCompile Include="07_Stiva.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -114,6 +114,7 @@ int main() {
 	printf("Lista simpla dupa dezalocare:\n");
 	parseList(prim);
 
+
 	fclose(f);
 	return 0;
 }
