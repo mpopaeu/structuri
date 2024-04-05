@@ -100,6 +100,7 @@ int main()
 
 	// interschimbare noduri adiacente in lista simpla prin modificarea adreselor de legatura (de tip next)
 
+
 	fclose(f);
 	return 0;
 }
