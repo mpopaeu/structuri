@@ -58,6 +58,18 @@ ListaDubla stergere_nod_data(ListaDubla lista, char * data_deschidere)
 	return lista;
 }
 
+// interschimb noduri adiacente; primul nod identificat pe baza nume_cont din structura User
+ListaDubla interschimb_adiacente(ListaDubla lista, char* cont)
+{
+
+}
+
+// modificare nume_user pe baza nume_cont din structura User
+void modifica_nume_user(ListaDubla lista, char* cont)
+{
+
+}
+
 int main()
 {
 	FILE* f = fopen("Accounts.txt", "r");
