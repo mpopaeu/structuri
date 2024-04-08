@@ -133,6 +133,10 @@ int main()
 		printf("\nContul bancar cautat nu exista in tabela de dispersie!\n");
 	}
 
+	// stergere cont bancar identificat pe baza de IBAN
+
+	// stergere cont bancar identificat pe baza de moneda
+
 	fclose(f);
 	return 0;
 }
