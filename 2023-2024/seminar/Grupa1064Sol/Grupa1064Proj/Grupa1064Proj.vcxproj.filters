@@ -18,6 +18,9 @@
     <ClCompile Include="05_Liste_duble.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="06_Hash_chain.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Conturi.txt">

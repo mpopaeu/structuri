@@ -89,11 +89,27 @@ IBAN* salveaza_conturi_vector(ListaDubla lista, char * currency, unsigned char *
 	return vector;
 }
 
+
+struct NodIBANLS
+{
+	char IBAN[25];
+	struct NodIBANLS* next;
+};
+
+typedef struct NodIBANLS NodIBANLS;
+
 // interschimb noduri adiacente in lista dubla pe baza de pozitie [i,i+1]
 
 // interschimb noduri oarecare in lista dubla pe baza de pozitie [i,j]
 
 // sortare lista dubla (folosind interschimbare de mai sus)
+
+// extragere noduri din lista dubla pentru un titular specificat (lista de params)
+// IBAN-urile conturilor extrase se salveaza intr-o lista simpla separata
+NodIBANLS* extrage_IBAN(ListaDubla *lista, char* titular)
+{
+
+}
 
 int main()
 {

@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="05_Liste_duble.c" />
+    <ClCompile Include="06_Hash_chain.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Conturi.txt" />
