@@ -1,5 +1,5 @@
 RO04RNCB1234567890999000
-Popescu Marian Georgian
+Pop
 789.05
 Romanian Leu
 RO98BTRL1234567890999321
@@ -7,7 +7,7 @@ Ionescu Alexandru
 89.05
 US Dollar
 RO04BRDE0000000000999000
-Georgescu Mircea Dan
+Mihaiu Alexandra
 7.05
 EURO
 RO04RNCB1234567890999789

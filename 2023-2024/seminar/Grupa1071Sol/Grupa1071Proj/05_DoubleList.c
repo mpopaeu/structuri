@@ -1,6 +1,6 @@
 #include "Structs.h"
 
-DoubleList insert_begining(DoubleList list, BankAccount *pba)
+DoubleList insert_beginning(DoubleList list, BankAccount *pba)
 {
 	NodeD* newNode = (NodeD*)malloc(sizeof(NodeD));
 
@@ -76,7 +76,7 @@ int main()
 		*pBankAccount = tBankAccount;
 
 		// pass pointer to BankAccount to add a new node in the double list
-		DList = insert_begining(DList, pBankAccount);
+		DList = insert_beginning(DList, pBankAccount);
 	}
 
 	printf("The double list after creation (head-to-tail):\n");
