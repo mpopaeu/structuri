@@ -139,10 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="05_DoubleLists.c" />
+    <Text Include="Accounts.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Accounts.txt" />
+    <ClCompile Include="06_Hash_chaining.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

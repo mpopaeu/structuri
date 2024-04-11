@@ -72,13 +72,22 @@ DoubleList swap(DoubleList list, unsigned char position_first)
 		return list;
 
 	NodeD* temp = list.head;
-	unsigned char counter = 0;
+	unsigned char counter = 1;
 	while (temp!=list.tail && counter <= position_first)
 	{
 
 	}
 
 	return list;
+}
+
+DoubleList swap(DoubleList list, unsigned char first_pos, unsigned char second_pos)
+{
+}
+
+DoubleList delete_nodes(DoubleList list, float delete_balance)
+{
+
 }
 
 int main()
@@ -91,7 +100,7 @@ int main()
 	while (fgets(buffer, sizeof(buffer), f))
 	{
 		BankAccount tAccount, *pAccount;
-		buffer[strlen(buffer) - 1] = 0; // overwrites the byte 0x0a ('\n') with byte 0x00 ('\n' added to buffer by fgets)
+		buffer[strlen(buffer) - 1] = 0; // overwrites the byte 0x0a ('\n' added to buffer by fgets) with byte 0x00
 		strcpy(tAccount.iban, buffer);
 
 		fgets(buffer, sizeof(buffer), f); // for the owner's name
@@ -116,8 +125,34 @@ int main()
 		DList = insert_start(DList, pAccount);
 	}
 
-	printf("Double list after creation:\n");
-	NodeD* temp = DList.tail;
+
+	printf("Double list after creation (head-to-tail):\n");
+	NodeD* temp = DList.head;
+	while (temp != NULL)
+	{
+		printf("%s %s\n", temp->info->iban, temp->info->owner_name);
+		temp = temp->next;
+	}
+	printf("\nDouble list after creation (tail-to-head):\n");
+	temp = DList.tail;
+	while (temp != NULL)
+	{
+		printf("%s %s\n", temp->info->iban, temp->info->owner_name);
+		temp = temp->prev;
+	}
+
+	// delete all nodes with the same balance
+	DList = delete_nodes(DList, (float)0.0);
+
+	printf("Double list after deletion (head-to-tail):\n");
+	temp = DList.head;
+	while (temp != NULL)
+	{
+		printf("%s %s\n", temp->info->iban, temp->info->owner_name);
+		temp = temp->next;
+	}
+	printf("\nDouble list after deletion (tail-to-head):\n");
+	temp = DList.tail;
 	while (temp != NULL)
 	{
 		printf("%s %s\n", temp->info->iban, temp->info->owner_name);
