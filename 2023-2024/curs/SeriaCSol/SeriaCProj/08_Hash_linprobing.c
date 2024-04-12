@@ -17,11 +17,10 @@ int positionHashFunction(char* str, int size) {
 	for (unsigned int i = 0; i < strlen(str); i++)
 		sum += str[i];
 
-	return sum % size; // impartire modulo pentru a obtine offset valid in tabela de dipersie (vector)
+	return sum % size;
 }
 
 char insertStudent(struct Student* ht, int size, struct Student s) {
-	// 1. calcul offset valid pentru vectorul (tabela de dispersie) ht
 	int pos = positionHashFunction(s.name, size);
 	printf("Position: %d for %s\n", pos, s.name);
 
@@ -62,12 +61,12 @@ int searchStudent(struct Student* ht, int size, char* studName)
 
 char deleteStudent(struct Student* ht, int size, char* studName)
 {
-	int poz = searchStudent(ht, size, studName); // pozitie reala a studentului in tabela hash
+	int poz = searchStudent(ht, size, studName);
 	if (poz == -1)
 		return 0;
 
-	free(ht[poz].name); // dezalocare nume student
-	ht[poz].name = 0; // disponibilizare pozitie la inserare dupa efectuare stergere
+	free(ht[poz].name);
+	ht[poz].name = 0;
 	int inf, sup;
 
 	char flag = 0;
@@ -92,17 +91,17 @@ char deleteStudent(struct Student* ht, int size, char* studName)
 	if (!flag)
 		sup = size - 1;
 
-	struct Student* temp = (struct Student*)malloc(sizeof(struct Student) * (sup - inf)); // alocare vector temporar studenti din cele 2 subclustere formate
+	struct Student* temp = (struct Student*)malloc(sizeof(struct Student) * (sup - inf));
 	int  j = 0;
-	for (int i = inf; i < poz; i++) // subcluster stanga
+	for (int i = inf; i < poz; i++)
 	{
-		temp[j++] = ht[i]; // salvare student in vector temporar
-		ht[i].name = 0; // disponibilizare pozitie
+		temp[j++] = ht[i];
+		ht[i].name = 0;
 	}
-	for (int i = poz + 1; i <= sup; i++) // subcluster dreapta
+	for (int i = poz + 1; i <= sup; i++)
 	{
-		temp[j++] = ht[i]; // salvare student in vector temporar
-		ht[i].name = 0;    // disponibilizare pozitie
+		temp[j++] = ht[i];
+		ht[i].name = 0;
 	}
 
 	for (int i = 0; i < (sup - inf); i++)
@@ -120,12 +119,12 @@ void main() {
 	char buffer[LINESIZE], seps[] = { ",\n" }, * token;
 	struct Student s;
 
-	struct Student* HTable; // tabela de dispersie cu linear probing
+	struct Student* HTable;
 	int size = ARRAY_SIZE;
 
 	HTable = (struct Student*)malloc(size * sizeof(struct Student));
 	for (int i = 0; i < size; i++) {
-		HTable[i].name = NULL; // fiecare element din vectorul HTable (tabela de dispersie)
+		HTable[i].name = NULL;
 	}
 
 
@@ -148,28 +147,28 @@ void main() {
 		while (!insert) {
 			struct Student* newHTable;
 			newSize += ARRAY_SIZE;
-			newHTable = (struct Student*)malloc(newSize * sizeof(struct Student)); // alocare tabela noua pt +ARRAY_SIZE elemente
+			newHTable = (struct Student*)malloc(newSize * sizeof(struct Student));
 
 			for (int i = 0; i < newSize; i++) {
 				newHTable[i].name = NULL;
 			}
 
 			insert = 1;
-			for (int i = 0; i < size && insert; i++) { // tabela veche se parseaza secvential (element cu element)
-				if (HTable[i].name) // la offset i in tabela veche se afla date student valid
-					insert = insertStudent(newHTable, newSize, HTable[i]); // mutare element i din tabela veche pe cea noua
+			for (int i = 0; i < size && insert; i++) {
+				if (HTable[i].name)
+					insert = insertStudent(newHTable, newSize, HTable[i]);
 			}
 
 			if (!insert) {
-				free(newHTable); // dezalocare tabela noua pentru ca mutarea elementelor de pe tabela veche a esuat
+				free(newHTable);
 			}
-			else { // mutare cu succes a elemetelor de pe tabela veche pe tabela noua
-				free(HTable); // dezalocare vector suport pentru tabela veche
+			else {
+				free(HTable);
 
-				HTable = newHTable; // comutare pointer tabela veche pe pointer tabela noua
-				size = newSize;		// comutare size pe noua dimensiune a tabelei noi
+				HTable = newHTable;
+				size = newSize;
 
-				insert = insertStudent(HTable, size, s); // tentativa de inserare a studentului in tabela
+				insert = insertStudent(HTable, size, s);
 			}
 		}
 	}

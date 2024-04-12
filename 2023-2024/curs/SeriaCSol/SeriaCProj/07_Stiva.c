@@ -69,7 +69,7 @@ void parse_list_recursiv(struct Nod* p)
 	if (p != NULL) // p este nod curent in traversare recursiva a listei simple
 	{
 		parse_list_recursiv(p->next);
-		printf("%d %s %5.2f\n", p->st.id, p->st.nume, p->st.medie);
+		printf("%d %s %5.2f\n", p->st.id, p->st.nume, p->st.medie); // prelucrare nod curent p
 	}
 }
 

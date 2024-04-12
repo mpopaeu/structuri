@@ -23,7 +23,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="07_Stiva.c">
+    <ClCompile Include="08_Hash_linprobing.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

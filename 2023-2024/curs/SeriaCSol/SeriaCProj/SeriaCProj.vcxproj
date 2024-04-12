@@ -23,7 +23,7 @@
     <Text Include="Test.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="07_Stiva.c" />
+    <ClCompile Include="08_Hash_linprobing.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
