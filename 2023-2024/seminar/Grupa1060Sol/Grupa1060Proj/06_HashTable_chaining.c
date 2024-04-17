@@ -63,15 +63,46 @@ void inserare_user_htable(Nod** ht, unsigned char ht_size, User usr)
 	ht[poz] = inserare_sfarsit(ht[poz], usr);
 }
 
-User cauta_utilizator_htable(Nod** ht, unsigned char ht_size, char* cheie_cautare)
+void inserare_user_htable_v2(Nod** ht, unsigned char ht_size, User usr)
 {
-	User usr;
+	// 1. determinare pozitie lista simpla in care se efectueaza inserarea
+	unsigned char poz = functie_hash(usr.nume_user, ht_size);
 
-	//
-
-	return usr;
+	// 2. inserare utilizator usr in lista simpla ht[poz]
+	ht[poz] = inserare_sfarsit(ht[poz], usr);
 }
 
+User* cauta_utilizator_htable(Nod** ht, unsigned char ht_size, char* cheie_cautare)
+{
+	// 1. determinare hash (offset lista simpla in care ar trebui sa gasesc date pentru cheie_cautare)
+	unsigned char poz = functie_hash(cheie_cautare, ht_size);
+
+	// 2. parsare nod cu nod lista simpla ht[poz]; returnare adresa heap unde structura este stocata in lista
+	Nod* temp = ht[poz];
+	while (temp != NULL)
+	{
+		if (strcmp(cheie_cautare, temp->u.nume_cont) == 0)
+		{
+			return &temp->u; // utilizator identificat in tabela hash; nu exista nodul 2 cu acelasi nume_cont
+		}
+
+		temp = temp->next;
+	}
+	
+	return NULL; // utilizatorul nu exista in tabela de dispersie
+}
+
+User** cauta_utilizator_htable_v2(Nod** ht, unsigned char ht_size, char* cheie_cautare, 
+									unsigned char* nr_users)
+{
+	// 1. determinare nr conturi cu acelasi nume_user
+
+	// 2. alocare memorie heap pentru vectorul de User* DACA nr de conturi nu este 0
+
+	// 3. cautare in extenso a conturilor si salvare adrese de conturi in vectorul alocat la p2.
+
+	// 4. return vector alocat sau NULL
+}
 int main()
 {
 	FILE* f = fopen("Accounts.txt", "r");
@@ -107,9 +138,19 @@ int main()
 	}
 
 	// cautare cont utilizator pe baza de cheie in tabela de dispersie cu chaining
-	User usr_gasit = cauta_utilizator_htable(HTable, HASH_TABLE_SIZE, "popes_9");
+	User* usr_gasit = cauta_utilizator_htable(HTable, HASH_TABLE_SIZE, "popes_9");
+	if (usr_gasit != NULL)
+	{
+		printf("Utilizator identificat in tabela de dispersie: %s %s\n",
+			usr_gasit->nume_cont, usr_gasit->nume_user);
+	}
+	else
+	{
+		printf("Utilizatorul cautat nu exista in tabela de dispersie!\n");
+	}
 
 	// dezalocare tabela de dispersie
+	// 1. dezalocare liste simple din tabela de dispersie
 	for (unsigned char i = 0; i < HASH_TABLE_SIZE; i++)
 	{
 		while (HTable[i] != NULL)
@@ -123,6 +164,39 @@ int main()
 			free(temp);				 // dezalocare nod
 		}
 	}
+	// 2. dezalocare vector suport pentru tabela de dispersie
+	free(HTable);
+	HTable = NULL;
+	usr_gasit = NULL; // ca urmare a dezalocarii tabelei, datele pointate nu mai exista
+
+	// creare tabela hash gestionata prin HTable unde cheie de cautare este nume_user
+	// re-parsare fisier cu date de intrare
+	fseek(f, 0, SEEK_SET);
+	while (fgets(buffer, sizeof(buffer), f))
+	{
+		char* token = NULL;
+		User utilizator;
+		token = strtok(buffer, sep); // token contine adresa de inceput in buffer pt nume_cont
+		utilizator.nume_cont = (char*)malloc(strlen(token) + 1);
+		strcpy(utilizator.nume_cont, token);
+
+		token = strtok(NULL, sep); // token contine adresa de inceput in buffer pt nume_user
+		utilizator.nume_user = (char*)malloc(strlen(token) + 1);
+		strcpy(utilizator.nume_user, token);
+
+		token = strtok(NULL, sep); // token contine adresa de inceput in buffer pt varsta
+		utilizator.varsta = (unsigned char)atoi(token);
+
+		token = strtok(NULL, sep); // token contine adresa de inceput in buffer pt deschis_la
+		strcpy(utilizator.deschis_la, token);
+
+		// inserare user in tabela de dispersie
+		inserare_user_htable_v2(HTable, HASH_TABLE_SIZE, utilizator);
+	}
+
+	// apel functie de cautare conturi User pentru cheie nume_user specificata in lista de parametri
+	unsigned char nr_users = 0;
+	User ** v_usr_gasiti = cauta_utilizator_htable_v2(HTable, HASH_TABLE_SIZE, "Ionescu Georgica", &nr_users);
 
 	fclose(f);
 	return 0;
