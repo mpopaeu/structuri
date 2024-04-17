@@ -172,6 +172,11 @@ int main()
 	// creare tabela hash gestionata prin HTable unde cheie de cautare este nume_user
 	// re-parsare fisier cu date de intrare
 	fseek(f, 0, SEEK_SET);
+
+	HTable = (Nod**)malloc(HASH_TABLE_SIZE * sizeof(Nod*));
+	for (unsigned char i = 0; i < HASH_TABLE_SIZE; i++)
+		HTable[i] = NULL; // HTable[i] acceseaza pointerul aferent listei i in tabela de dispersie HTable
+
 	while (fgets(buffer, sizeof(buffer), f))
 	{
 		char* token = NULL;
@@ -197,6 +202,11 @@ int main()
 	// apel functie de cautare conturi User pentru cheie nume_user specificata in lista de parametri
 	unsigned char nr_users = 0;
 	User ** v_usr_gasiti = cauta_utilizator_htable_v2(HTable, HASH_TABLE_SIZE, "Ionescu Georgica", &nr_users);
+
+
+	// dezalocare tabela de dispersie #2 (cheie: nume_user)
+
+	// dezalocare vector de pointeri
 
 	fclose(f);
 	return 0;
