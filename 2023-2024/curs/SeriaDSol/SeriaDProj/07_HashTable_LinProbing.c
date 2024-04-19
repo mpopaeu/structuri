@@ -67,7 +67,7 @@ char deleteStudent(struct Student* ht, int size, char* studName)
 		return 0;
 
 	free(ht[poz].name); // dezalocare nume student
-	ht[poz].name = 0; // disponibilizare pozitie la inserare dupa efectuare stergere
+	ht[poz].name = 0;   // disponibilizare pozitie la inserare dupa efectuare stergere
 	int inf, sup;
 
 	char flag = 0;
@@ -92,23 +92,27 @@ char deleteStudent(struct Student* ht, int size, char* studName)
 	if (!flag)
 		sup = size - 1;
 
-	struct Student* temp = (struct Student*)malloc(sizeof(struct Student) * (sup - inf)); // alocare vector temporar studenti din cele 2 subclustere formate
-	int  j = 0;
-	for (int i = inf; i < poz; i++) // subcluster stanga
+	if ((sup - inf) > 0)
 	{
-		temp[j++] = ht[i]; // salvare student in vector temporar
-		ht[i].name = 0; // disponibilizare pozitie
-	}
-	for (int i = poz + 1; i <= sup; i++) // subcluster dreapta
-	{
-		temp[j++] = ht[i]; // salvare student in vector temporar
-		ht[i].name = 0;    // disponibilizare pozitie
-	}
+		struct Student* temp = (struct Student*)malloc(sizeof(struct Student) * (sup - inf)); // alocare vector temporar studenti din cele 2 subclustere formate
+		int  j = 0;
+		for (int i = inf; i < poz; i++) // subcluster stanga
+		{
+			temp[j++] = ht[i]; // salvare student in vector temporar
+			ht[i].name = 0; // disponibilizare pozitie
+		}
+		for (int i = poz + 1; i <= sup; i++) // subcluster dreapta
+		{
+			temp[j++] = ht[i]; // salvare student in vector temporar
+			ht[i].name = 0;    // disponibilizare pozitie
+		}
 
-	for (int i = 0; i < (sup - inf); i++)
-		flag = insertStudent(ht, size, temp[i]);
+		for (int i = 0; i < (sup - inf); i++)
+			flag = insertStudent(ht, size, temp[i]); // reinserare studenti in tabela de dispersie
+													 // pozitiile ocupate vor fi in [inf, sup]
 
-	free(temp);
+		free(temp);
+	}
 
 	return 1;
 }
@@ -181,6 +185,17 @@ void main() {
 		}
 	}
 
+	// cautare student in tabela de dispersie
+	int poz_student = searchStudent(HTable, size, "Mihai Vasilescu");
+	if (poz_student != -1)
+	{
+		printf("\n\nStudent identificat: %d %s\n\n", HTable[poz_student].id, HTable[poz_student].name);
+	}
+	else
+	{
+		printf("Studentul nu exista in tabela de dispersie!\n");
+	}
+
 	char studName[] = { "Popescu Gigel" };
 	char deleted = deleteStudent(HTable, size, studName);
 
@@ -190,6 +205,15 @@ void main() {
 			printf("Pozitie: %d, Student: %d %s\n", i, HTable[i].id, HTable[i].name);
 		}
 	}
+
+	// dezalocare tabela hash
+	for (int i = 0; i < size; i++) {
+		if (HTable[i].name) {
+			free(HTable[i].name); // dezalocare string pentru nume student stocat pe offset i in tabela
+		}
+	}
+	free(HTable);
+	HTable = NULL;
 
 	fclose(f);
 }
