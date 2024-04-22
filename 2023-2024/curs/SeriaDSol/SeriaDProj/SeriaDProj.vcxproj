@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="HeapKeys.txt" />
     <Text Include="Studenti.txt" />
     <Text Include="Test.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="07_HashTable_LinProbing.c" />
+    <ClCompile Include="08_HeapStruct.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

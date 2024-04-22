@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Studenti.txt" />
-    <Text Include="Test.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="08_Hash_linprobing.c" />

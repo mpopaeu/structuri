@@ -21,9 +21,15 @@
     <Text Include="Test.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="HeapKeys.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="07_HashTable_LinProbing.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="08_HeapStruct.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

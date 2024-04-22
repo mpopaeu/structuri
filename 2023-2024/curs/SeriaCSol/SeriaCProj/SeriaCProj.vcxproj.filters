@@ -18,9 +18,6 @@
     <Text Include="Studenti.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="Test.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="08_Hash_linprobing.c">
