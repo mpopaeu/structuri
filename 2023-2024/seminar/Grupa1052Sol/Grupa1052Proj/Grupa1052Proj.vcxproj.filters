@@ -18,9 +18,12 @@
     <Text Include="Conturi.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="ContABC.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_Hash_chain.c">
+    <ClCompile Include="07_ABC.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -83,6 +83,24 @@ NodLS* cauta_cont(NodLS ** HT, unsigned char size, char* cheie_cautare)
 	return nod_gasit;
 }
 
+struct NodLSRef
+{
+	ContBancar* pdata; // adresa date cont bancar din NodLS
+	struct NodLSRef* next;
+};
+typedef struct NodLSRef NodLSRef;
+
+// functia pentru accesarea conturilor cu acelasi titular specificat parametru al functiei
+// titular NU este cheie in tabela de dispersie -> tabela de dispersie nu poate fi accesata
+// cu functia hash aplicata pe IBAN (vector de liste simple)
+
+NodLSRef* cauta_conturi_titular(NodLS** HT, unsigned char size, char* nume_titular)
+{
+	NodLSRef* lista = NULL;
+
+	return lista;
+}
+
 int main()
 {
 
@@ -137,6 +155,24 @@ int main()
 
 	// stergere cont bancar identificat pe baza de moneda
 
+	// dezalocare structura tabela hash cu chaining
+	// dezalocare liste simple din vectorul suport tabela hash
+	for (unsigned char i = 0; i < size_htable; i++)
+	{
+		while (HTable[i] != NULL)
+		{
+			NodLS* temp = HTable[i]; // inceput actual salvat in temp (izolare nod 1)
+			HTable[i] = HTable[i]->next; // actualizare inceput de lista simpla i
+
+			free(temp->cont.titular); // dezalocare string titular cont bancar
+			free(temp);				  // dezalocare nod lista simpla cu cont bancar
+		}
+	}
+
+	// dezalocare vector suport tabela hash
+	free(HTable);
+	HTable = NULL;
+	
 	fclose(f);
 	return 0;
 }
