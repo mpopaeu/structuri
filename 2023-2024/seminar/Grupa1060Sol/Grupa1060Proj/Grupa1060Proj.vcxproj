@@ -140,9 +140,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="Accounts.txt" />
+    <Text Include="AccountsTree.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_HashTable_chaining.c" />
+    <ClCompile Include="07_ABC.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

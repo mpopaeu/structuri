@@ -18,9 +18,12 @@
     <Text Include="Accounts.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="AccountsTree.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_HashTable_chaining.c">
+    <ClCompile Include="07_ABC.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
