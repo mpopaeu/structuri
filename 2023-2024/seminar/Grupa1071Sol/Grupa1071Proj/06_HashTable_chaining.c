@@ -32,6 +32,8 @@ void insert_ba_hash_table(Node** HT, unsigned char ht_size, BankAccount ba_data)
 	HT[offset] = insert_begining(HT[offset], ba_data);
 }
 
+
+// the first appearance of BankAccount meeting the name 
 Node* search_first_ba(Node** HT, unsigned char ht_size, char* name)
 {
 	// call function to hash compute
@@ -47,6 +49,57 @@ Node* search_first_ba(Node** HT, unsigned char ht_size, char* name)
 	}
 
 	return temp; // NULL
+}
+
+// function to create an array of BankAccount addresses will meet the key (searching_name)
+// function returns the memory address of the array + the actual size of that array 
+// created array contains references to BankAccount data found in hash table
+//
+// I/: HT - hash table
+// I/: ht_size - size of the array as implementation support for the hash table (chaining)
+// I/: searching_name - key used to identify BankAccount with the same owner's name
+// O/: array_size - actual size of the array created for the found BankAccount data in hash table
+// return: starting memory address of the array with references to BankAccount data
+BankAccount** search_all_ba(Node** HT, unsigned char ht_size, char* searching_name, 
+						   unsigned char* array_size)
+{
+	// call function to hash computation
+	unsigned char offset = hash_function(searching_name, ht_size);
+
+	// initialize the size of the output array
+	*array_size = 0;
+
+	// once offset computed, the node must be searched item by item in the simple list
+	Node* temp = HT[offset];
+	while (temp)
+	{
+		if (strcmp(temp->data.owner_name, searching_name) == 0)
+			(*array_size) += 1; // add to counter the number of BankAccount data
+		temp = temp->next;
+	}
+
+	// allocate the output array
+	BankAccount** out_array = NULL; 
+	
+	if (*array_size != 0)
+	{
+		out_array = (BankAccount**)malloc(*array_size * sizeof(BankAccount*));
+
+		// parse again the simple list HT[offset] to store address of BankAccount data
+		unsigned char i = 0;
+		temp = HT[offset];
+		while (temp)
+		{
+			if (strcmp(temp->data.owner_name, searching_name) == 0)
+			{
+				out_array[i] = &temp->data;
+				i += 1; // next storage item is the next iterator in the output array
+			}
+			temp = temp->next;
+		}
+	}
+
+	return out_array;
 }
 
 int main()
@@ -85,16 +138,30 @@ int main()
 	Node* temp = search_first_ba(HTable, HASH_TABLE_SIZE, "Popescu Mircea");
 	if (temp)
 	{
-		printf("Bank Account has been founded out: %s %s\n", temp->data.owner_name, temp->data.iban);
+		printf("\nBank Account has been founded out: %s %s\n", temp->data.owner_name, temp->data.iban);
 	}
 
-	// TODO: search for all bank account which meets the key; the founded bank accounts will be stored
+	printf("\n\nSearching all BankAccount data for a certain owner's name:\n");
+	unsigned char size_all_ba;
+	BankAccount** array_all_ba = search_all_ba(HTable, HASH_TABLE_SIZE, "Vasilescu Miruna", &size_all_ba);
+	if (array_all_ba != NULL)
+	{
+		// at least, there is one single BankAccount with searching key (for the owner's name)
+		for (unsigned char i = 0; i < size_all_ba; i++)
+			printf("Bank account: %s %s\n", array_all_ba[i]->iban, array_all_ba[i]->owner_name);
+	}
+	else
+	{
+		printf("There is no BankAccount data to match the searching owner's name!\n");
+	}
+
+	// TODO #1: search for all bank accounts which meet the key; the founded bank accounts will be stored
 	// into a separate simple list; the separate simple list does not share heap memory locations
 	// with the simple lists built in hash table with chaining
 
 	// TODO: deallocation of hash table
 	// TODO: deallocation of simple list with all bank account data for the same key (function 
-	// according to requirements at line #90)
+	// according to requirements above TODO #1)
 	fclose(f);
 	return 0;
 }
