@@ -124,7 +124,7 @@ int main()
 			// realocare vector cu + DIM elemente
 			// se copiaza elementele din vechea structura in noua structura pe exact aceleasi pozitii
 			capacitate_stocare += DIM;
-			int* new_strHeap = (int*)malloc(capacitate_stocare * sizeof(DIM));
+			int* new_strHeap = (int*)malloc(capacitate_stocare * sizeof(int));
 			for (int i = 0; i < nKeys; i++)
 				new_strHeap[i] = strHeap[i];
 
@@ -144,17 +144,19 @@ int main()
 		printf(" %d ", strHeap[i]);
 
 	// inserare cheie 26 in structura Heap
-	inserare_cheie_heap(strHeap, &nKeys, 26);
+	int cheie_noua = 45;
+	inserare_cheie_heap(strHeap, &nKeys, cheie_noua);
 
-	printf("\n\n Structura Heap dupa inserare cheie 26: ");
+	printf("\n\n Structura Heap dupa inserare cheie %d: ", cheie_noua);
 	for (int i = 0; i < nKeys; i++)
 		printf(" %d ", strHeap[i]);
 	printf("\n");
 
 	cheie = stergere_cheie_heap(strHeap, &nKeys);
+	printf("Stergere nod arbore structura Heap: %d\n", cheie);
 
-	printf("Stergere chei din structura Heap: ");
-	while (nKeys > 0)
+	printf("Stergere chei din structura Heap: "); 
+	while (nKeys > 0) // golire arbore structura Heap
 	{
 		printf(" %d ", stergere_cheie_heap(strHeap, &nKeys));
 	}
