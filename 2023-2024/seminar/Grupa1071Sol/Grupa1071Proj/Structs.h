@@ -35,3 +35,11 @@ struct DoubleList
 };
 
 typedef struct DoubleList DoubleList;
+
+struct NodeBST
+{
+	struct BankAccount data;
+	struct NodeBST *left, *right;
+};
+
+typedef struct NodeBST NodeBST;

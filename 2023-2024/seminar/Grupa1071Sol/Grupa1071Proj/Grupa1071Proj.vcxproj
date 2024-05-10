@@ -145,7 +145,7 @@
     <ClInclude Include="Structs.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_HashTable_chaining.c" />
+    <ClCompile Include="07_BinSearchTree.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -22,6 +22,13 @@ struct Node
 typedef struct BankAccount BankAccount;
 typedef struct Node Node;
 
+struct NodeRef
+{
+	struct BankAccount* pinfo;
+	struct NodeRef* next;
+};
+typedef struct NodeRef NodeRef;
+
 Node* insert_start(Node* list, BankAccount acc)
 {
 
@@ -74,6 +81,41 @@ BankAccount* search(Node** HT, unsigned char ht_size, char* key)
 	return NULL; // the BankAccount with key does not exist in the hash table
 }
 
+// search all bank accounts having the same owner's name (not a searching key in the actual hash table)
+// I/ HT starting address of hash table created for iban as a searching key
+// I/ ht_size the actual size of the array HT
+// I/ non_key the owner's name to be searched throughout hast table HT; it is not a searching key
+// /O return the address of the first node of a simple list which stores addresses (references) 
+//		to bank accounts stored by the hash table
+NodeRef* search_ba_owner(Node** HT, unsigned char ht_size, char* non_key)
+{
+	NodeRef* list_ba = NULL;
+
+	for (unsigned char i = 0; i < ht_size; i++) // I have to parse all items in hash table (not searching key)
+	{
+		Node* temp = HT[i];
+		while (temp)
+		{
+			if (strcmp(non_key, temp->info.owner_name) == 0)
+			{
+				// temp contains bank account data for searching owner's name
+				// reference to temp->info will be stored by the simple list to NodeRef
+				// allocate node for returning simple lista (NodeRef)
+				NodeRef* new_node = (NodeRef*)malloc(sizeof(NodeRef));
+				new_node->pinfo = &(temp->info); // reference to BankAccount stored by the hash table
+				new_node->next = list_ba; // insertion at the beginning of the list
+
+				list_ba = new_node; // update the starting item of the resulting list
+			}
+
+			temp = temp->next;
+		}
+
+	}
+
+	return list_ba;
+}
+
 // create hash table with key owner_name
 // search for all Bank Account data for a certain owner provided as parameter to the search function
 
@@ -112,7 +154,7 @@ int main()
 	}
 
 	// searching a BankAccount based on key
-	BankAccount* p_account_data = search(HTable, HASH_TABLE_SIZE, "Ionescu Georgica");
+	BankAccount* p_account_data = search(HTable, HASH_TABLE_SIZE, "RO98BTRL000000432168");
 	if (p_account_data != NULL)
 	{
 		// BankAccount data exists in hash table
@@ -121,6 +163,24 @@ int main()
 	else
 	{
 		printf("The searched Bank Account does not exist in the hash table!\n");
+	}
+
+
+	NodeRef* list_ba_owner = search_ba_owner(HTable, HASH_TABLE_SIZE, "Ionescu Georgica");
+	if (list_ba_owner != NULL)
+	{
+		// there is one single (at least) bank acoount data for the searching owner's name
+		printf("Bank accounts for the searching owner's name:\n");
+		NodeRef* temp = list_ba_owner;
+		while (temp != NULL)
+		{
+			printf("%s %s\n", temp->pinfo->iban, temp->pinfo->owner_name);
+			temp = temp->next;
+		}
+	}
+	else
+	{
+		printf("There is no bank account data for the searching owner's name!\n\n");
 	}
 
 	// deallocate hash table with chaining
@@ -140,6 +200,14 @@ int main()
 	free(HTable);
 	HTable = NULL;
 
+	// deallocate the simple list with refereces to bank accounts having the same owner
+	while (list_ba_owner != NULL)
+	{
+		NodeRef* temp = list_ba_owner;
+		list_ba_owner = list_ba_owner->next; // temp is isolated from the list
+		free(temp); // only the node should be deallocated
+					// bank account data deallocate before because they are in the hash table
+	}
 
 	fclose(f);
 	return 0;

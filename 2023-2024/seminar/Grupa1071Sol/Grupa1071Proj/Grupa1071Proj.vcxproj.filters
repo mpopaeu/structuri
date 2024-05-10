@@ -25,7 +25,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_HashTable_chaining.c">
+    <ClCompile Include="07_BinSearchTree.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
