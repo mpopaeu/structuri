@@ -139,10 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="06_Hash_chain.c" />
+    <ClCompile Include="07_ABC.c" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Conturi.txt" />
+    <Text Include="ConturiABC.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

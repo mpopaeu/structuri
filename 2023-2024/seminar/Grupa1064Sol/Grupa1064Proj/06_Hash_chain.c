@@ -102,6 +102,12 @@ void stergere_conturi_bancare(NodLS** HT, unsigned char ht_size, char* titular_c
 
 }
 
+// stergere conturi bancare pentru moneda specificata
+void stergere_cb_moneda(NodLS** HT, unsigned char ht_size, char* moneda)
+{
+
+}
+
 int main()
 {
 	FILE* f = fopen("Conturi.txt", "r");
@@ -124,7 +130,7 @@ int main()
 		fscanf(f, "%s", contB.moneda);
 		fscanf(f, "%f", &contB.sold);
 
-		// inserare cont bancar in lista dubla
+		// inserare cont bancar in hash table
 		inserare_tabela_hash(HTable, HTABLE_SIZE, contB);
 
 		contB.titular = NULL; // pentru a elimina partajarea dintre ultimul nod inserat si contB
@@ -158,6 +164,9 @@ int main()
 
 	// stergere conturi bancare din tabela de dispersie pentru titular specificat 
 	stergere_conturi_bancare(HTable, HTABLE_SIZE, "Popescu Iulian");
+
+	// stergere conturi bancare din tabela de dispersie pentru moneda specificata 
+	stergere_cb_moneda(HTable, HTABLE_SIZE, "EUR");
 
 	// dezalocare tabela de dispersie
 	// se parseaza secvential vectorul suport al tabelei de dispersie
