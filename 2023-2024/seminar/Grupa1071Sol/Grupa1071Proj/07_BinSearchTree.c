@@ -38,6 +38,103 @@ NodeBST* insert_ba_binary_search_tree(NodeBST* r, BankAccount ba, char *insert_f
 	return r;
 }
 
+void parse_ascending_keys(NodeBST* r)
+{
+	if (r != NULL)
+	{
+		parse_ascending_keys(r->left);
+		printf("%s %s\n", r->data.iban, r->data.owner_name);
+		parse_ascending_keys(r->right);
+	}
+}
+
+NodeBST* deallocate_BST(NodeBST* r)
+{
+	if (r != NULL)
+	{
+		r->left = deallocate_BST(r->left);
+		r->right = deallocate_BST(r->right);
+
+		// we may dealocate the current node r because r->left and r->right were deallocate by above calls
+		free(r->data.owner_name);
+		free(r->data.currency);
+		free(r);
+
+		r = NULL;
+	}
+
+	return r;
+}
+
+
+BankAccount* search_BST_key(NodeBST* r, char* iban_key)
+{
+	if (r != NULL)
+	{
+		if (strcmp(r->data.iban, iban_key) == 0)
+		{
+			return &(r->data); // the bank account data exist in the tree and returned to the caller
+		}
+		else
+		{
+			if (strcmp(r->data.iban, iban_key) > 0)
+			{
+				// continue on the left
+				return search_BST_key(r->left, iban_key);
+			}
+			else
+			{
+				// continue on the right
+				return search_BST_key(r->right, iban_key);
+			}
+		}
+	}
+
+	return NULL;
+}
+
+NodeBST* delete_BST_node(NodeBST* r, char* iban_key, BankAccount* out_data)
+{
+	if (r != NULL)
+	{
+		if (strcmp(r->data.iban, iban_key) == 0)
+		{
+			// the node has been identifiied and must be deleted from BST
+			if (r->left && r->right)
+			{
+				// r has 2 childrens (case #3)
+			}
+			else
+			{
+				if (r->left == NULL && r->right == NULL)
+				{
+					// r is leaf (case #1)
+				}
+				else
+				{
+					// r has one single children (case #2)
+					// could be lef OR right
+				}
+			}
+		}
+		else
+		{
+			if (strcmp(r->data.iban, iban_key) > 0)
+			{
+				// continue on the left
+				r->left = delete_BST_node(r->left, iban_key, out_data);
+			}
+			else
+			{
+				// continue on the right
+				r->right = delete_BST_node(r->right, iban_key, out_data);
+			}
+		}
+	}
+
+	return r;
+}
+
 int main()
 {
 	FILE* f = fopen("Accounts.txt", "r");
@@ -81,6 +178,26 @@ int main()
 		}
 	}
 
+	printf("\nPARSING: Content of BST:\n");
+	parse_ascending_keys(root);
+
+	// search bank account data based on BST key (IBAN)
+	BankAccount *pBankAccount = NULL;
+	pBankAccount = search_BST_key(root, "RO04BRDE1234000000999011");
+	if (pBankAccount != NULL)
+	{
+		printf("\nSEARCH: Bank account data has been found out: %s %s\n", pBankAccount->iban, pBankAccount->owner_name);
+	}
+	else
+	{
+		printf("\nSEARCH: There is no Bank Account data based on iban key provided to search.\n");
+	}
+
+	// deallocate the BST
+	root = deallocate_BST(root);
+
+	printf("\nDEALLOCATION: Content of BST after deallocation:\n");
+	parse_ascending_keys(root);
 
 	fclose(f);
 
