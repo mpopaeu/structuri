@@ -142,7 +142,7 @@
     <Text Include="Accounts.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_Hash_chaining.c" />
+    <ClCompile Include="07_Trees.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

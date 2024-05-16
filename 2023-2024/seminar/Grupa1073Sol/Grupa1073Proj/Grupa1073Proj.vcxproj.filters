@@ -20,7 +20,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_Hash_chaining.c">
+    <ClCompile Include="07_Trees.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
