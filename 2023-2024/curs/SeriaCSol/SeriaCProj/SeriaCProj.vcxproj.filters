@@ -20,7 +20,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="08_Hash_linprobing.c">
+    <ClCompile Include="09_Arbori.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

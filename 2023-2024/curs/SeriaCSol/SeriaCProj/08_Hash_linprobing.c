@@ -102,7 +102,7 @@ char deleteStudent(struct Student* ht, int size, char* studName)
 	for (int i = poz + 1; i <= sup; i++)
 	{
 		temp[j++] = ht[i]; // mutare date din tabela hash in temp (subcluster dreapta)
-		ht[i].name = 0;	   // // disponibilizez pozitie i in vederea ocuparii mai tarziu la reinserare din temp
+		ht[i].name = 0;	   // disponibilizez pozitie i in vederea ocuparii mai tarziu la reinserare din temp
 	}
 
 	for (int i = 0; i < (sup - inf); i++) // elementele din vectorul temporar temp
