@@ -131,7 +131,86 @@ User* cautaUserDupaId(NodABC* r, unsigned short int idCautat) {
 // numarul de noduri de pe un nivel specificat
 void nr_noduri_nivel(NodABC* r, unsigned char* count, unsigned nivel)
 {
+	if (r != NULL)
+	{
+		if ((nivel - 1) == 0)
+		{
+			// nodul r este plasat pe nivelul specificat
+			*count += 1;
+			//return;
+		}
+		else
+		{
+			nr_noduri_nivel(r->st, count, nivel - 1); // nivel - 1: -1 ---> inca un salt pe nivel inferior (+1) efectuat
+			nr_noduri_nivel(r->dr, count, nivel - 1);
+		}
+	}
+}
 
+NodABC* sterge_nod_cheie(NodABC* r, unsigned short int cheie, User* pdata)
+{
+	if (r) {
+		if (r->id_user < cheie) {
+			r->dr = sterge_nod_cheie(r->dr, cheie, pdata);
+		}
+		else if (r->id_user > cheie) {
+			r->st = sterge_nod_cheie(r->st, cheie, pdata);
+		}
+		else {
+			// nodul de sters este prezent in arbore (identificat pe baza de cheie)
+			if ((r->st != NULL) && (r->dr != NULL))
+			{
+				NodABC* parinte_temp = NULL;
+				NodABC* temp = r->st; // alegere subarbore stanga pentru a cauta cheia maxima
+				while (temp->dr != NULL)
+				{
+					parinte_temp = temp; // actualizare parinte temp inainte de modificarea lui temp
+					temp = temp->dr; // cheia maxima se afla in cel mai din dreapta nod din subrabore stanga
+				}
+
+				// interschimb date din nodurile r si temp
+				unsigned short int auxi = r->id_user;
+				r->id_user = temp->id_user;
+				temp->id_user = auxi;
+				User usr = r->u;
+				r->u = temp->u;
+				temp->u = usr;
+
+				NodABC* desc_temp_stanga = temp->st;
+				
+				// temp este nodul care se dezaloca
+				*pdata = temp->u;
+				free(temp);			// dezalocare nod cu User cu cheie dupa interschimb
+
+				if (parinte_temp != NULL)
+				{
+					parinte_temp->dr = desc_temp_stanga;
+				}
+				else
+				{
+					// temp este chiar radacina de subarbore stanga
+					r->st = desc_temp_stanga;
+				}
+			}
+			else
+			{
+				// nodul este frunza SAU are 1 singur descendent
+				NodABC* temp = NULL;
+				if (r->st != NULL)
+					temp = r->st;
+				else
+					if (r->dr != NULL)
+						temp = r->dr;
+
+				*pdata = r->u;
+				free(r); // dezalocare nod
+
+				r = temp; // pentru a lega NULL sau descendent de parinte de r inainte de dezalocare
+			}
+		}
+	}
+
+	return r;
 }
 
 int main()
@@ -193,6 +272,11 @@ int main()
 	numaraFrunze(rad, &count);
 	printf("Numarul de frunze este: %d\n", count);
 
+	// numar noduri pe nivel specificat
+	count = 0;
+	nr_noduri_nivel(rad, &count, 4);
+	printf("Numarul de noduri de pe nivel specificat este: %d\n", count);
+
 	//cautare dupa id
 	User* user = cautaUserDupaId(rad, 399);
 	if (user != NULL)
@@ -201,11 +285,16 @@ int main()
 	else
 		printf("User nu a fost identificat in ABC!\n");
 
+	// stergere nod pe baza de cheie
+	User utilizator;
+	rad = sterge_nod_cheie(rad, 273, &utilizator);
+	printf("Arborele dupa stergere nod: \n");
+	afisareABCInordine(rad);
+
 	// dezalocare arbore binar de cautare
 	rad = dezalocareABC(rad);
 	afisareABCInordine(rad);
 
-	//cod scris dupa seminar
 	//dezalocarea userului returnat prin DeepCopy
 	if (user) {
 		if (user->nume_cont) {
