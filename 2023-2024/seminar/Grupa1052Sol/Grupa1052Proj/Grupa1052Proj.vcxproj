@@ -140,7 +140,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="ContABC.txt" />
-    <Text Include="Conturi.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="07_ABC.c" />

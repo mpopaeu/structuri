@@ -107,7 +107,93 @@ NodABC* dezalocare_ABC(NodABC* r)
 // numarul de conturi bancare cu acelasi titular
 unsigned char nr_conturi_titular(NodABC* r, char* titular)
 {
+	unsigned char nr_titulari = 0;
+	if (r)
+	{
+		// traversare ABC in preordine
+		// prelucrare nod curent r inainte de vizitare descendenti
+		if (strcmp(titular, r->cont.titular) == 0)
+		{
+			nr_titulari += 1;
+		}
 
+		// vizitare descendenti si aplicare aceleiasi logici in fiecare nod din descendenti
+		nr_titulari += nr_conturi_titular(r->st, titular);
+		nr_titulari += nr_conturi_titular(r->dr, titular);
+	}
+
+	return nr_titulari;
+}
+
+NodABC* stergere_nod_cheie(NodABC* r, unsigned short int cheie, ContBancar *p_data)
+{
+	if (r)
+	{
+		if (cheie < r->cont.cheie)
+			r->st = stergere_nod_cheie(r->st, cheie, p_data); // continuare cautare pe subarbore stanga
+		else
+			if (cheie > r->cont.cheie)
+				r->dr = stergere_nod_cheie(r->dr, cheie, p_data); // continuare cautare pe subarbore dreapta
+			else
+			{
+				// nodul r este nodul de sters
+				// salvare date cont bancar
+				*p_data = r->cont;
+				if ((r->st == NULL) && (r->dr == NULL))
+				{
+					// 1. r este frunza
+					// dezalocare nod
+					free(r);
+					r = NULL;
+				}
+				else
+				{
+					if ((r->st != NULL) && (r->dr != NULL))
+					{
+						// 3. r cu 2 descendenti 
+						// caut cel mai din dreapta nod (cheie maxima) din subarbore stanga
+						NodABC* temp, * parinte_temp = NULL;
+						// alegere subarbore stanga
+						temp = r->st;
+						while (temp->dr)
+						{
+							parinte_temp = temp;
+							temp = temp->dr;
+						}
+
+						// rescriere r cu datele din temp
+						r->cont = temp->cont;
+						if (parinte_temp != NULL)
+						{
+							parinte_temp->dr = temp->st;
+						}
+						else
+						{
+							// radacina de subarbore stanga este cu cheie maxima
+							r->st = temp->st;
+						}
+						// dezalocare nod temp
+						free(temp);
+					}
+					else
+					{
+						// 2. r cu 1 singur descendent
+						// salvare unic descendent
+						NodABC* temp = r->dr;
+						if (r->st != NULL)
+							temp = r->st;
+
+						// dezalocare r
+						free(r);
+
+						// modificare r cu unicul descendent pentru a fi returnar in apel recursiv anterior
+						r = temp;
+					}
+				}
+			}
+	}
+
+	return r;
 }
 
 int main()
@@ -162,13 +248,35 @@ int main()
 	else
 		printf("Contul bancar nu exista in ABC!\n");
 
-	// TODO: stergere nod in ABC
+	// numar conturi cu acelasi titular
+	unsigned char nr_titulari = 0;
+	nr_titulari = nr_conturi_titular(arbore, "Sandru Vasile");
+	printf("Numar de conturi bancare cu acelasi nume titular: %u", nr_titulari);
+
+	// stergere nod in ABC
+	ContBancar cont;
+	cont.titular = NULL; // flag pentru succes operatie de stergere nod
+	arbore = stergere_nod_cheie(arbore, 95, &cont);
+	if (cont.titular != NULL)
+	{
+		// nodul a fost sters
+		printf("\n\nCont bancar sters din arbore: %s %s\n", cont.iban, cont.titular);
+	}
+	else
+	{
+		printf("\n\nCont bancar neidentificat in arbore!\n");
+	}
+	printf("Arbore binar de cautare dupa operatia de stergere nod:\n");
+	inordine_ABC(arbore);
 
 	// dezalocare structura ABC
 	arbore = dezalocare_ABC(arbore);
 	printf("\nArborele dupa dezalocare: ");
 	inordine_ABC(arbore);
 	printf("\n\n");
+
+	// dezalocare cont bancar extras din arbore binar de cautare
+	free(cont.titular);
 
 	fclose(f);
 	return 0;

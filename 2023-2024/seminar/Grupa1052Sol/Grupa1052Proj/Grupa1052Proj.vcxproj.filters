@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Conturi.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
     <Text Include="ContABC.txt">
       <Filter>Resource Files</Filter>
     </Text>

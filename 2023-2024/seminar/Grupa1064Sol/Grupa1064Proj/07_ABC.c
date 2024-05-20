@@ -71,6 +71,95 @@ void inordine(NodABC* r)
 	}
 }
 
+NodABC* dezalocareABC(NodABC* r)
+{
+	if (r != NULL)
+	{
+		r->st = dezalocareABC(r->st);
+		r->dr = dezalocareABC(r->dr);
+
+		free(r->data.titular); // dezalocare titular din nodul curent r
+		free(r);			// dezalocare nod curent r
+
+		r = NULL;
+	}
+
+	return r;
+}
+
+ContBancar* cauta_cb_cheie(NodABC *r, unsigned short int cheie_cautata)
+{
+	if (r)
+	{
+		if (r->cheie > cheie_cautata)
+		{
+			return cauta_cb_cheie(r->st, cheie_cautata);
+		}
+		else
+		{
+			if (r->cheie < cheie_cautata)
+			{
+				return cauta_cb_cheie(r->dr, cheie_cautata);
+			}
+			else
+			{
+				// cont bancar identificat in ABC
+				return &(r->data);
+			}
+		}
+	}
+	return NULL;
+}
+
+unsigned short int nr_noduri_titular(NodABC* r, char* nume)
+{
+	unsigned short int count = 0;
+
+	if (r != NULL)
+	{
+		if (strcmp(nume, r->data.titular) == 0)
+		{
+			count += 1;
+		}
+		count += nr_noduri_titular(r->st, nume);
+		count += nr_noduri_titular(r->dr, nume);
+	}
+
+	return count;
+}
+
+
+void init_vector(NodABC* r, char* nume, unsigned short int v[], unsigned short int* offset)
+{
+
+	if (r != NULL)
+	{
+		if (strcmp(nume, r->data.titular) == 0)
+		{
+			v[*offset] = r->cheie;
+			*offset += 1;
+		}
+		init_vector(r->st, nume, v, offset);
+		init_vector(r->dr, nume, v, offset);
+	}
+}
+
+unsigned short int* v_chei_titular(NodABC* r, char* nume, unsigned short int *vector_size)
+{
+	*vector_size = nr_noduri_titular(r, nume);
+	if (*vector_size != 0)
+	{
+		unsigned short int* vector = (unsigned short int*)malloc((*vector_size) * sizeof(unsigned short int));
+		unsigned short int offset = 0;
+		init_vector(r, nume, vector, &offset);
+		return vector;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
 int main()
 {
 	FILE* f = fopen("ConturiABC.txt", "r");
@@ -113,11 +202,43 @@ int main()
 	inordine(root);
 	printf("\n\n");
 
-	// TODO: cautare cont bancar dupa cheie
+	// cautare cont bancar dupa cheie
+	ContBancar* p_contB = NULL;
+	p_contB = cauta_cb_cheie(root, 61);
+	if (p_contB != NULL)
+	{
+		printf("Cont bancar identificat: %s %s\n", p_contB->iban, p_contB->titular);
+	}
+	else
+	{
+		printf("Contul bancar nu exista in ABC.\n");
+	}
 
-	// TODO: cautare cont bancar dupa iban
+	// cautare cont bancar dupa titular
+	unsigned short int nr_chei_titular = 0;
+	unsigned short int* vector = v_chei_titular(root, "Popescu Iulian", &nr_chei_titular);
+	if (vector != NULL)
+	{
+		printf("Lista de conturi bancare identificate cu titular cautat: ");
+		for (unsigned short int i = 0; i < nr_chei_titular; i++)
+		{
+			printf("%u ", vector[i]);
+		}
+		printf("\n\n");
+	}
+	else
+	{
+		printf("Nu exista noduri cu titular cautat in ABC!\n\n");
+	}
 
-	// TODO: dezalocare ABC
+	// dezalocare ABC
+	root = dezalocareABC(root);
+	printf("Arbore dupa dezalocare: ");
+	inordine(root);
+	printf("\n\n");
+
+	// dezalocare vector
+	free(vector);
 
 	fclose(f);
 	return 0;
