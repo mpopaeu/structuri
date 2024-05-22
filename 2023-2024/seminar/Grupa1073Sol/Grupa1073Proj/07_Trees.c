@@ -17,8 +17,16 @@ struct NodeBST
 	struct NodeBST* left, *right;
 };
 
+
+struct Node
+{
+	char IBAN[21];
+	struct Node* next;
+};
+
 typedef struct BankAccount BankAccount;
 typedef struct NodeBST NodeBST;
+typedef struct Node Node;
 
 NodeBST* insert_ba_tree(NodeBST* r, BankAccount tAccount, unsigned char *insert_flag)
 {
@@ -69,6 +77,14 @@ void parse_tree(NodeBST *r)
 	}
 }
 
+// create a simple list with IBANs of the bank accounts being
+// on the reverse path from a certain node in BST up to the root of the BST
+
+Node* search_reverse_path(NodeBST* r, char* search_IBAN)
+{
+
+}
+
 int main()
 {
 	FILE* f = fopen("Accounts.txt", "r");
@@ -105,6 +121,7 @@ int main()
 		else
 		{
 			printf("Bank account %s has not been inserted!\n", tAccount.iban);
+			free(tAccount.owner_name); // deallocate because the bank account was not inserted into BST
 		}
 	}
 	
@@ -113,6 +130,16 @@ int main()
 
 	// count BAs with the same currency within the BST
 	// count BAs as leafs within the BST
+
+	Node* head = search_reverse_path(root, "RO98BTRL010101432168");
+	if (head != NULL)
+	{
+		// the bank account data was found out within BST
+	}
+	else
+	{
+		// the bank account data with the specified IBAN is not stored by BST
+	}
 
 	// BST deallocation
 
