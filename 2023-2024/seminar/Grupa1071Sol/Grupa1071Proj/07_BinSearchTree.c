@@ -102,7 +102,7 @@ NodeBST* delete_BST_node(NodeBST* r, char* iban_key, BankAccount* out_data)
 			// the node has been identifiied and must be deleted from BST
 			if (r->left && r->right)
 			{
-				// r has 2 childrens (case #3)
+				// r has 2 child (case #3)
 			}
 			else
 			{
@@ -112,7 +112,7 @@ NodeBST* delete_BST_node(NodeBST* r, char* iban_key, BankAccount* out_data)
 				}
 				else
 				{
-					// r has one single children (case #2)
+					// r has one single child (case #2)
 					// could be lef OR right
 				}
 			}
@@ -121,18 +121,24 @@ NodeBST* delete_BST_node(NodeBST* r, char* iban_key, BankAccount* out_data)
 		{
 			if (strcmp(r->data.iban, iban_key) > 0)
 			{
-				// continue on the left
+				// continue to the left
 				r->left = delete_BST_node(r->left, iban_key, out_data);
 			}
 			else
 			{
-				// continue on the right
+				// continue to the right
 				r->right = delete_BST_node(r->right, iban_key, out_data);
 			}
 		}
 	}
 
 	return r;
+}
+
+// count leaves on a certain level within a BST
+unsigned short int count_leaves_level(NodeBST* r, unsigned short int level)
+{
+
 }
 
 int main()

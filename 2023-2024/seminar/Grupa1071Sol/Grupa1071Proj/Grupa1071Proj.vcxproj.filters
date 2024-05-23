@@ -25,7 +25,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="07_BinSearchTree.c">
+    <ClCompile Include="08_BalancedTrees.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

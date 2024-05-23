@@ -43,3 +43,12 @@ struct NodeBST
 };
 
 typedef struct NodeBST NodeBST;
+
+struct BalancedNode
+{
+	struct BankAccount data;
+	struct BalancedNode* left, * right;
+	char balance;
+};
+
+typedef struct BalancedNode BalancedNode;
