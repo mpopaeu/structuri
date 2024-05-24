@@ -22,7 +22,7 @@
     <Text Include="Studenti.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="09_Arbori.c" />
+    <ClCompile Include="09_ArboriBin.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

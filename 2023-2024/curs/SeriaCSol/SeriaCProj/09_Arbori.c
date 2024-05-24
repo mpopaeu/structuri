@@ -98,7 +98,7 @@ void main() {
 	root = inserare(root, 3, 1);
 	root = inserare(root, 4, 1);
 	root = inserare(root, 5, 2);
-	root = inserare(root, 6, 0);
+	root = inserare(root, 6, 2);
 	root = inserare(root, 7, 6);
 	root = inserare(root, 8, 7);
 
