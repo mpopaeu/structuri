@@ -139,10 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ContABC.txt" />
+    <Text Include="Graf.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="07_ABC.c" />
+    <ClCompile Include="08_Graf.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

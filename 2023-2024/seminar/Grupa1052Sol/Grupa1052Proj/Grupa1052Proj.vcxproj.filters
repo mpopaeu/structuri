@@ -15,12 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ContABC.txt">
+    <Text Include="Graf.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="07_ABC.c">
+    <ClCompile Include="08_Graf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
