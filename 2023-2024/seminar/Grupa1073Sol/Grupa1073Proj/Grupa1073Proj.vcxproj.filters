@@ -18,9 +18,12 @@
     <Text Include="Accounts.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="HeapKeys.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="08_BalancedTrees.c">
+    <ClCompile Include="09_HeapStr.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -140,9 +140,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="Accounts.txt" />
+    <Text Include="HeapKeys.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="08_BalancedTrees.c" />
+    <ClCompile Include="09_HeapStr.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
