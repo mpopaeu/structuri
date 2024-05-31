@@ -138,7 +138,24 @@ NodeBST* delete_BST_node(NodeBST* r, char* iban_key, BankAccount* out_data)
 // count leaves on a certain level within a BST
 unsigned short int count_leaves_level(NodeBST* r, unsigned short int level)
 {
-
+	if (r)
+	{
+		if (level == 1)
+		{
+			if (r->left == NULL && r->right == NULL)
+			{
+				return 1;
+			}
+		}
+		else
+		{
+			if (level > 1)
+			{
+				return count_leaves_level(r->left, level - 1) + count_leaves_level(r->right, level - 1);
+			}
+		}
+	}
+	return 0;
 }
 
 int main()
@@ -198,6 +215,9 @@ int main()
 	{
 		printf("\nSEARCH: There is no Bank Account data based on iban key provided to search.\n");
 	}
+
+	unsigned short int leaves = count_leaves_level(root, 6);
+	printf("No. of leaves = %hu\n", leaves);
 
 	// deallocate the BST
 	root = deallocate_BST(root);
