@@ -18,9 +18,12 @@
     <Text Include="Studenti.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Graf.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="09_ArboriBin.c">
+    <ClCompile Include="11_Graf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

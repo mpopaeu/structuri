@@ -1,35 +1,29 @@
-
 #include <stdio.h>
 #include <malloc.h>
 #include <string.h>
 #include <stdlib.h>
 
+#define LINESIZE 128
 
-struct  Student {
+struct Student {
 	int id;
 	char* nume;
-	float medie;
+	float medie; // data derivata
 };
 
 struct NodAVL {
-	struct Student stud;
-	int GE;
+	struct Student s;
+	char GE;
 	struct NodAVL* st, * dr;
 };
-
-typedef struct Student Student;
-typedef struct NodAVL NodAVL;
-
-#define LINESIZE 128
 
 // maximul a doi intregi
 int maxim(int a, int b) {
 	return a > b ? a : b;
 }
 
-
 // inaltime (sub)arbore r
-int h(NodAVL* r) {
+int h(struct NodAVL* r) {
 	if (r)
 		return 1 + maxim(h(r->st), h(r->dr));
 	else
@@ -38,7 +32,7 @@ int h(NodAVL* r) {
 
 
 // gradul de echilibru al unui nod
-void calculGENod(NodAVL* r) {
+void calculGENod(struct NodAVL* r) {
 	if (r) {
 		//prelucrare (calcul GE)
 		r->GE = h(r->dr) - h(r->st);
@@ -47,7 +41,7 @@ void calculGENod(NodAVL* r) {
 
 
 // rotire simpla la dreapta
-NodAVL* rotireSimplaDr(NodAVL* pivot, NodAVL* fiuSt) {
+struct NodAVL* rotireSimplaDr(struct NodAVL* pivot, struct NodAVL* fiuSt) {
 	pivot->st = fiuSt->dr;
 	calculGENod(pivot);
 	fiuSt->dr = pivot;
@@ -57,7 +51,7 @@ NodAVL* rotireSimplaDr(NodAVL* pivot, NodAVL* fiuSt) {
 }
 
 // rotire simpla la stanga
-NodAVL* rotireSimplaSt(NodAVL* pivot, NodAVL* fiuDr) {
+struct NodAVL* rotireSimplaSt(struct NodAVL* pivot, struct NodAVL* fiuDr) {
 	pivot->dr = fiuDr->st;
 	calculGENod(pivot);
 	fiuDr->st = pivot;
@@ -67,7 +61,7 @@ NodAVL* rotireSimplaSt(NodAVL* pivot, NodAVL* fiuDr) {
 }
 
 // rotire dubla stanga-dreapta
-NodAVL* rotireDblStDr(NodAVL* pivot, NodAVL* fiuSt) {
+struct NodAVL* rotireDblStDr(struct NodAVL* pivot, struct NodAVL* fiuSt) {
 	//aducerea dezechilibrului pe aceeasi directie
 	pivot->st = rotireSimplaSt(fiuSt, fiuSt->dr);
 	calculGENod(pivot);
@@ -80,7 +74,7 @@ NodAVL* rotireDblStDr(NodAVL* pivot, NodAVL* fiuSt) {
 }
 
 // rotire dubla dreapta-stanga
-NodAVL* rotireDblDrSt(NodAVL* pivot, NodAVL* fiuDr) {
+struct NodAVL* rotireDblDrSt(struct NodAVL* pivot, struct NodAVL* fiuDr) {
 	// aducerea dezechilibrului pe aceeasi directie
 	pivot->dr = rotireSimplaDr(fiuDr, fiuDr->st);
 	calculGENod(pivot);
@@ -92,25 +86,22 @@ NodAVL* rotireDblDrSt(NodAVL* pivot, NodAVL* fiuDr) {
 	return fiuDr;
 }
 
-// inserare nod in AVL
-NodAVL* insNodAVL(NodAVL* r, Student s, int* err) {
-	if (r) {
-		if (r->stud.id > s.id)
-			r->st = insNodAVL(r->st, s, err);
-		else
-			if (r->stud.id < s.id)
-				r->dr = insNodAVL(r->dr, s, err);
-			else
-				*err = 1;
-	}
-	else {
-		NodAVL* nou;
-		nou = (NodAVL*)malloc(sizeof(NodAVL));
-		nou->stud = s;
-		nou->st = NULL;
+
+
+struct NodAVL* inserare(struct NodAVL* r, struct Student st, int* er)
+{
+	if (r == NULL) {
+		struct NodAVL* nou = (struct NodAVL*)malloc(sizeof(struct NodAVL));
 		nou->dr = NULL;
+		nou->st = NULL;
+		nou->s = st;
 		r = nou;
 	}
+	else if (r->s.id == st.id) *er = 1;
+	else if (r->s.id > st.id)
+		r->st = inserare(r->st, st, er);
+	else
+		r->dr = inserare(r->dr, st, er);
 
 	// recalculez grad de echilibru pt nodul curent
 	calculGENod(r);
@@ -137,21 +128,36 @@ NodAVL* insNodAVL(NodAVL* r, Student s, int* err) {
 		}
 	}
 
+
 	return r;
 }
 
-
-// traversare AVL inordine
-void InordineAVL(NodAVL* rAVL) {
-	if (rAVL) {
-		InordineAVL(rAVL->st);
-		printf(" %d cu GE = %d \n", rAVL->stud.id, rAVL->GE);
-		InordineAVL(rAVL->dr);
+void TraversareInordine(struct NodAVL* r)
+{
+	if (r) {
+		TraversareInordine(r->st);
+		printf("\n%d %s %d\n", r->s.id, r->s.nume, r->GE);
+		TraversareInordine(r->dr);
 	}
 }
 
+struct NodAVL* DezalocareArboreBinCautare(struct NodAVL* r)
+{
+	if (r) {
+		TraversareInordine(r->st);
+		TraversareInordine(r->dr);
 
-int main() {
+		// dezalocare nod curent r
+		free(r->s.nume); // dezalocare nume student stocat in nod r
+		free(r);		// dezalocare nod din ABC
+
+		r = NULL;	// actualizare continut nod curent r dupa dezalocare lui r
+	}
+
+	return r;
+}
+
+void main() {
 
 	struct Student stud;
 	struct NodAVL* root = NULL;
@@ -179,7 +185,7 @@ int main() {
 		// inserare student in ABC
 		int err = 0;
 		// float test = 0; // test cu parametrul 3 ca referinta
-		root = insNodAVL(root, stud, &err);
+		root = inserare(root, stud, &err);
 		if (err) {
 			printf("\nStudentul cu id %d exista in arbore.\n", stud.id);
 			free(stud.nume);
@@ -192,7 +198,11 @@ int main() {
 
 	// traversare in inordine (ordine crescatoare id-uri studenti)
 	printf("\nTraversare arbore inordine:\n\n");
-	InordineAVL(root);
+	TraversareInordine(root);
 
-	return 0;
+	// dezalocare arbore binar de cautare
+	root = DezalocareArboreBinCautare(root);
+	printf("\nTraversare arbore inordine dupa dezalocare:\n\n");
+	TraversareInordine(root);
 }
+
