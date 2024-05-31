@@ -23,6 +23,36 @@ struct NodAVL
 
 typedef struct NodAVL NodAVL;
 
+struct NodStiva {
+	NodAVL* nod_avl;
+	struct NodStiva* next;
+};
+
+typedef struct NodStiva NodStiva;
+
+NodStiva* push(NodStiva* stack, NodAVL* adresa)
+{
+	NodStiva* nou = (NodStiva*)malloc(sizeof(NodStiva));
+	nou->nod_avl = adresa;
+	nou->next = stack;
+
+	return stack;
+}
+
+NodStiva* pop(NodStiva* stack, NodAVL** nod_extras)
+{
+	if (stack)
+	{
+		*nod_extras = stack->nod_avl;
+		NodStiva* tmp = stack;
+		stack = stack->next;
+
+		free(tmp);
+	}
+
+	return stack;
+}
+
 // maximul a doi intregi
 int maxim(int a, int b) {
 	return a > b ? a : b;
@@ -177,10 +207,13 @@ NodAVL* sterge_nod_cheie(NodAVL* r, unsigned short int cheie, User* pdata)
 			{
 				NodAVL* parinte_temp = NULL;
 				NodAVL* temp = r->st; // alegere subarbore stanga pentru a cauta cheia maxima
+				NodStiva* stiva = NULL;
 				while (temp->dr != NULL)
 				{
 					parinte_temp = temp; // actualizare parinte temp inainte de modificarea lui temp
-					temp = temp->dr; // cheia maxima se afla in cel mai din dreapta nod din subrabore stanga
+					temp = temp->dr; // cheia maxima se afla in cel mai din dreapta nod din subarbore stanga
+
+					stiva = push(stiva, parinte_temp); // salveaza pe stiva parintele lui temp
 				}
 
 				// interschimb date din nodurile r si temp
@@ -206,6 +239,39 @@ NodAVL* sterge_nod_cheie(NodAVL* r, unsigned short int cheie, User* pdata)
 					// temp este chiar radacina de subarbore stanga
 					r->st = desc_temp_stanga;
 				}
+
+				// continul stivei este consumat in vederea reechilibrarii subarborelui stanga pentru r
+				while (stiva)
+				{
+					NodAVL* nod = NULL;
+					stiva = pop(stiva, &nod); // extragere nod de pe stiva
+
+					// reechilibrare subarbore cu radacina in nod extras de pe stiva
+					calculGENod(nod);
+					if (nod->grad_echilibru == 2) {
+						if (nod->dr->grad_echilibru == -1) {
+							//dezechilibru dreapta-stanga
+							nod = rotireDblDrSt(nod, nod->dr);
+						}
+						else {
+							//dezechilibru dreapta
+							nod = rotireSimplaSt(nod, nod->dr);
+						}
+					}
+					else {
+						if (nod->grad_echilibru == -2) {
+							if (nod->st->grad_echilibru == 1) {
+								//dezechilibru combinat stanga-dreapta
+								nod = rotireDblStDr(nod, nod->st);
+							}
+							else {
+								//dezechilibru stanga
+								nod = rotireSimplaDr(nod, nod->st);
+							}
+						}
+					}
+					
+				}
 			}
 			else
 			{
@@ -221,6 +287,36 @@ NodAVL* sterge_nod_cheie(NodAVL* r, unsigned short int cheie, User* pdata)
 				free(r); // dezalocare nod
 
 				r = temp; // pentru a lega NULL sau descendent de parinte de r inainte de dezalocare
+			}
+		}
+	}
+
+	// recalculez grad de echilibru pt nodul curent
+	// eventual, de mutat cod in functie si apelata functia atat la inserare,
+	// cat si la stergere
+	if (r)
+	{
+		calculGENod(r);
+		if (r->grad_echilibru == 2) {
+			if (r->dr->grad_echilibru == -1) {
+				//dezechilibru dreapta-stanga
+				r = rotireDblDrSt(r, r->dr);
+			}
+			else {
+				//dezechilibru dreapta
+				r = rotireSimplaSt(r, r->dr);
+			}
+		}
+		else {
+			if (r->grad_echilibru == -2) {
+				if (r->st->grad_echilibru == 1) {
+					//dezechilibru combinat stanga-dreapta
+					r = rotireDblStDr(r, r->st);
+				}
+				else {
+					//dezechilibru stanga
+					r = rotireSimplaDr(r, r->st);
+				}
 			}
 		}
 	}
@@ -305,10 +401,10 @@ int main()
 	{
 		printf("Utilizator %s sters", utilizator.nume_cont);
 	}
-	printf("\nArbore AVL dupa stergere #1:\n");
+	printf("\nArbore AVL dupa stergere #2:\n");
 	afisareAVLInordine(rad);
 
-	// dezalocare campuri utilizator
+	// dezalocare campuri din var utilizator
 	// dezalocare AVL
 
 	return 0;

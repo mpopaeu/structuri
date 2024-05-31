@@ -1,0 +1,265 @@
+#include <stdio.h>
+#include <malloc.h>
+
+typedef struct Nod Nod;
+typedef struct NodLS NodLS;
+typedef struct NodLP NodLP;
+
+// structura nod lista principala
+struct NodLS;
+struct NodLP {
+	unsigned int idVarf;
+	NodLS* primListaVecini;
+	NodLP* next;
+};
+
+// structura nod lista secundara
+struct NodLS {
+	unsigned int idNodAdiacent;
+	NodLS* next;
+};
+
+// structura nod stiva
+struct Nod {
+	unsigned int idVarf;
+	Nod* next;
+};
+
+// inserare nod in lista secundara
+NodLS* inserareNodLS(NodLS* pLS, unsigned int id) {
+	NodLS* nou = (NodLS*)malloc(sizeof(NodLS));
+	nou->idNodAdiacent = id;
+	nou->next = 0;
+
+	if (!pLS) { // LS nu contine nici un nod
+		return nou;
+	}
+	else {
+		// parsare LS pana la ultimul nod
+		NodLS* tmp = pLS;
+		while (tmp->next)
+			tmp = tmp->next;
+
+		tmp->next = nou;
+	}
+
+	return pLS;
+}
+
+// inserare nod in lista principala
+NodLP* inserareNodLP(NodLP* pLP, unsigned int id, NodLS* pLstVecini) {
+	NodLP* nou = (NodLP*)malloc(sizeof(NodLP));
+	nou->idVarf = id;
+	nou->primListaVecini = pLstVecini;
+	nou->next = 0;
+
+	if (!pLP) { // LP nu contine nici un nod
+		return nou;
+	}
+	else {
+		// parsare LP pana la ultimul nod
+		NodLP* tmp = pLP;
+		while (tmp->next)
+			tmp = tmp->next;
+
+		tmp->next = nou;
+	}
+
+	return pLP;
+}
+
+NodLP* cautaNodLP(NodLP* pLP, unsigned int idCautat) {
+	NodLP* tmp = pLP;
+	while (tmp) {
+		if (tmp->idVarf == idCautat)
+			return tmp; // adresa nod in LP cu idCautat
+
+		tmp = tmp->next;
+	}
+
+	return tmp; // NULL; nu exista nod in LP cu idCautat
+}
+
+Nod* push(Nod* stiva, unsigned int varf)
+{
+	Nod* nou = (Nod*)malloc(sizeof(Nod));
+	nou->idVarf = varf;
+	nou->next = stiva;
+
+	return nou;
+}
+
+Nod* pop(Nod* stiva, unsigned int *varf_extras)
+{
+	if (stiva)
+	{
+		*varf_extras = stiva->idVarf;
+		Nod* tmp = stiva;
+		stiva = stiva->next;
+
+		free(tmp);
+	}
+
+	return stiva;
+}
+
+// traversare DF a grafului
+unsigned int* DF(NodLP* pLP, unsigned int start, unsigned int nrVarfuri) {
+	unsigned int* flags, * output, k = 0;
+	Nod* stack = 0;
+
+	// alocare vector de flaguri
+	flags = (unsigned int*)malloc(nrVarfuri * sizeof(unsigned int));
+	// initializare vector flaguri
+	for (unsigned int i = 0; i < nrVarfuri; i++)
+		flags[i] = 0;
+
+	// alocare vector de iesire
+	output = (unsigned int*)malloc(nrVarfuri * sizeof(unsigned int));
+
+	// push varf de start
+	stack = push(stack, start);
+	flags[start - 1] = 1;
+
+	while (stack) {
+		unsigned int varf;
+		// extragere nod graf din varful stivei
+		stack = pop(stack, &varf);
+
+		// salvare in banda de iesire a varfului extras in vederea prelucrarii
+		output[k] = varf;
+		k = k + 1;
+
+		// stabilire vecini pentru varf
+		// cautare nod in lista principala cu id == varf
+		NodLP* tmpLP = cautaNodLP(pLP, varf);
+		NodLS* tmpLS = tmpLP->primListaVecini; // accesare lista secundara de varfuri adiacente pentru varf extras de pe stiva
+		while (tmpLS)
+		{
+			unsigned int vecin = tmpLS->idNodAdiacent;
+
+			// push pentru vecinii cu flags nul
+			if (flags[vecin - 1] == 0)
+			{
+				// vecin este disponibil la inserarea pe stiva
+				stack = push(stack, vecin);
+				// comutare flags pentru vecinii salvati pe stiva
+				flags[vecin - 1] = 1;
+			}
+
+			tmpLS = tmpLS->next;
+		}
+	}
+
+	return output;
+}
+
+
+// TO DO: functia traversare BF
+
+// TO DO: functia put pentru coada
+
+// TO DO: functia get pentru coada
+
+void main() {
+	FILE* f;
+	f = fopen("Graf.txt", "r");
+
+	char buffer[128];
+	fgets(buffer, sizeof(buffer), f);
+
+	NodLP* pListaAdiacenta = 0;
+	unsigned int nrVarfuri = 0;
+
+	sscanf(buffer, "%d", &nrVarfuri); // preluare nr varfuri de pe prima linie din fisier
+	for (unsigned int i = 1; i <= nrVarfuri; i++) // creare noduri LP
+		pListaAdiacenta = inserareNodLP(pListaAdiacenta, i, NULL);
+
+
+	while (fgets(buffer, sizeof(buffer), f)) {
+		unsigned int src, dst;
+		sscanf(buffer, "%d %d", &src, &dst);
+
+		NodLP* tmpLP = cautaNodLP(pListaAdiacenta, src);
+
+		if (tmpLP) {
+			// nodul cu idVarf == src
+			tmpLP->primListaVecini = inserareNodLS(tmpLP->primListaVecini, dst);
+
+			tmpLP = cautaNodLP(pListaAdiacenta, dst);
+			if (tmpLP) {
+				// nodul cu idVarf == src
+				tmpLP->primListaVecini = inserareNodLS(tmpLP->primListaVecini, src);
+			}
+		}
+		else {
+			// nu exista nodul cautat in LP
+			printf("\nNodul cautat cu id %d nu exista.\n", src);
+		}
+	}
+
+	// parsare lista de adiacenta
+	NodLP* tmpLP = pListaAdiacenta;
+	while (tmpLP) {
+
+		printf("\nVarf %d cu vecinii: ", tmpLP->idVarf);
+
+		NodLS* tmpLS = tmpLP->primListaVecini;
+		while (tmpLS) {
+			printf(" %d ", tmpLS->idNodAdiacent);
+
+			tmpLS = tmpLS->next;
+		}
+
+		tmpLP = tmpLP->next;
+	}
+
+	// traversare Depth-First graf
+	unsigned int* depth_first_out = DF(pListaAdiacenta, 5, nrVarfuri);
+	printf("\nTraversare DF cu start varf 5: ");
+	for (unsigned int i = 0; i < nrVarfuri; i++)
+	{
+		printf(" %hu ", depth_first_out[i]);
+	}
+
+	unsigned int* depth_first_out_2 = DF(pListaAdiacenta, 8, nrVarfuri);
+	printf("\n\nTraversare DF cu start varf 8: ");
+	for (unsigned int i = 0; i < nrVarfuri; i++)
+	{
+		printf(" %hu ", depth_first_out_2[i]);
+	}
+
+	// dezalocare vectori traversari DF
+	free(depth_first_out);
+	free(depth_first_out_2);
+	depth_first_out = NULL;
+	depth_first_out_2 = NULL;
+
+	// dezalocare lista de adiacenta
+	while (pListaAdiacenta)
+	{
+		tmpLP = pListaAdiacenta;
+		pListaAdiacenta = pListaAdiacenta->next; // actualizare inceput lista principala
+		// dezalocare lista secundara de varfuri adiacente lui tmpLP->idVarf
+		while (tmpLP->primListaVecini)
+		{
+			NodLS* tmpLS = tmpLP->primListaVecini;
+			tmpLP->primListaVecini = tmpLS->next; // actualizare inceput lista secundara
+
+			// dezalocare nod in lista secundara
+			free(tmpLS);
+		}
+
+		// dezalocare nod in lista principala
+		free(tmpLP);
+	}
+
+	if (pListaAdiacenta == NULL)
+		printf("\n\nLista de adiacenta a fost dezalocata!");
+
+
+	printf("\n\n");
+	fclose(f);
+}
+
+
