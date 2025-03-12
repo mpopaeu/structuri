@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="01_TipuriDate.c">
+    <ClCompile Include="03_Structuri.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
