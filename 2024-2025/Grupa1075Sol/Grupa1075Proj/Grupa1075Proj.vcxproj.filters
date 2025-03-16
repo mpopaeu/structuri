@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="01_DataTypes.c">
+    <ClCompile Include="03_Structures.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
