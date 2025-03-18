@@ -139,7 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="03_Structuri.c" />
+    <ClCompile Include="04_ListeSimple.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CarduriBancare.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
