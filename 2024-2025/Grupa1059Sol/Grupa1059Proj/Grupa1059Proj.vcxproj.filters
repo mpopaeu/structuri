@@ -15,13 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="02_Masive.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="CarduriBancare.txt">
       <Filter>Resource Files</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="04_ListeSimple.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
