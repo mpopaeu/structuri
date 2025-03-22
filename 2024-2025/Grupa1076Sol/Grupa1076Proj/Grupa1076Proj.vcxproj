@@ -139,7 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="03_Structures.c" />
+    <ClCompile Include="04_SimpleList.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CardData.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
