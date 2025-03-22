@@ -18,5 +18,13 @@
     <ClCompile Include="03_Structures.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="04_SimpleLists.c">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CardData.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

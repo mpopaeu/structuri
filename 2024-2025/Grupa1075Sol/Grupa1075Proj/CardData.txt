@@ -1,0 +1,3 @@
+Popescu Marian Alexandru,6523000099998765,10/28,BCR,1986.94
+Ionescu Virgil,6234999912349807,7/26,Unicredit,105.08
+Vasilescu Mihai George,6154888855556531,1/26,Citi,87.54
