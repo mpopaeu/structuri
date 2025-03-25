@@ -39,14 +39,9 @@ int main()
 	while (!feof(f) && i < VECTOR_LENGTH) // 1. conditie aplicata dupa o incercare de a citi nr card bancar
 										  // 2. i nu poate depasi numarul maxim de elemente definit pt v_cards
 	{
-		//fscanf(f, "%[^,]", &titular);
 		v_cards[i].detinator = malloc(strlen(titular) + 1); // +1 pt terminatorul de string (byte 0x00)
 		strcpy(v_cards[i].detinator, titular); // copiere string nume detinator in vector, offset i, campul detinator
-
-		//fscanf(f, "%[^,]s", v_cards[i].expira_la);
-		//fscanf(f, "%f", &(v_cards[i].sold));
-		//fscanf(f, "%[^\n]s", v_cards[i].moneda);
-
+		
 		i += 1; // acces la urmatorul card bancar
 		fscanf(f, "\n");
 		fscanf(f, "%[^,],%[^,],%[^,],%f,%[^\n]", v_cards[i].nr_card, titular,
