@@ -29,10 +29,60 @@ typedef struct Nod Nod;
 
 Nod* inserare_nod_sfarsit(Nod* lista, CardBancar data)
 {
-	// cautare sfarsit de lista
 	// alocare nod
-	// populre nod cu data
+	Nod* nou = malloc(sizeof(Nod));
+
+	// populare nod cu data
+	nou->cb = data; // partajare temporara mem heap pt titular si emitent
+	nou->next = NULL; // nu exista succesor; nou va deveni ultimul nod in lista simpla
+
+	if (lista == NULL)
+	{
+		// nu exista nici un nod in lista simpla
+		return nou;
+		// lista = nou; // lista se returneaza la finalul executiei functiei
+	}
+	else
+	{
+		// exista cel putin un nod in lista simpla
+		// cautare sfarsit de lista
+		Nod* temp = lista;
+		while (temp->next != NULL)
+			temp = temp->next; // actualizez temp pe nodul succesor
+
+		// temp este plasat pe ultimul nod din lista simpla
+		temp->next = nou; // legarea/atasarea lui nou la sfarsitul listei simple
+
+	}
 	// return lista actualizata daca este cazul
+	return lista;
+}
+
+void traversare_listasimpla(Nod* lista)
+{
+	Nod* temp = lista;
+	while (temp)
+	{
+		printf("%s %s\n", temp->cb.nr_card, temp->cb.titular);
+		temp = temp->next;
+	}
+}
+
+Nod* stergere_inceput(Nod* lista)
+{
+	if (lista != NULL)
+	{
+		// exista cel putin 1 nod in lista simpla
+		Nod* temp = lista;
+		lista = lista->next; // actualizare inceput de lista pe nodul 2 (succesor)
+
+		free(temp->cb.emitent); // dezalocare extensie in heap pentru CardBancar
+		free(temp->cb.titular); // dezalocare extensie in heap pentru CardBancar
+
+		free(temp); // dezalocare nod 
+	}
+
+	return lista;
 }
 
 int main()
@@ -70,14 +120,33 @@ int main()
 		strcpy(card.data_expirare, temp_buff);
 
 		// inserare date card in lista simpla
-		
+		prim = inserare_nod_sfarsit(prim, card);
 
 		// incercare preluare titular card urmator
 		fgets(temp_buff, sizeof(temp_buff), f);
 	}
 	fclose(f);
 
-	// stergere nosd la inceput, la interior (criteriu definit)
+	printf("Lista simpla dupa creare:\n");
+	traversare_listasimpla(prim);
+
+	// stergere nod la inceput
+	prim = stergere_inceput(prim);
+	printf("\n\nLista simpla dupa stergere nod la inceput:\n");
+	traversare_listasimpla(prim);
+
+	// dezalocare lista simpla
+	while (prim != NULL)
+	{
+		// exista cel putin un nod in lista simpla
+		// care poate fi sters/eliminat din lista
+		prim = stergere_inceput(prim);
+	}
+
+	printf("\n\nLista simpla dupa dezalocare:\n");
+	traversare_listasimpla(prim);
+
+	// stergere la interior (criteriu definit)
 
 	return 0;
 }
