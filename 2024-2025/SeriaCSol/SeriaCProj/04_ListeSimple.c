@@ -61,11 +61,11 @@ struct Student stergereStudent(struct Nod** p) {
 
 int main() {
 
-	struct Nod* prim = 0; // pointer adresa nod inceput lista -> gestionare
-				   // structura de date lista simpla
+	struct Nod* prim = NULL; // pointer adresa nod inceput lista -> gestionare
+						  // structura de date lista simpla
 
 	struct Student stud; // buffer incarcare date din fisier
-				  // suprascris pentru fiecare student preluat din fisier
+						 // suprascris pentru fiecare student preluat din fisier
 
 	FILE* f;
 	f = fopen("Studenti.txt", "r");
@@ -102,8 +102,12 @@ int main() {
 	printf("Student extras: %d %s\n", stud.id, stud.nume);
 
 	// dezalocare structura lista simpla
+	free(stud.nume);
 	while (prim)
+	{
 		stud = stergereStudent(&prim);
+		free(stud.nume);
+	}
 
 	printf("Lista dupa dezalocare:\n");
 	parseList(prim);
