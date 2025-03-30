@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="04_SimpleList.c" />
+    <ClCompile Include="05_DoubleList.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CardData.txt" />
