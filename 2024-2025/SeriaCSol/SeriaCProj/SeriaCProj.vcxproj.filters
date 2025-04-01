@@ -18,6 +18,9 @@
     <ClCompile Include="05_ListeDuble.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="06_HT_linprob.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Studenti.txt">
