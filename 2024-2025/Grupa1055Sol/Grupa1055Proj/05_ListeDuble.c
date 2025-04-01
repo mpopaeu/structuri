@@ -129,6 +129,11 @@ ListaDubla stergere_inceput(ListaDubla lista)
 
 // functie sortare noduri lista dubla
 
+// functie stergere nod de pe pozitia i in lista dubla
+// datele cardului bancar sunt "salvate"/returnate in vederea utilizarii ulterioare 
+// (stergere cu extragerea datelor din nod)
+
+
 int main()
 {
 	FILE* f = NULL;
@@ -143,7 +148,6 @@ int main()
 	fgets(buffer, sizeof(buffer), f);
 	while (!feof(f))
 	{
-		buffer[sizeof(card.nr_card) - 1] = 0;
 		strtok(buffer, "\n");
 		strcpy(card.nr_card, buffer);
 
