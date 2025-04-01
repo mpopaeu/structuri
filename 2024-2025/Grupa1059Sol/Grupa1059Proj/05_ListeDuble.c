@@ -78,7 +78,30 @@ void traversare_listadubla(ListaDubla lista)
 // functie de stergere nod la sfarsitul listei duble
 ListaDubla stergere_sfarsit(ListaDubla lista)
 {
+	if (lista.prim != NULL)
+	{
+		// exista cel putin 1 nod in lista dubla
+		if (lista.prim == lista.ultim)
+		{
+			// exista 1 singur nod in lista dubla
+			free(lista.prim->card.detinator);
+			free(lista.prim);
 
+			lista.prim = NULL;
+			lista.ultim = NULL; // lista devine empty
+		}
+		else
+		{
+			NodD* temp = lista.ultim;
+			lista.ultim = lista.ultim->prev; // nodul din fata lui temp devine ultimul din lista dubla
+			lista.ultim->next = NULL;
+
+			free(temp->card.detinator);
+			free(temp);
+		}
+	}
+
+	return lista;
 }
 
 // functie de stergere a nodurilor cu acelasi detinator de card bancar
@@ -86,6 +109,8 @@ ListaDubla stergere_sfarsit(ListaDubla lista)
 // functie de sortare a nodurilor din lista dubla (sold card bancar)
 
 // functie de intreschimbare doua noduri adiacente in lista dubla
+
+// functie care salveaza carduri bancare (acelasi detinator) intr-o lista simpla 
 
 int main()
 {
@@ -100,7 +125,7 @@ int main()
 	CardBancar card;
 	fscanf(f, "%[^,],%[^,],%[^,],%f,%[^\n]", card.nr_card, titular,
 		card.expira_la, &(card.sold), card.moneda);
-	while (!feof(f)) // 1. conditie aplicata dupa o incercare de a citi nr card bancar
+	while (!feof(f)) // conditie aplicata dupa o incercare de a citi nr card bancar
 	{
 		card.detinator = malloc(strlen(titular) + 1); // +1 pt terminatorul de string (byte 0x00)
 		strcpy(card.detinator, titular); // copiere string nume detinator in variabila temporara card
@@ -111,11 +136,13 @@ int main()
 		listaD = inserare_inceput(listaD, card);
 
 		fscanf(f, "%[^,],%[^,],%[^,],%f,%[^\n]", card.nr_card, titular,
-			card.expira_la, &(card.sold), card.moneda); // citire nr card de pe linia urmatoare
+			card.expira_la, &(card.sold), card.moneda); // citire date card de pe linia urmatoare
 	}
 	fclose(f);
 	printf("Lista dubla dupa creare:\n");
 	traversare_listadubla(listaD);
+
+	// apel functie care creeaza lista simpla carduri cu acelasi detinator
 
 	// stergere nod la sfarsitul listei duble
 	listaD = stergere_sfarsit(listaD);
