@@ -101,6 +101,10 @@ ListaDubla stergere_inceput(ListaDubla lista)
 	return lista;
 }
 
+
+// functie interschimb noduri adiacente in lista dubla
+// cu modificarea adreselor de legatura
+
 int main()
 {
 	FILE* f = NULL;
