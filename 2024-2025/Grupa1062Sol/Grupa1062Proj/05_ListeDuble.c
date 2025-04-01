@@ -130,16 +130,20 @@ ListaDubla stergere_inceput(ListaDubla lista)
 	return lista;
 }
 
+// functie salvare intr-un vector de string-uri 
+// a nr carduri stocate in lista dubla
+
+
 int main()
 {
-	// preluare date din fisiere pentru carduri bancare
+	// preluare date din fisier pentru carduri bancare
 	FILE* f = NULL;
 	f = fopen("CarduriBancare.txt", "r");
 
 	CardBancar card;
-	ListaDubla listaD; // variabila cu pointeri de acces la capetele listei duble
-	listaD.prim = NULL; // nu exista primul nod (lista empty)
-	listaD.ultim = NULL; // nu exista ultimul nod (lista empty)
+	ListaDubla listaD;		// variabila cu pointeri de acces la capetele listei duble
+	listaD.prim = NULL;		// nu exista primul nod (lista empty)
+	listaD.ultim = NULL;	// nu exista ultimul nod (lista empty)
 
 	char buffer[150];
 	char sep[] = ";\n";
@@ -176,20 +180,21 @@ int main()
 			listaD = inserare_nod_interior(listaD, card, listaD.prim->cb.nr_card); // listaD.prim->cb.nr_card exista sigur in lista
 		}
 
-		// verificare prezenta card in lista simpla
+		// verificare prezenta card in lista dubla
 		NodD* temp = listaD.prim;
-		unsigned char flag = 0; // card.nr_card nu este prezent in lista simpla
+		unsigned char flag = 0; // card.nr_card nu este prezent in lista dubla
 		while ((temp != NULL) && (flag == 0))
-		{ // cautare prezenta card.nr_card in lista simpla dupa apel functie inserare nod
+		{ 
+			// cautare prezenta card.nr_card in lista dubla dupa apel functie inserare nod
 			if (strcmp(temp->cb.nr_card, card.nr_card) == 0)
 			{
-				flag = 1; // card.nr_card este gasit in lista simpla
+				flag = 1; // card.nr_card este gasit in lista dubla
 			}
 			temp = temp->next;
 		}
-		if (flag == 0) // card nu a fost inserat in lista simpla
+		if (flag == 0) // card nu a fost inserat in lista dubla
 		{
-			// card.nr_card nu a fost gasit in lista simple, deci nu a avut loc inserarea
+			// card.nr_card nu a fost gasit in lista dubla, deci nu a avut loc inserarea
 			free(card.titular);
 		}
 
