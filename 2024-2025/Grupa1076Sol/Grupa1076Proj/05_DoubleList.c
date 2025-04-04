@@ -76,10 +76,68 @@ void parse_list(DoubleList list)
 	}
 }
 
-//DoubleList delete_node_middle(DoubleList list, char* card_number)
-//{
-//
-//}
+// delete all node having the same holder's name
+DoubleList delete_nodes_holder(DoubleList list, char* holder_name)
+{
+
+}
+
+// swap 2 nodes in the double list by changing the prev and next pointers
+
+DoubleList delete_node_middle(DoubleList list, char* card_number)
+{
+	if (list.head != NULL)
+	{
+		// there is one node at least in my double list
+		NodeD* temp = list.head;
+
+		while (temp!= NULL && strcmp(temp->data.card_no, card_number) != 0)
+		{
+			// the temp is not the node to be deleted
+			temp = temp->next;
+		}
+
+		if (temp != NULL)
+		{
+			// the node to be deleted has been identified as temp
+			// there is one single node with card_number in the list (unique values for card_number)
+			if (temp == list.head)
+			{
+				// head will be deleted
+				list.head = list.head->next;
+				if (list.head != NULL)
+				{
+					list.head->prev = NULL; // the second node becomes the new head of the double list
+				}
+				else
+				{
+					list.tail = NULL; // double list becomes an empty list
+				}
+			}
+			else
+			{
+				if (temp == list.tail)
+				{
+					list.tail = list.tail->prev; // update of tail with previous node
+					list.tail->next = NULL; // make the previous node as being the new tail of the double list
+				}
+				else
+				{
+					// temp is not neither head or tail
+					(temp->prev)->next = temp->next; // (temp->prev) is the node right before the temp
+					(temp->next)->prev = temp->prev; // (temp->next) is the node right after the temp
+				}
+			}
+
+			// deallocate the node temp
+			free(temp->data.holder); // deallocate holder within the card structure
+			free(temp->data.currency); // deallocate currency within the card structure
+			free(temp); // deallocate the NODE temp
+		}
+	}
+
+	return list;
+}
 
 
 int main()
@@ -120,18 +178,18 @@ int main()
 	printf("Duble list after creation:\n");
 	parse_list(d_list);
 
-	//d_list = delete_node_middle(d_list, "6542777788881908");
-	//printf("\nDouble list after deletion of one node:\n");
-	//parse_list(d_list);
+	d_list = delete_node_middle(d_list, "6523667711220094");
+	printf("\nDouble list after deletion of one node:\n");
+	parse_list(d_list);
 
-	//// deallocate the entire list by calling the one single node deletion
-	//// for the card number taken from the head everytime
-	//while (d_list.head != NULL)
-	//{
-	//	d_list = delete_node_middle(d_list, d_list.head->data.card_no);
-	//}
-	//printf("\nDouble list after deallocation:\n");
-	//parse_list(d_list);
+	// deallocate the entire list by calling the one single node deletion
+	// for the card number taken from the head everytime
+	while (d_list.head != NULL)
+	{
+		d_list = delete_node_middle(d_list, d_list.head->data.card_no);
+	}
+	printf("\nDouble list after deallocation:\n");
+	parse_list(d_list);
 
 
 	// insert a node in the middle of the list (define criteria!)
