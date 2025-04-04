@@ -105,6 +105,9 @@ Node* delete_node_beginning(Node* list)
 	return list;
 }
 
+// function to delete all nodes having the same card holder (parameter of the function)
+// within a simple list
+
 int main()
 {
 	FILE* f = fopen("CardData.txt", "r");
