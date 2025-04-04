@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="05_ListeDuble.c" />
+    <ClCompile Include="06_HT_LinProb.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Studenti.txt" />
