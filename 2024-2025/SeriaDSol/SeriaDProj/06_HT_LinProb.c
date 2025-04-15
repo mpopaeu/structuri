@@ -15,9 +15,9 @@ struct Student {
 int positionHashFunction(char* str, int size) {
 	int sum = 0;
 	for (unsigned int i = 0; i < strlen(str); i++)
-		sum += str[i];
+		sum += str[i]; // insumare coduri ASCII pentru stringul str (cheie)
 
-	return sum % size;
+	return sum % size; // rezultatul este in interiorul zonei alocate pr vector suport tabela hash
 }
 
 char insertStudent(struct Student* ht, int size, struct Student s) {
@@ -28,24 +28,24 @@ char insertStudent(struct Student* ht, int size, struct Student s) {
 
 	for (int i = pos; i < size && !inserted; i++) {
 		if (ht[i].name == NULL) {
-			ht[i] = s;
+			ht[i] = s; // scriere date s in tabela hash
 			inserted = 1;
 		}
 	}
 
-	return inserted;
+	return inserted; // 0 - nu a fost inserat, 1 - s a fost inserat
 }
 
 
 int searchStudent(struct Student* ht, int size, char* studName)
 {
-	int pos = positionHashFunction(studName, size);
+	int pos = positionHashFunction(studName, size); // pozitia pe care ar trebui sa fie stocat setul de date
 	char found = 0;
 	for (int i = pos; i < size && !found; i++)
 	{
-		if (ht[i].name == 0)
+		if (ht[i].name == 0) // validare existenta set date pe offset i in tabela hash
 			found = -1;
-		else if (strcmp(ht[i].name, studName) == 0)
+		else if (strcmp(ht[i].name, studName) == 0) // cautare in extenso pe cheia de cautare
 		{
 			found = 1;
 			pos = i;
@@ -53,9 +53,9 @@ int searchStudent(struct Student* ht, int size, char* studName)
 	}
 
 	if (found == 1)
-		return pos;
+		return pos; // date identificate in tabela hash pe offset pos (pozitie reala)
 	else
-		return -1;
+		return -1; // datele cautate nu sunt in tabela hash
 }
 
 
@@ -63,14 +63,14 @@ char deleteStudent(struct Student* ht, int size, char* studName)
 {
 	int poz = searchStudent(ht, size, studName);
 	if (poz == -1)
-		return 0;
+		return 0; // studentul nu a fost identificat in tabela hash
 
-	free(ht[poz].name);
-	ht[poz].name = 0;
+	free(ht[poz].name); // dezalocare nume student
+	ht[poz].name = 0; // disponibilize poz pentru inserari viitoare
 	int inf, sup;
 
 	char flag = 0;
-	for (int i = poz - 1; i >= 0 && !flag; i--)
+	for (int i = poz - 1; i >= 0 && !flag; i--) // determinare limita inferioara sub-cluster stanga
 	{
 		if (ht[i].name == 0)
 		{
@@ -82,7 +82,7 @@ char deleteStudent(struct Student* ht, int size, char* studName)
 		inf = 0;
 
 	flag = 0;
-	for (int i = poz + 1; i < size && !flag; i++)
+	for (int i = poz + 1; i < size && !flag; i++) // cautare limita superioara sub-cluster dreapta
 		if (ht[i].name == 0)
 		{
 			flag = 1;
@@ -91,21 +91,23 @@ char deleteStudent(struct Student* ht, int size, char* studName)
 	if (!flag)
 		sup = size - 1;
 
-	struct Student* temp = (struct Student*)malloc(sizeof(struct Student) * (sup - inf));
+	struct Student* temp = (struct Student*)malloc(sizeof(struct Student) * (sup - inf)); // alocare vector temporar cu studenti din cele 2 sub-clustere
 	int  j = 0;
-	for (int i = inf; i < poz; i++)
+	for (int i = inf; i < poz; i++) // copiere data din sub-cluster stanga in vector temp
 	{
 		temp[j++] = ht[i];
-		ht[i].name = 0;
+		ht[i].name = 0; // disponibilizare i in tabela hash
 	}
-	for (int i = poz + 1; i <= sup; i++)
+	for (int i = poz + 1; i <= sup; i++) // copiere data din sub-cluster dreapta in vector temp
 	{
 		temp[j++] = ht[i];
-		ht[i].name = 0;
+		ht[i].name = 0; // disponibilizare i in tabela hash
 	}
+	
+	// elemente cuprinse intre inf si sup sunt disponibile in a fi ocupate cu date la inserare in tabela hash
 
 	for (int i = 0; i < (sup - inf); i++)
-		flag = insertStudent(ht, size, temp[i]);
+		flag = insertStudent(ht, size, temp[i]); // re-inserare date din temp in tabela de dispersie
 
 	free(temp);
 
@@ -119,8 +121,8 @@ void main() {
 	char buffer[LINESIZE], seps[] = { ",\n" }, * token;
 	struct Student s;
 
-	struct Student* HTable;
-	int size = ARRAY_SIZE;
+	struct Student* HTable; // pointer acces la tabela de dispersie
+	int size = ARRAY_SIZE; // capacitate de stocare initiala a tabelei hash
 
 	HTable = (struct Student*)malloc(size * sizeof(struct Student));
 	for (int i = 0; i < size; i++) {
@@ -141,34 +143,35 @@ void main() {
 
 		printf("%d %s\n", s.id, s.name);
 
-		char insert = insertStudent(HTable, size, s);
+		char insert = insertStudent(HTable, size, s); // inserare student s in tabela hash; return flag inserare
 		int newSize = size;
 
 		while (!insert) {
 			struct Student* newHTable;
-			newSize += ARRAY_SIZE;
+			newSize += ARRAY_SIZE; // noua dimensiune a tabelei hash
 			newHTable = (struct Student*)malloc(newSize * sizeof(struct Student));
 
 			for (int i = 0; i < newSize; i++) {
-				newHTable[i].name = NULL;
+				newHTable[i].name = NULL; // initial, toate elementele de pe noua tabela sunt disponibile la inserare
 			}
 
+			// mutarea elementelor de pa tabela curenta pe noua tabela
 			insert = 1;
-			for (int i = 0; i < size && insert; i++) {
-				if (HTable[i].name)
-					insert = insertStudent(newHTable, newSize, HTable[i]);
+			for (int i = 0; i < size && insert; i++) { // se parseaza (secvential) toate elementele din tabela curenta (HTable)
+				if (HTable[i].name) // exista set de date stocat pe offset i in HTable
+					insert = insertStudent(newHTable, newSize, HTable[i]); // re-inserare elemenet i din HTable pe newHTable
 			}
 
 			if (!insert) {
-				free(newHTable);
+				free(newHTable); // mutarea elementelor de pe tabela curenta a esuat; se dezaloca noua tabela 
 			}
-			else {
-				free(HTable);
+			else { // mutarea tuturor elementelor a fost efectuata pe noua tabela newHTable
+				free(HTable); // dezalocare tabela curenta
 
-				HTable = newHTable;
-				size = newSize;
+				HTable = newHTable; // comutare var HTable pe noua tabela
+				size = newSize; // update lungime noua tabela; comutare size pe newSize
 
-				insert = insertStudent(HTable, size, s);
+				insert = insertStudent(HTable, size, s); // noua tentativa de inserare s
 			}
 		}
 	}
@@ -178,6 +181,16 @@ void main() {
 		if (HTable[i].name) {
 			printf("Pozitie: %d, Student: %s\n", i, HTable[i].name);
 		}
+	}
+
+	int offs_stud = searchStudent(HTable, size, "Gigel opescuP");
+	if (offs_stud != -1)
+	{
+		printf("Student identificat in tabela hash: %s %d\n", HTable[offs_stud].name, HTable[offs_stud].id);
+	}
+	else
+	{
+		printf("Studentul cautat nu exista in tabela hash!\n");
 	}
 
 	char studName[] = { "Popescu Gigel" };
