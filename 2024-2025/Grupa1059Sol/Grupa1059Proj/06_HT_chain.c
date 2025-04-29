@@ -57,10 +57,79 @@ unsigned char inserare_HT(Nod** tabela, CardBancar data, unsigned char tabela_le
 }
 
 // cautare card bancar in functie de cheie (nr_card)
-
+CardBancar* catuare_card(Nod** tabela, unsigned char tabela_length, char* nr_card)
+{
+	unsigned char offset = functie_hash(nr_card, tabela_length);//se cauta dupa cheie de cautare
+	if (tabela != NULL)//tabela exista(este alocata in memeorie heap)
+	{
+		Nod* temp = tabela[offset];//se acceseaza lista care ar trebui sa contina datele pt nr_card cautat
+		while (temp != NULL)//se verifica prezenta nr card in lista tabel de offset
+		{
+			if (strcmp(temp->card.nr_card, nr_card) == 0)
+			{
+				return &(temp->card);
+			}
+			temp = temp->next;
+		}
+	}
+	return NULL;
+}
 // stergere card bancar din tabela hash pe baza de cheie (nr_card)
+void stergere_card(Nod** tabela, unsigned char tabela_length, char* nr_card)
+{
+	unsigned char offset = functie_hash(nr_card, tabela_length);//se cauta dupa cheie de cautare
+	if (tabela != NULL)//tabela exista(este alocata in memeorie heap)
+	{
+		Nod* temp = tabela[offset];//se acceseaza lista care ar trebui sa contina datele pt nr_card cautat
 
+		if (strcmp(temp->card.nr_card, nr_card) == 0)
+		{
+			tabela[offset] = temp->next;//modificare adresa de incaput a listei tabela[offset]
+			free(temp->card.detinator);
+			free(temp);//dezalocare nod
+			return;
+		}
+	
+		Nod* prev = temp;
+		temp = temp->next;
+		while (temp != NULL)//se verifica prezenta nr card in lista tabel de offset
+		{
+			if (strcmp(temp->card.nr_card, nr_card) == 0)
+			{
+				prev->next = temp->next;
+				free(temp->card.detinator);
+				free(temp);
+				return;
+			}
+			prev = temp;
+			temp = temp->next;
+		}
+	}
+}
 // dezalocare tabela de dispersie
+
+float sold_mediu(Nod** tabela, unsigned char tabela_length, char* moneda)
+{
+	float suma = 0;
+	unsigned int contor = 0;
+	for (int i = 0; i < tabela_length; i++)//se traverseaza toate elem din vectorul de liste(moneda nu este cheie)
+	{
+		Nod* temp = tabela[i];//suntem pe lista i;se salveaza primul nod din lista i in temp
+		while (temp != NULL)//se traverseaza toate nodurile din lista i
+		{
+			if (strcmp(temp->card.moneda, moneda) == 0)//se compara moneda cautata cu moneda stocata in nodul temp
+			{
+				suma += temp->card.sold;//se adauga soldul la suma temporara
+				contor++;//se incrementaza nr de carduri cu moneda cautata
+			}
+			temp = temp->next;//se acceseaza nodul succesor din lista i
+		}
+	}
+	if (suma == 0 && contor == 0)
+		return -1;//cazul in care nu se gaseste niciun card cun moneda cautata
+	else
+		return suma /contor;//se calculeaza soldul mediu pe cardurile cu aceeasi moneda
+}
 
 int main()
 {
@@ -94,6 +163,24 @@ int main()
 	}
 	fclose(f);
 
+	float medie = sold_mediu(HT, TABELA_HASH_LENGTH, "RON");
+	if (medie == -1)
+		printf("Nu a fost gasit niciun card cu moneda cautata\n");
+	else
+		printf("soldul mediu: %.2f\n", medie);
 
+	CardBancar* c = catuare_card(HT, TABELA_HASH_LENGTH, "6413889977660001");
+	if (c == NULL)
+		printf("cardul nu a fost gasit\n");
+	else
+		printf("titularul %s, sold %f\n", c->detinator, c->sold);
+
+	stergere_card(HT, TABELA_HASH_LENGTH, "6413889977660001");
+	printf("Cautare card dupa stergere\n");
+	c = catuare_card(HT, TABELA_HASH_LENGTH, "6413889977660001");
+	if (c == NULL)
+		printf("cardul nu a fost gasit\n");
+	else
+		printf("titularul %s, sold %f\n", c->detinator, c->sold);
 	return 0;
 }
