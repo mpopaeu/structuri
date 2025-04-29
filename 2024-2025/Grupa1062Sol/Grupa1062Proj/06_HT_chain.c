@@ -80,6 +80,77 @@ CardBancar* cautare_HT(Nod** tabela, unsigned char dim_tabela, char* cheie)
 	return NULL; // cardul bancar nu a fost gasit in tabela de dispersie
 }
 
+
+void stergere_card_HT(Nod** tabela, unsigned char dim_tabela, char* cheie)
+{
+	unsigned char offset_lista = functie_hash(cheie, dim_tabela);
+
+	if (tabela[offset_lista] != NULL)
+	{
+		// lista de pe offset_lista contine cel putin 1 nod
+		Nod* temp = tabela[offset_lista];
+		Nod* prev = NULL;
+		while (temp != NULL)
+		{
+			if (strcmp(temp->cb.nr_card, cheie) == 0)
+			{
+				if (prev == NULL)
+				{
+					// se sterge primul nod din lista tabela[offset_lista]
+					tabela[offset_lista] = temp->next; // actualizare inceput de lista tabela [offset_lista]
+				}
+				else
+				{
+					// se sterge nod la interior lista (inclusiv ultimul nod)
+					prev->next = temp->next; // actualizare legatura predecesor al lui temp catre succesor al lui temp
+				}
+				free(temp->cb.titular);		// dezalocare extensie titular pentru date card bancar stocate de temp
+				free(temp);					// dezalocare nod lista simpla
+
+				return; // nu are sens cautarea unui alt nod cu acelasi nr de card 
+			}
+			
+			temp = temp->next;
+		}
+	}
+}
+
+// cautare carduri bancare care au aceeasi moneda
+// cardurile de salveaza intr-un vector
+CardBancar** cautare_card_moneda(Nod** tabela, unsigned char dim, char* moneda, unsigned char* nr)
+{
+	*nr = 0;
+	for (int i = 0; i < dim; i++)//calcul nr de carduri bancare cu aceeasi moneda
+	{
+		Nod* temp = tabela[i];
+		while (temp != NULL)
+		{
+			if (strcmp(moneda, temp->cb.moneda) == 0)
+				(*nr)++;//incrementare counter carduri bancare cu aceeasi moneda
+			temp = temp->next;
+		}
+
+	}
+	CardBancar** carduri = malloc(*nr * sizeof(CardBancar*));//alocare memorie heap pt vector cu counter determinat mai sus
+	int j = 0;//offset curent pentru stocare cardBancar in vector
+	for (int i = 0; i < dim; i++)
+	{
+		Nod* temp = tabela[i];
+		while (temp != NULL)
+		{
+			if (strcmp(moneda, temp->cb.moneda) == 0)
+			{
+				carduri[j] = &(temp->cb);//scriere adresa card bancar in vector; vectorul si tabela Hash partajeaza memorie heap pt titular
+				j++;
+			}
+			temp = temp->next;
+		}
+
+	}
+	return carduri;
+}
+
+
 int main()
 {
 	// preluare date din fisiere pentru carduri bancare
@@ -122,12 +193,12 @@ int main()
 
 		printf("Inserare card %s in lista %u\n", card.nr_card, pozitie_tabela);
 
-
 		// incercare preluare linie urmatoare (daca exista)
 		fgets(buffer, sizeof(buffer), f);
 	}
 	fclose(f);
 
+	printf("Cautare card bancar in tabela de dispersie pe baza de cheie -> nr card\n");
 	CardBancar* pCard = cautare_HT(HT, DIM_TABELA_HASH, "6453000010109999");
 	if (pCard != NULL)
 	{
@@ -139,4 +210,41 @@ int main()
 	}
 
 	// stergere card bancar din tabela de dispersie
+	printf("Stergere card bancar in tabela de dispersie pe baza de cheie -> nr card\n");
+	stergere_card_HT(HT, DIM_TABELA_HASH, "6453000010109999");
+
+	printf("Cautare card bancar in tabela de dispersie dupa operatia de stergere:\n");
+	pCard = cautare_HT(HT, DIM_TABELA_HASH, "6453000010109999");
+	if (pCard != NULL)
+	{
+		printf("Card bancar identificat: %s %s\n", pCard->nr_card, pCard->titular);
+	}
+	else
+	{
+		printf("Cardul bancar nu este prezent in tabela de dispersie!\n");
+	}
+
+	unsigned char nr;
+	CardBancar** carduri = cautare_card_moneda(HT, DIM_TABELA_HASH, "RON", &nr);
+	printf("\nCarduri bancare din vector\n");
+	for (int i = 0; i < nr; i++)
+	{
+		printf("%s %s\n", carduri[i]->nr_card, carduri[i]->moneda);
+	}
+	//dezalocare tabela hash
+	for (int i = 0; i < DIM_TABELA_HASH; i++)
+	{
+		
+		while (HT[i] != NULL)
+		{
+			Nod* temp = HT[i];//temp este primul nod din lista
+			HT[i] = HT[i]->next;//noul inceput de lista este nodul 2
+			free(temp->cb.titular);
+			free(temp);
+		}
+	}
+	free(HT);//dezalocare vector de liste
+	//dezalocare vector
+	free(carduri);//titularii cardurilor bancare au fost dezalocati anterior in secventa dezalocare tabela hash
+	return 0;
 }
