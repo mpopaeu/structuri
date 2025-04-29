@@ -93,6 +93,82 @@ CardBancar* cautare_HT(char* cheie, Nod* *tabela, unsigned char dim_tabela)
 	return NULL;
 }
 
+void stergere_card(char* cheie, Nod** tabela, unsigned char dim_tabela)
+{
+	unsigned char pozitie_tabela = functie_hash(cheie, dim_tabela);
+
+	Nod* temp = tabela[pozitie_tabela]; // card bancar cautat ar trebuie sa fie stocat in lista pozitie_tabela
+	Nod* prev = NULL;
+	while (temp != NULL)
+	{
+		if (strcmp(temp->cb.nr_card, cheie) == 0)
+		{
+			// cardul de sters a fost identificat
+			if (prev == NULL)
+			{
+				// nodul de sters (temp) este primul nod din lista tabela[pozitie_tabela]
+				tabela[pozitie_tabela] = temp->next; // actualizare inceput de lista stocat in tabela[pozitie_tabela]
+			}
+			else
+			{
+				// nodul de sters este in interior (inclusiv ultimul nod)
+				prev->next = temp->next;
+			}
+
+			free(temp->cb.titular); // dezalocare string titular din date stocate in nod
+			free(temp->cb.emitent);	// dezalocare string emitent din date stocate in nod
+			free(temp);				// dezalocare nod
+
+			return; // oprire executie functie deoarece nu exista alt card bancar cu acelasi numar
+		}
+
+		prev = temp;
+		temp = temp->next;
+	}
+}
+
+Nod* stergere_emitent_lista(Nod* lista, char* emitent,unsigned char* count) {
+	
+		while (lista!=NULL && strcmp(lista->cb.emitent, emitent) == 0) {//verificare prezenta emitent in primul nod din lista
+			//se sterg toate nodurile consecutive incepand cu primul nod din lista
+			Nod* temp = lista;
+			lista = lista->next;//actualizare inceput de lista
+			free(temp->cb.titular);
+			free(temp->cb.emitent);
+			free(temp);
+			(*count) += 1;
+		}
+		if (lista != NULL) {//stergere noduri in interiorul listei
+			Nod* prev = lista;//primul nod din lista nu contine emitent (secventa while de mai sus)
+			Nod* temp = lista->next;
+			while (temp != NULL) {
+				if (strcmp(temp->cb.emitent, emitent) == 0) {//emitent identificat in nodul temp
+					prev->next = temp->next;
+					free(temp->cb.titular);
+					free(temp->cb.emitent);
+					free(temp);
+					temp = prev->next;//se continua verificarea pe noul succesor al lui prev
+					(*count) += 1;
+				}
+				else {//doar daca temp nu contine emitentul cautat
+					prev = temp;
+					temp = temp->next;
+				}
+			}
+		}
+		return lista;
+}
+unsigned char stergere_card_emitent(char* emitent, Nod** Tabela, unsigned char dim_tabela) {
+	unsigned char count = 0;
+	for (unsigned char i = 0; i < dim_tabela; i++) {
+		if (Tabela[i] != NULL) {
+			Tabela[i] = stergere_emitent_lista(Tabela[i], emitent,&count);
+		}
+	}
+	return count;
+
+}
+
 int main()
 {
 	FILE* f = NULL;
@@ -141,15 +217,44 @@ int main()
 	}
 	fclose(f);
 
+	printf("\nCautare card bancar in tabela de dispersie:\n");
 	CardBancar* pCard = cautare_HT("6234999919870000", HT, DIM_TABELA_HASH);
 	if (pCard != NULL)
 	{
-		printf("\nCard bancar identificat in tabela de dispersie: %s %s\n", pCard->nr_card, pCard->titular);
+		printf("Card bancar identificat in tabela de dispersie: %s %s\n", pCard->nr_card, pCard->titular);
 	}
 	else
 	{
-		printf("\nCardul bancar cautat nu exista in tabela de dispersie!\n");
+		printf("Cardul bancar cautat nu exista in tabela de dispersie!\n");
 	}
 
 	// stergere card bancar pe baza de cheie
+	printf("\nStergere card bancar in tabela de dispersie:\n");
+	stergere_card("6234999919870000", HT, DIM_TABELA_HASH);
+	pCard = cautare_HT("6234999919870000", HT, DIM_TABELA_HASH);
+	printf("Cautare card bancar dupa stergerea sa din tabela de dispersie:\n");
+	if (pCard != NULL)
+	{
+		printf("Card bancar identificat in tabela de dispersie: %s %s\n", pCard->nr_card, pCard->titular);
+	}
+	else
+	{
+		printf("Cardul bancar cautat nu exista in tabela de dispersie!\n");
+	}
+
+	// stergere carduri bancare cu acelasi emitent
+	printf("\n\nNr carduri sterse din tabela avand acelasi emitent: %u\n", stergere_card_emitent("BCR", HT, DIM_TABELA_HASH));
+
+	// dezalocare tabela de dispersie
+	for (unsigned char i = 0; i < DIM_TABELA_HASH; i++) {
+		while (HT[i] != NULL) {
+			Nod* temp = HT[i];
+			HT[i] = HT[i]->next;//noul inceput de lista este nodul 2
+			free(temp->cb.emitent);
+			free(temp->cb.titular);
+			free(temp);
+		}
+	}
+	free(HT);
+	return 0;
 }
