@@ -100,7 +100,81 @@ CardBancar* cautare_HT(Nod** tabela, unsigned char dim_tabela, char* nr_card_cau
 		temp = temp->next;
 	}
 
-	return NULL; // temp este NULL, deci nu exista card bancar cu nr cautat in parameterii functiei
+	return NULL; // temp este NULL, deci nu exista card bancar cu nr cautat in parametrii functiei
+}
+
+Nod* cautare_HT_titular(Nod** tabela, unsigned char dim_tabela, char* titular)
+{
+	Nod* lista_carduri = NULL; //lista cu date card avand acelasi titular
+	Nod* temp; //nod temporar utilizat la parsarea unei liste 
+	if (tabela)
+	{
+		for (unsigned char i = 0; i < dim_tabela; i++) //se traverseaza vectorul de liste simple
+		{
+			temp = tabela[i]; //temp se initializeaza cu adresa primului nod din lista tabela[i]
+			while (temp != NULL) //lista i se traverseaza in intregime
+			{
+				if (strcmp(temp->card.titular, titular) == 0) //verifica daca titular este in nodul temp
+				{
+					lista_carduri = inserare_sfarsit(lista_carduri, temp->card); //inserare card bancar in lista rezultat
+				}
+				temp = temp->next; //acces la nodul succesor al lui temp
+			}
+		}
+	}
+	return lista_carduri; //se returneaza adresa primului nod care va contine cardurile bancare avand acelasi titular
+}
+
+Nod** dezalocare_HT(Nod** tabela, unsigned char dim_tabela)
+{
+	Nod* temp;
+	if (tabela)
+	{
+		for (unsigned char i = 0; i < dim_tabela; i++)
+		{
+			while (tabela[i])
+			{
+				temp = tabela[i];
+				tabela[i] = tabela[i]->next;
+				free(temp->card.titular);
+				free(temp);
+			}
+		}
+
+		free(tabela);
+		tabela = NULL;
+	}
+	return tabela;
+}
+
+void stergere_dupa_cheie(Nod** tabela, unsigned char dim_tabela, char* cheie)
+{
+	unsigned int offset = functie_hash(cheie, dim_tabela);
+	Nod* lista = tabela[offset];
+	Nod* temp = lista;
+	Nod* prev = NULL;
+	while (temp)
+	{
+		if (strcmp(temp->card.nr_card, cheie) == 0)
+		{
+			if (prev == NULL)
+			{
+				tabela[offset] = tabela[offset]->next;
+				free(temp->card.titular);
+				free(temp);
+				return;
+			}
+			else
+			{
+				prev->next = temp->next;
+				free(temp->card.titular);
+				free(temp);
+				return;
+			}
+		}
+		prev = temp;
+		temp = temp->next;
+	}
 }
 
 int main()
@@ -164,5 +238,48 @@ int main()
 
 	// stergere card bancar pe baza de cheie
 
+	Nod* lista_carduri = cautare_HT_titular(HT, DIM_TABELA_DISPERSIE, "Ionescu Marian");
+	Nod* temp = lista_carduri;
+	printf("\n\nCarduri cu acelasi titular: \n");
+	while (temp)
+	{
+		printf("\nNumele: %s\nNr Card: %s\n", temp->card.titular, temp->card.nr_card);
+		temp = temp->next;
+	}
+
+	stergere_dupa_cheie(HT, DIM_TABELA_DISPERSIE, "4720098769018080");
+	pCard = cautare_HT(HT, DIM_TABELA_DISPERSIE, "4720098769018080");
+	printf("\n\n----Stergere card bancar dupa cheie----\n");
+	if (pCard != NULL)
+	{
+		printf("Cardul a fost identificat in tabela de dispersie: %s %s\n", pCard->nr_card, pCard->titular);
+	}
+	else
+	{
+		printf("Cardul bancar nu a fost identificat in tabela de dispersie!\n");
+	}
+
 	// dezalocare tabela de dispersie
+	HT = dezalocare_HT(HT, DIM_TABELA_DISPERSIE);
+	//dezalocare lista carduri ( deoarece variabila lista_carduri este reutilizata pentru stocarea datelor de card cu acelasi titular)
+	temp = lista_carduri;
+	while (lista_carduri)
+	{
+		temp = lista_carduri;
+		lista_carduri = lista_carduri->next;
+		
+		//free(temp->card.titular);
+		//titularul este deja dezalocat prin functia dezalocare_HT
+
+		free(temp);
+	}
+
+	lista_carduri = cautare_HT_titular(HT, DIM_TABELA_DISPERSIE, "Ionescu Marian");
+	temp = lista_carduri;
+	printf("\n\nCarduri cu acelasi titular DUPA dezalocare tabela de dispersie: \n");
+	while (temp)
+	{
+		printf("\nNumele: %s\nNr Card: %s\n", temp->card.titular, temp->card.nr_card);
+		temp = temp->next;
+	}
 }
