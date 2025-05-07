@@ -107,7 +107,7 @@ void stergere_card_HT(Nod** tabela, unsigned char dim_tabela, char* cheie)
 				free(temp->cb.titular);		// dezalocare extensie titular pentru date card bancar stocate de temp
 				free(temp);					// dezalocare nod lista simpla
 
-				return; // nu are sens cautarea unui alt nod cu acelasi nr de card 
+				return;		// nu are sens cautarea unui alt nod cu acelasi nr de card 
 			}
 			
 			temp = temp->next;
@@ -120,19 +120,19 @@ void stergere_card_HT(Nod** tabela, unsigned char dim_tabela, char* cheie)
 CardBancar** cautare_card_moneda(Nod** tabela, unsigned char dim, char* moneda, unsigned char* nr)
 {
 	*nr = 0;
-	for (int i = 0; i < dim; i++)//calcul nr de carduri bancare cu aceeasi moneda
+	for (int i = 0; i < dim; i++)	//calcul nr de carduri bancare cu aceeasi moneda
 	{
 		Nod* temp = tabela[i];
 		while (temp != NULL)
 		{
 			if (strcmp(moneda, temp->cb.moneda) == 0)
-				(*nr)++;//incrementare counter carduri bancare cu aceeasi moneda
+				(*nr)++;		//incrementare counter carduri bancare cu aceeasi moneda
 			temp = temp->next;
 		}
 
 	}
-	CardBancar** carduri = malloc(*nr * sizeof(CardBancar*));//alocare memorie heap pt vector cu counter determinat mai sus
-	int j = 0;//offset curent pentru stocare cardBancar in vector
+	CardBancar** carduri = malloc(*nr * sizeof(CardBancar*));	//alocare memorie heap pt vector cu counter determinat mai sus
+	int j = 0;		//offset curent pentru stocare cardBancar in vector
 	for (int i = 0; i < dim; i++)
 	{
 		Nod* temp = tabela[i];
@@ -140,7 +140,7 @@ CardBancar** cautare_card_moneda(Nod** tabela, unsigned char dim, char* moneda, 
 		{
 			if (strcmp(moneda, temp->cb.moneda) == 0)
 			{
-				carduri[j] = &(temp->cb);//scriere adresa card bancar in vector; vectorul si tabela Hash partajeaza memorie heap pt titular
+				carduri[j] = &(temp->cb);	//scriere adresa card bancar in vector; vectorul si tabela Hash partajeaza memorie heap pt titular
 				j++;
 			}
 			temp = temp->next;
@@ -161,7 +161,7 @@ int main()
 	Nod* *HT = NULL; // vector alocat la runtime de pointeri la liste simple
 	HT = malloc(DIM_TABELA_HASH * sizeof(Nod*)); // alocare heap pt vector HT
 	for (unsigned char i = 0; i < DIM_TABELA_HASH; i++)
-		HT[i] = NULL; // HT[i] este lista simpla pe offset i in vector HT
+		HT[i] = NULL;	// HT[i] este lista simpla pe offset i in vector HT
 
 
 	char buffer[150];
@@ -231,20 +231,23 @@ int main()
 	{
 		printf("%s %s\n", carduri[i]->nr_card, carduri[i]->moneda);
 	}
+
+
 	//dezalocare tabela hash
 	for (int i = 0; i < DIM_TABELA_HASH; i++)
 	{
 		
 		while (HT[i] != NULL)
 		{
-			Nod* temp = HT[i];//temp este primul nod din lista
-			HT[i] = HT[i]->next;//noul inceput de lista este nodul 2
+			Nod* temp = HT[i];		//temp este primul nod din lista
+			HT[i] = HT[i]->next;	//noul inceput de lista este nodul 2
 			free(temp->cb.titular);
 			free(temp);
 		}
 	}
-	free(HT);//dezalocare vector de liste
+	free(HT);		//dezalocare vector de liste
+	
 	//dezalocare vector
-	free(carduri);//titularii cardurilor bancare au fost dezalocati anterior in secventa dezalocare tabela hash
+	free(carduri);	//titularii cardurilor bancare au fost dezalocati anterior in secventa dezalocare tabela hash
 	return 0;
 }

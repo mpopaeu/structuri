@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_HT_chain.c">
+    <ClCompile Include="10_StructHeapc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
