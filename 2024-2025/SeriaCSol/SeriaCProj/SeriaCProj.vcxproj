@@ -19,9 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_HT_linprob.c" />
+    <ClCompile Include="10_StructHeap.c" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="HeapKeys.txt" />
     <Text Include="Studenti.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -90,7 +90,7 @@ char deleteStudent(struct Student* ht, int size, char* studName)
 		if (ht[i].name == 0)
 		{
 			flag = 1;
-			sup = i - 1; // sup loimita superioara
+			sup = i - 1; // sup limita superioara
 		}
 	if (!flag)
 		sup = size - 1;
