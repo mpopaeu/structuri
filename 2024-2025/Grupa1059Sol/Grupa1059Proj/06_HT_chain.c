@@ -133,7 +133,7 @@ float sold_mediu(Nod** tabela, unsigned char tabela_length, char* moneda)
 
 int main()
 {
-	Nod** HT = NULL;
+	Nod** HT = NULL; // variabila acces la vector suport pentru tabela de dispersie (cu chaining)
 
 	HT = malloc(sizeof(Nod*) * TABELA_HASH_LENGTH); // tabela hash cu maxim 50 de liste simple
 					// fiecare element din tabela (vector) este de tip Nod* (adresa de inceput de lista simpla
@@ -182,5 +182,21 @@ int main()
 		printf("cardul nu a fost gasit\n");
 	else
 		printf("titularul %s, sold %f\n", c->detinator, c->sold);
+
+	// dezalocare tabela de dispersie
+	// se traverseaza intreaga structura (vector de liste) 
+	// se reutilizeaza functia stergere_card, trimitand input "convenabil" astfel incat 
+	// listele sa se dezaloce pentru toate nodurile
+
+	for (unsigned char i = 0; i < TABELA_HASH_LENGTH; i++)
+	{
+		while (HT[i] != NULL) // in lista HT[i] exista cel putin 1 nod
+		{
+			stergere_card(HT, TABELA_HASH_LENGTH, HT[i]->card.nr_card); // stergere nod 1 din lista HT[i] cu actualizare HT[i]
+		}
+	}
+	free(HT); // dezalocare vector suport pentru tabela de dispersie cu chaining
+	HT = NULL;
+
 	return 0;
 }

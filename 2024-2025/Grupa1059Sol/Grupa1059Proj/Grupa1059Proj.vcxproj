@@ -142,7 +142,7 @@
     <Text Include="CarduriBancare.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_HT_chain.c" />
+    <ClCompile Include="10_Struct_MaxHeap.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

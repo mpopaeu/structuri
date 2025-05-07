@@ -20,7 +20,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_HT_chain.c">
+    <ClCompile Include="10_Struct_MaxHeap.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
