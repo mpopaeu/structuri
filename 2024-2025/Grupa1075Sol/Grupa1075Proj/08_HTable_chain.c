@@ -147,8 +147,63 @@ BankCard* search_data(Node** htable, unsigned int htable_size, char* holders_nam
 	return NULL; // there is no holders_name stored by htable
 }
 
+Node* search_all_data(Node** htable, unsigned int htable_size, char* holders_name)
+{
+	Node* cardList = NULL;
+	// 1. compute the place in htable where data will be checked (offset of a simple list)
+	unsigned int offset = hash_function(holders_name, htable_size);
+
+	// 2. check node by node if the holders_name is stored by the simple list htable[offset]
+	Node* temp = htable[offset]; // temp is the first node in the simple list htable[offset]
+	while (temp)
+	{
+		if (strcmp(temp->data.holder, holders_name) == 0)
+		{
+			cardList = insert_node(cardList, temp->data, temp->data.holder);
+
+		}
+
+		temp = temp->next;
+	}
+
+	return cardList;
+}
 // update the search implementation to catch all BankCard data sets for the same holder's name
 
+// delete all bank cards having the same holder's name
+void delete_cards(Node** htable, unsigned char htable_size, char* holder_name)
+{
+	unsigned char offset = hash_function(holder_name, htable_size);
+	Node* temp = htable[offset];
+	Node* prev = NULL;
+	while (temp)
+	{
+		if (strcmp(temp->data.holder, holder_name) == 0)
+		{
+			if (temp == htable[offset])
+			{
+				htable[offset] = temp->next;
+			}
+			else
+			{
+				prev->next = temp->next;
+			}
+			free(temp->data.holder);
+			free(temp->data.issuer);
+			free(temp);
+			if (prev == NULL)
+			{
+				temp = htable[offset];
+			}
+		}
+		else
+		{
+			prev = temp;
+			temp = temp->next;
+		}
+
+	}
+}
 int main()
 {
 	Node* *HTable = NULL;
@@ -206,8 +261,27 @@ int main()
 	}
 
 	fclose(f);
+	Node* holderList = search_all_data(HTable, HASH_TABLE_SIZE, "Vasilescu Mihai George");
+	Node* temp = holderList;
+	printf("List of cards with the same holder\n");
+	while (temp)
+	{
+		printf("BankCard details: %s %s %s\n", temp->data.holder, temp->data.card_no, temp->data.issuer);
+		temp = temp->next;
+	}
+	delete_cards(HTable, HASH_TABLE_SIZE, "Vasilescu Mihai George");
+	p_card_data = search_data(HTable, HASH_TABLE_SIZE, "Vasilescu Mihai George");
+	printf("Search for holder's name after card data deletion\n");
+	if (p_card_data != NULL)
+	{
+		printf("BankCard details: %s %s %s\n", p_card_data->holder, p_card_data->card_no, p_card_data->issuer);
+	}
+	else
+	{
+		printf("There is no BankCard data for the specified holder.\n");
+	}
 
 	// deallocate the hash table
 
-
+	// deallocate the simple list with cards for the same holder
 }
