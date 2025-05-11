@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_HT_LinProb.c" />
+    <ClCompile Include="08_Heap.c" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Studenti.txt" />
+    <Text Include="HeapKeys.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

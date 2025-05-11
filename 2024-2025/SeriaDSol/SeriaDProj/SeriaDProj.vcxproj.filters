@@ -15,12 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_HT_LinProb.c">
+    <ClCompile Include="08_Heap.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Studenti.txt">
+    <Text Include="HeapKeys.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
