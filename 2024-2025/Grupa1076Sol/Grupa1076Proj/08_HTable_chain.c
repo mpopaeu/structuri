@@ -98,6 +98,37 @@ BankCard* search_card_data(Node** htable, unsigned int htable_size, char* card_n
 
 // deallocate the hash table
 
+// create array of card data for a currency specified as paramater of the function
+BankCard* new_array(Node** hashtable, unsigned int size, char* currency, unsigned int* no_matches) {
+	*no_matches = 0;
+	for (unsigned int i = 0; i < size; i++) { //Parse the entire hashtable. Currency is not the key.
+		Node* temp = hashtable[i]; //hashtable[i] stores the adress of the first node in list i for the hashtable.
+		while (temp) {
+			if (strcmp(temp->data.currency, currency) == 0) { //Check if the currency matches.
+				*no_matches += 1; //Number of matches counts the matching cards on currency.
+			}
+			temp = temp->next;
+		}
+	} 
+	
+	if(*no_matches > 0){ 
+		BankCard* new_verified_array = malloc(sizeof(BankCard) * *no_matches); //Allocation of the result array.
+		unsigned int temp_index = 0;
+		for (unsigned int i = 0; i < size; i++) {//Parse the entire hashtable. Currency is not the key.
+			Node* temp = hashtable[i];
+			while (temp) {
+				if (strcmp(temp->data.currency, currency) == 0) {
+					new_verified_array[temp_index] = temp->data;//Store the card data into the result array.Array and hash table share some heap locations.
+					temp_index += 1;
+				}
+				temp = temp->next;
+			}
+		}
+		return new_verified_array;
+	}else { return NULL; }//No array if there is no match.
+}
+
+
 int main()
 {
 	FILE* f = fopen("CardData.txt", "r");
@@ -146,6 +177,27 @@ int main()
 	{
 		printf("The card data does not exist in hash table.\n");
 	}
+	unsigned int temp_size;
+	BankCard* card_array = new_array(HTable, HASH_TABLE_SIZE, "Romanian Leu", &temp_size);
+
+	
+	printf("Array of Card Data with same currency: \n");
+	for (unsigned int i = 0; i < temp_size; i++) {
+		printf("Card data info: %s %s\n", card_array[i].card_no, card_array[i].currency);
+	}
+
+	//Deallocation of the hashtable.
+	for (unsigned int i = 0; i < HASH_TABLE_SIZE; i++) {
+		while (HTable[i]) {
+			Node* temp = HTable[i];
+			HTable[i] = HTable[i]->next;
+			free(temp->data.currency);
+			free(temp->data.holder);
+			free(temp);
+		}
+	}
+	//Deallocation of card_array.
+	free(card_array);
 
 	return 0;
 }
