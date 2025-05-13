@@ -23,5 +23,11 @@
     <ClCompile Include="10_Struct_MaxHeap.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="11_ArbBin.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="06_HT_chain.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
