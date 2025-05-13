@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="10_StructHeap.c">
+    <ClCompile Include="11_ArbBinar.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

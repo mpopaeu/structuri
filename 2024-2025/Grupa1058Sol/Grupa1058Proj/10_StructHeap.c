@@ -51,6 +51,9 @@ int* agregare_struct_heap(int* h1, unsigned char size_h1,
 
 	unsigned char gata = 1;
 
+	// 1. agregarea este corecta doar pentru o diferenta de inaltime de maxim 1 nivel
+	// in caz contrar, structura agregata trebuie validata si prelucrata astfel incat sa fie un arbore binar complet
+	// 2. daca structurile heap1 si heap2 au acelasi numar de niveluri, se valideaza ca heap 1 are ultimul nivel complet
 	while (gata == 1) //  asigura traversarea pe niveluri in tandem pentru h1 si h2
 	{
 		l = i; // numar de elemente salvate anterior in structura agregata
@@ -100,8 +103,12 @@ int main()
 										heap2, sizeof(heap2) / sizeof(int),
 										heap_agregat, &nr_chei, &capacitate_stocare, 23);
 
-	printf("Structura Heap agregata: ");
+	printf("Structura Heap agregata si nevalidata: ");
 	for (unsigned char i = 0; i < nr_chei; i++)
 		printf("%d ", heap_agregat[i]);
 	printf("\n");
+
+	// validare pozitie cheie din nod radacina
+	// se cauta prin abordare top-down locul corect al cheii inserate
+	// vezi suport de curs, operatia de stergere
 }
