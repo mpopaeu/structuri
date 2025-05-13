@@ -51,6 +51,10 @@ int* agregare_structuri_heap(int* h1, unsigned char dim_h1,
 	unsigned char j = 0;	// offset traversare h2
 	unsigned int nr_chei_nivel_curent = 1; // nr maxim de chei de pe nivel curent
 
+	// 1. Diferenta de inaltime dintre h1 si h2 este de maxim 1 nivel; altfel, structura heap agregata trebuie
+	// sa fie restructurata astfel incat sa respecte asezarea nodurilor ca arbore binar complet
+	// 2. Daca h1 si h2 au aceeasi inaltime, se valideaza ca h1 sa aiba ultimul nivel complet ocupat cu noduri
+
 	while (flag == 1) // traversare structuri h1 si h2 pe niveluri in tandem 
 	{
 		// fiecare iteratie de while acceseaza acelasi nivel din h1 si h2
@@ -104,10 +108,14 @@ int main()
 										   heap2, sizeof(heap2)/sizeof(int),
 										   &capacitate, &nr_chei, 23);
 
-	printf("Structura heap agregata: ");
+	printf("Structura Heap dupa agregare, dar nevalidata: ");
 	for (unsigned char i = 0; i < nr_chei; i++)
 		printf("%d ", heap_agregat[i]);
 	printf("\n");
+
+	// validare pozitie cheie inserata (23) in arborele Heap
+	// prin aplicarea operatiei de filtrare top-down
+	// vezi suport curs, operatia de stergere
 
 	return 0;
 }

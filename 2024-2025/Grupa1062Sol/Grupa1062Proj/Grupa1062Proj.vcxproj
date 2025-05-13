@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="10_StructHeapc.c" />
+    <ClCompile Include="11_ArboreBinar.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CarduriBancare.txt" />
