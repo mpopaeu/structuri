@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="08_Heap.c" />
+    <ClCompile Include="11_ArboriO.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="HeapKeys.txt" />
