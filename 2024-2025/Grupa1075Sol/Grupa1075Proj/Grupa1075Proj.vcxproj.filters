@@ -20,7 +20,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="08_HTable_chain.c">
+    <ClCompile Include="11_BST.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

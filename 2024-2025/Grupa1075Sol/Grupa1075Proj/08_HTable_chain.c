@@ -283,5 +283,4 @@ int main()
 
 	// deallocate the hash table
 
-	// deallocate the simple list with cards for the same holder
 }
