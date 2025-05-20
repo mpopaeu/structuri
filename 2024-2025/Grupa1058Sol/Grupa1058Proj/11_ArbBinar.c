@@ -78,10 +78,116 @@ void traversare_Inordine(NodABC * r)
 }
 
 // dezalocare de ABC
+NodABC* dezalocare_ABC(NodABC* r)
+{
+	if (r != NULL)
+	{
+		// 1. dezalocare noduri din subarbore stanga
+		r->stanga = dezalocare_ABC(r->stanga);
+		// 2. dezalocare noduri din subarbore dreapta
+		r->dreapta = dezalocare_ABC(r->dreapta);
+
+		// 3. prelucrare nod curent r: dezalocare/stergere nod din ABC
+		printf("Stergere nod %s\n", r->cb.nr_card);
+		free(r->cb.emitent);
+		free(r->cb.titular);
+		free(r);
+		r = NULL;
+	}
+
+	return r; 
+}
 
 // determinare inaltime ABC (nr niveluri)
 
 // determinare numar de noduri de pe nivel specificat
+
+// stergere noduri frunza in ABC
+NodABC* stergere_frunze_ABC(NodABC* r)
+{
+	if (r != NULL)
+	{
+		// traversare/vizitare ABC in preordine
+		if ((r->stanga == NULL) && (r->dreapta == NULL))
+		{
+			free(r->cb.emitent);
+			free(r->cb.titular);
+			free(r);
+			r = NULL;
+		}
+		else
+		{
+			// r nu este frunza; continua cautarea pe ambii descendenti
+			r->stanga = stergere_frunze_ABC(r->stanga);
+			r->dreapta = stergere_frunze_ABC(r->dreapta);
+		}
+	}
+
+	return r;
+}
+
+NodABC* stergere_nod_ABC(NodABC* r, char* cheie, unsigned char* flag_stergere)
+{
+	if (r != NULL)
+	{
+		if (strcmp(cheie, r->cb.nr_card) < 0)
+		{
+			r->stanga = stergere_nod_ABC(r->stanga, cheie, flag_stergere);
+		}
+		else
+		{
+			if (strcmp(cheie, r->cb.nr_card) > 0)
+			{
+				r->dreapta = stergere_nod_ABC(r->dreapta, cheie, flag_stergere);
+			}
+			else
+			{
+				// a fost identificat nodul de sters
+				*flag_stergere = 1;
+				if ((r->stanga == NULL) && (r->dreapta = NULL))
+				{
+					// r este nod frunza
+					free(r->cb.emitent);
+					free(r->cb.titular);
+					free(r);
+					r = NULL;
+				}
+				else
+				{
+					if ((r->stanga != NULL) && (r->dreapta != NULL))
+					{
+						// r cu 2 descendenti
+						// ????
+					}
+					else
+					{
+						// r cu 1 descendent
+						NodABC* temp = NULL;
+						if (r->stanga != NULL)
+						{
+							temp = r->stanga;
+						}
+						else
+						{
+							temp = r->dreapta;
+						}
+
+						free(r->cb.emitent);
+						free(r->cb.titular);
+						free(r);
+						r = temp; // r se actualizeaza cu descendentul sau pe care il trimitem la parinte
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		*flag_stergere = 0; // nu a fost identificat nodul de sters in ABC
+	}
+
+	return r; 
+}
 
 int main()
 {
@@ -138,6 +244,16 @@ int main()
 	}
 	fclose(f);
 
-	printf("Arbore Binar de Cautare traversat in Inordine:\n");
+	printf("\nArbore Binar de Cautare traversat in Inordine:\n");
+	traversare_Inordine(root);
+
+	printf("\nStergere frunze in Arbore Binar de Cautare:\n");
+	root = stergere_frunze_ABC(root);
+	printf("\nArbore Binar de Cautare traversat in Inordine dupa stergere frunze:\n");
+	traversare_Inordine(root);
+	
+	printf("\nDezalocare Arbore Binar de Cautare:\n");
+	root = dezalocare_ABC(root);
+	printf("\nArbore Binar de Cautare traversat in Inordine dupa dezalocare:\n");
 	traversare_Inordine(root);
 }
