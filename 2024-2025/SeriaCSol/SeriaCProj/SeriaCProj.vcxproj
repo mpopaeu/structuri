@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="10_StructHeap.c" />
+    <ClCompile Include="12_Arbori.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="HeapKeys.txt" />
