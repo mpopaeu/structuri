@@ -41,14 +41,14 @@ NodArbore* inserare_nod_ABC(NodArbore* r, CardBancar card, unsigned char *flag)
 	{
 		// exista nod curent r
 		// se decide pe care subarbore se continua cautarea locului de inserat pentru card
-		if (strcmp(r->card.nr_card, card.nr_card) < 0)
+		if (strcmp(card.nr_card, r->card.nr_card) < 0)
 		{
 			// se continua cautarea locului de inserat pe stanga nodului (subarborelui) curent
 			r->stanga = inserare_nod_ABC(r->stanga, card, flag);
 		}
 		else
 		{
-			if (strcmp(r->card.nr_card, card.nr_card) > 0)
+			if (strcmp(card.nr_card, r->card.nr_card) > 0)
 			{
 				// se continua cautarea locului de inserat pe dreapta nodului (subarborelui) curent
 				r->dreapta = inserare_nod_ABC(r->dreapta, card, flag);
@@ -83,7 +83,120 @@ NodArbore* inserare_nod_ABC(NodArbore* r, CardBancar card, unsigned char *flag)
 // stergere nod frunza in ABC
 
 // determinare nr noduri frunza in ABC
+void determinare_nr_frunze_ABC(NodArbore* r, unsigned char* counter)
+{
+	if (r != NULL)
+	{
+		determinare_nr_frunze_ABC(r->stanga, counter);
 
+		if ((r->stanga == NULL) && (r->dreapta == NULL))
+		{
+			*counter += 1;
+		}
+
+		determinare_nr_frunze_ABC(r->dreapta, counter);
+	}
+}
+
+// salvare date carduri bancare plasate in nodurile frunza
+
+// traversare in inordine ABC
+void traversare_Inordine_ABC(NodArbore* r)
+{
+	if (r != NULL)
+	{
+		traversare_Inordine_ABC(r->stanga);
+		printf("%s\n", r->card.nr_card);
+		traversare_Inordine_ABC(r->dreapta);
+	}
+}
+
+
+// stergere nod din ABC
+NodArbore* stergere_nod_ABC(NodArbore* r, char* cheie, unsigned char* flag)
+{
+	if (r != NULL)
+	{
+		// exista nod curent r
+		// se decide pe care subarbore se continua cautarea locului de inserat pentru card
+		if (strcmp(cheie, r->card.nr_card) < 0)
+		{
+			// se continua cautarea locului de inserat pe stanga nodului (subarborelui) curent
+			r->stanga = stergere_nod_ABC(r->stanga, cheie, flag);
+		}
+		else
+		{
+			if (strcmp(cheie, r->card.nr_card) > 0)
+			{
+				// se continua cautarea locului de inserat pe dreapta nodului (subarborelui) curent
+				r->dreapta = stergere_nod_ABC(r->dreapta, cheie, flag);
+			}
+			else
+			{
+				// nodul curent r contine aceeasi cheie (nr card) cu setul de date de inserat
+				// r este nodul de sters
+				*flag = 1;  // comutare flag pe modul stergere efectuata
+
+				if (r->stanga!=NULL && r->dreapta != NULL)
+				{
+					// nodul curent r are 2 descendenti
+					NodArbore* temp = r->dreapta; // aleg subarbore dreapta pt a cauta nodul de cheie minima
+					if (temp->stanga == NULL)
+					{
+						// nodul de cheie minima este radacina de subarbore dreapta
+						CardBancar caux = r->card;
+						r->card = temp->card;
+						temp->card = caux;
+
+						r = temp->dreapta;
+					}
+					else
+					{
+						// se cauta nodul cu cheia minima incepand cu temp (subarbore dreapta)
+						// ????
+					}
+
+					free(temp->card.titular);
+					free(temp);
+				}
+				else
+				{
+					// nodul are 1 descendent SAU este frunza
+					NodArbore* temp = r; // temp este nodul de sters
+					if (r->stanga == NULL && r->dreapta == NULL)
+					{
+						r = NULL;
+					}
+					else
+					{
+						if (r->stanga != NULL)
+						{
+							// exista descendent stanga
+							r = r->stanga;
+						}
+						else
+						{
+							r = r->dreapta;
+						}
+					}
+
+					free(temp->card.titular);
+					free(temp);
+				}
+			}
+		}
+	}
+	else
+	{
+		// nod curent este nul
+		// nu a fost identificat nod cu cheie cautata
+		// stergere nu are loc in ABC
+
+		*flag = 0; // comutare flag pe modul stergere ne-efectuata
+	}
+
+	return r;
+}
 
 int main()
 {
@@ -137,4 +250,13 @@ int main()
 		fgets(buffer, sizeof(buffer), f);
 	}
 	fclose(f);
+
+	printf("\nABC in traversare in inordine:\n");
+	traversare_Inordine_ABC(root);
+
+	// determinare numar noduri frunza
+	unsigned char counter = 0;
+	determinare_nr_frunze_ABC(root, &counter);
+
+	printf("\nNumarul de noduri frunza din ABC: %u\n", counter);
 }
