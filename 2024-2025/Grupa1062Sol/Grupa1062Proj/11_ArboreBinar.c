@@ -90,6 +90,54 @@ void traversare_inordine(NodArbore* r)
 
 // determinare nr de noduri de pe nivel specificat
 
+// dezalocare ABC
+NodArbore* dezalocare_ABC(NodArbore* r)
+{
+	if (r != NULL)
+	{
+		// dezalocare noduri din subarbore stanga
+		r->stanga = dezalocare_ABC(r->stanga);
+		// dezalocare noduri din subarbore dreapta
+		r->dreapta = dezalocare_ABC(r->dreapta);
+
+		printf("Stergere card bancar %s\n", r->cb.nr_card);
+		free(r->cb.titular);
+		free(r); // dezalocare nod curent
+		r = NULL; // valoarea NULL scrisa in parintele lui r la revenirea in apelul anterior
+	}
+
+	return r;
+}
+
+// stergere noduri frunza plasate pe un nivel specificat in ABC
+NodArbore* stergere_frunze_nivel(NodArbore* r, unsigned char nivel)
+{
+	if (r != NULL)
+	{
+		if (nivel > 1)
+		{
+			r->stanga = stergere_frunze_nivel(r->stanga, nivel-1);
+			r->dreapta = stergere_frunze_nivel(r->dreapta, nivel-1);
+		}
+		else
+		{
+			if (nivel == 1)
+			{
+				// nivelul targetat prin operatia de stergere
+				if ((r->stanga == NULL) && (r->dreapta == NULL))
+				{
+					printf("Frunza care se sterge: %s\n", r->cb.nr_card);
+					free(r->cb.titular);
+					free(r);
+					r = NULL;
+				}
+			}
+		}
+	}
+
+	return r;
+}
+
 int main()
 {
 	FILE* f = NULL;
@@ -129,11 +177,11 @@ int main()
 
 		if (inserat != 0)
 		{
-			printf("Card %s a fost inserat in arbore \n", card.nr_card);
+			printf("Cardul %s a fost inserat in arbore \n", card.nr_card);
 		}
 		else
 		{
-			printf("Card %s NU a fost inserat in arbore \n", card.nr_card);
+			printf("Cardul %s NU a fost inserat in arbore \n", card.nr_card);
 			free(card.titular); // dezalocare titular deoarece card nu a fost inserat in ABC
 		}
 		
@@ -142,6 +190,18 @@ int main()
 	}
 	fclose(f);
 
-	printf("\n\nTraversare inordine arbore binar de cautare\n");
+	printf("\n\nTraversare inordine arbore binar de cautare:\n");
 	traversare_inordine(root);
+
+	printf("\n\nStergere frunze de pe nivel specificat:\n");
+	root = stergere_frunze_nivel(root, 4);
+	printf("\n\nTraversare inordine arbore binar de cautare dupa stergere frunze de pe nivel specificat:\n");
+	traversare_inordine(root);
+
+	printf("\nDezalocare ABC\n");
+	root = dezalocare_ABC(root);
+	printf("\nTraversare inordine arbore binar de cautare dupa dezalocare:\n");
+	traversare_inordine(root);
+
+	return 0;
 }
