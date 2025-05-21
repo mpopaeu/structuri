@@ -43,7 +43,7 @@ BSTNode* insert_node_BST(BSTNode *node, BankCard data, unsigned char* success_fl
 			else
 			{
 				// there is a duplicated key in BST
-				// frop off the insertion
+				// drop off the insertion
 				*success_flag = 0;
 			}
 		}
@@ -62,6 +62,50 @@ BSTNode* insert_node_BST(BSTNode *node, BankCard data, unsigned char* success_fl
 
 	return node; // return the current node to be placed on the left/right of its parent in the previous call in the chain
 }
+
+void parse_BST_Inorder(BSTNode* node)
+{
+	if (node != NULL)
+	{
+		// 1. parse the left subtree in the same approach (recursivelly)
+		parse_BST_Inorder(node->left);
+
+		// 2. process the node
+		printf("Card no: %s\n", node->data.card_no);
+
+		// 3. parse same way on the right subtree
+		parse_BST_Inorder(node->right);
+	}
+}
+
+
+BSTNode* deallocate_BST_Postorder(BSTNode* node)
+{
+	if (node != NULL)
+	{
+		// 1. parse the left subtree
+		node->left = deallocate_BST_Postorder(node->left);
+
+		// 2. parse the right subtree
+		node->right = deallocate_BST_Postorder(node->right);
+
+		// 3. deallocate the current node
+		printf("Card %s is deallocationg\n", node->data.card_no);
+		free(node->data.currency);	// deallocate currency extension to heap
+		free(node->data.holder);	// deallocate holder extension to heap
+		free(node);			// deallocate the BST node
+
+		node = NULL;
+	}
+
+	return node;
+}
+
+// number of nodes on a certain level specified as parameter
+
+// number of nodes placed on the path from root till a certain node specified by the key
+
+// number of leafs placed on the last level of the BST
 
 int main()
 {
@@ -111,4 +155,13 @@ int main()
 	}
 
 	fclose(f);
+
+	printf("\nBST just after building (inorder parsing):\n");
+	parse_BST_Inorder(root);
+
+	// deallocate the BST
+	printf("\nBST deallocation just started:\n");
+	root = deallocate_BST_Postorder(root);
+	printf("\nBST just deallocated (inorder parsing):\n");
+	parse_BST_Inorder(root);
 }

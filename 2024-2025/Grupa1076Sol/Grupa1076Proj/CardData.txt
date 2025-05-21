@@ -1,4 +1,4 @@
 6523999900001234,10/26,Popescu Virgil Marian,Romanian Leu,199.87
 6542777788881908,04/25,Ionescu Alexandru,Euro,89.62
 6523667711220099,07/26,Vasilescu Mihai George,Romanian Leu,0.76
-6523667711220099,07/26,Georgescu Marian,Euro,0.76
+6523667711220098,07/26,Georgescu Marian,Euro,0.76
