@@ -6,7 +6,7 @@
 struct Date
 {
 	char month; // stored as value
-	char year; // stored as value; only last 2 letters are stored
+	char year;  // stored as value; only last 2 letters are stored
 };
 
 typedef struct Date Date;
@@ -72,6 +72,53 @@ BSTNode* insert_node_BST(BSTNode *node, BankCard data, unsigned char * insert_fl
 	return node;
 }
 
+void parse_BST_Inorder(BSTNode* node)
+{
+	if (node != NULL)
+	{
+		// 1. parse te left subtree same way like the current node
+		parse_BST_Inorder(node->left);
+
+		// 2. print out some bank card info
+		printf("Card number #%s\n", node->data.card_no);
+
+		// 3. parse the right subtree same way like the current node
+		parse_BST_Inorder(node->right);
+	}
+}
+
+BSTNode* BST_deallocation_Postorder(BSTNode* node)
+{
+	if (node != NULL)
+	{
+		
+		// 1. parse the left subtree in Postorder to be deallocated
+		BST_deallocation_Postorder(node->left);
+
+		// 2. parse the right subtree in Postorder to be deallocated
+		BST_deallocation_Postorder(node->right);
+
+		// deallocation of the current node (param node) can be done only
+		// after deallocation of both subtrees. That's why the Postorder is the right 
+		// way to parse the entire BST in order to be deallocated. Otherwise, we get memory leaks
+		// and runtime errors after heap memory free
+		// 3. deallocate the current node (param node) with both subtrees as being null pointers
+
+		printf("Card #%s removed fro BST\n", node->data.card_no);
+		free(node->data.holder); // deallocate heap memory for card data extension holder
+		free(node->data.issuer); // deallocate heap memory for card data extension issuer
+
+		free(node); // deallocate heap memory for the node itself (containing data, left and rigth as fields)
+		node = NULL;
+	}
+
+	return node; // return to the previous self-call the content of the current node (param node)
+}
+
+// count the leaf nodes on a certain BST level
+
+// save the node placed on the path root -> specified card number
+
 int main()
 {
 	BSTNode* root = NULL; // mandatory to mark an empty Binary Search Tree
@@ -123,4 +170,12 @@ int main()
 	}
 
 	fclose(f);
+
+	printf("\n\nInorder parsing of the BST:\n");
+	parse_BST_Inorder(root);
+
+	printf("\n\nBST deallocation:\n");
+	root = BST_deallocation_Postorder(root);
+	printf("\n\nBST after deallocation:\n");
+	parse_BST_Inorder(root);
 }

@@ -1,4 +1,4 @@
 Popescu Marian Alexandru,6523000099998765,10/28,BCR,1986.94
 Ionescu Virgil,6234999912349807,7/26,Unicredit,105.08
 Vasilescu Mihai George,6154888855556531,1/26,Citi,87.54
-Vasilescu Mihai George,6154888855556531,2/27,BT,34.54
+Vasilescu Ioan,6154888855556551,2/27,BT,34.54
