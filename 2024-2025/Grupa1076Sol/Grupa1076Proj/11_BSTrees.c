@@ -102,10 +102,65 @@ BSTNode* deallocate_BST_Postorder(BSTNode* node)
 }
 
 // number of nodes on a certain level specified as parameter
+void count_nodes_level(BSTNode* node, unsigned char target_level, unsigned char *count)
+{
+	if (node != NULL)
+	{
+		if (target_level > 0)
+		{
+			count_nodes_level(node->left, target_level - 1, count);
+
+			if (target_level == 1)
+				*count += 1; // increase counter for nodes placed on the targeted level
+
+			count_nodes_level(node->right, target_level - 1, count);
+		}
+	}
+}
+
+unsigned char count_nodes_level_ret(BSTNode* node, unsigned char target_level)
+{
+	if (node != NULL)
+	{
+		if (target_level > 0)
+		{
+			if (target_level == 1)
+				return 1; 
+			else
+				return count_nodes_level_ret(node->left, target_level - 1) + 
+				       count_nodes_level_ret(node->right, target_level - 1);
+		}
+	}
+
+	return 0;
+}
 
 // number of nodes placed on the path from root till a certain node specified by the key
 
 // number of leafs placed on the last level of the BST
+
+// delete leaf nodes stored on a specified BST level (target level)
+BSTNode* delete_nodes_on_specified_level(BSTNode* node, unsigned char level) {
+	if (node != NULL) {
+		if (level == 1) {
+			if ((node->right == NULL) && (node->left == NULL)) {
+				free(node->data.currency);
+				free(node->data.holder);
+				free(node);
+				node = NULL;
+			}
+		
+		}
+		if (level > 1) {
+			node->left=delete_nodes_on_specified_level(node->left, level - 1);
+			node->right=delete_nodes_on_specified_level(node->right, level - 1);
+		}
+	}
+	return node;
+
+}
+
+// delete a node in BST based om its key specified as input parameter
 
 int main()
 {
@@ -158,6 +213,20 @@ int main()
 
 	printf("\nBST just after building (inorder parsing):\n");
 	parse_BST_Inorder(root);
+
+	printf("\nCount nodes on a specified level in the BST:\n");
+	unsigned char count = 0;
+	count_nodes_level(root, 2, &count);
+	printf("\nNumber of nodes stored on the targeted level in BST: %u node(s) -> void\n", count);
+	count = count_nodes_level_ret(root, 2);
+	printf("\nNumber of nodes stored on the targeted level in BST: %u node(s) -> unsigned char\n", count);
+
+
+	//delete leaf nodes on a specified level
+	root = delete_nodes_on_specified_level(root, 2);
+	printf("\nBST after leaf node deallocation\n");
+	parse_BST_Inorder(root);
+
 
 	// deallocate the BST
 	printf("\nBST deallocation just started:\n");
