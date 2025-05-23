@@ -52,6 +52,26 @@ void preordine(struct NodTree* r) {
 	}
 }
 
+struct NodTree* dezalocare_AO_postordine(struct NodTree* r) {
+	if (r != NULL) {
+		r->fiu = dezalocare_AO_postordine(r->fiu);
+		struct NodTree* temp = r->frate; // salvare prim frate pentru r (inceput lista de frati)
+		printf("Dezalocare nod cu cheia %d\n", r->key);
+		free(r);
+		r = NULL;
+
+		while (temp != NULL) {
+				temp->fiu = dezalocare_AO_postordine(temp->fiu); // dezalocare subarbori pentru nodul temp
+				struct NodTree* t_frate = temp; // salvare temporara inceput de lista de fratie in vederea dezalocarii
+				temp = temp->frate; // temp este urmatorul nod in lista de frati
+				printf("Dezalocare nod cu cheia %d\n", t_frate->key);
+				free(t_frate); // dezalocare inceput lista frati pentru care s-au dezalocat toti subarborii
+			}
+		}
+
+	return r;
+}
+
 // r - nod radacina AO
 // cheie - cheie nodului care se insereaza in AO
 // idParinte - cheie nod care devine parinte pentru nodul de inserat cu cheie
@@ -131,10 +151,18 @@ void main() {
 	printf("\n\n");
 
 	printf("\nInserare NOD cheie 9:\n");
-	// root = inserare(root, 9, 7);
+	root = inserare(root, 9, 7);
 	// root = inserare(root, 9, 0); // nodul cu cheie 9 devine noua radacina de AO
-	root = inserare(root, 9, 17);
+	// root = inserare(root, 9, 17); // nodul cu cheie 17 nu exista in AO, nodul cu cheie 9 nu se insereaza
+	
 	printf("\nArborele in traversare in preordine:\n\n");
 	preordine(root);
+
+	printf("\nDezalocare Arbore Oarecare:\n");
+	root = dezalocare_AO_postordine(root);
+
+	printf("\nArborele in traversare in preordine dupa dezalocare:\n\n");
+	preordine(root);
+
 	printf("\n\n");
 }
