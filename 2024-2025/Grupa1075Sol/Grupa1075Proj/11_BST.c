@@ -116,8 +116,97 @@ BSTNode* BST_deallocation_Postorder(BSTNode* node)
 }
 
 // count the leaf nodes on a certain BST level
+void count_leaf_nodes(BSTNode* node, unsigned char level, unsigned char* count)
+{
+	if (node != NULL)
+	{
+		if (level > 0) // current level is above the targeted one
+		{
+			count_leaf_nodes(node->left, level - 1, count);
 
-// save the node placed on the path root -> specified card number
+			if (level == 1)
+			{
+				// node is placed on targeted level
+				if (node->left == NULL && node->right == NULL)
+				{
+					//node is a leaf in BST
+					*count += 1;
+				}
+			}
+
+			count_leaf_nodes(node->right, level - 1, count);
+		}
+		else
+		{
+			; // no interest to go down the targeted level
+		}
+	}
+}
+
+// save the nodes placed on the path root -> specified card number
+struct Node
+{
+	BSTNode* node_adr;
+	struct Node* next;
+};
+
+typedef struct Node Node;
+
+Node* insert_node_list(Node* list, BSTNode* node)
+{
+	Node* temp = list;
+	Node* new_node = malloc(sizeof(Node));
+	new_node->node_adr = node;
+	new_node->next = NULL;
+	if (temp != NULL)
+	{
+		while (temp->next)
+		{
+			temp = temp->next;
+		}
+		temp->next = new_node;
+	}
+	else
+	{
+		list = new_node;
+	}
+	return list;
+}
+
+void save_nodes_path(BSTNode* node, char* card_n, Node** list)
+{
+	if (node != NULL)
+	{
+		*list = insert_node_list(*list, node);
+		if (strcmp(card_n, node->data.card_no) < 0)
+		{
+			save_nodes_path(node->left, card_n, list);
+		}
+		else 
+			if (strcmp(card_n, node->data.card_no) > 0)
+			{
+				save_nodes_path(node->right, card_n, list);
+			}
+			else
+			{
+				return; //node cointains the same card no as card_n, we have to stop the chain of calls
+			}
+	}
+	else //deallocate the list since the node with card_n does not exist in the tree
+	{
+		Node* temp = *list;
+		while (temp)
+		{
+			*list = (*list)->next;
+			free(temp);
+			temp = *list;
+		} 
+	}
+}
+
+// save the nodes on the same tree level specified as parameter of the function
+
+// delete one single node identified for a specified card number (the key) in the BST
 
 int main()
 {
@@ -174,8 +263,40 @@ int main()
 	printf("\n\nInorder parsing of the BST:\n");
 	parse_BST_Inorder(root);
 
+	printf("\n\nCount the leaf nodes on targeted level:\n");
+	unsigned char count = 0;
+	count_leaf_nodes(root, 3, &count);
+	printf("Number of leaf nodes on targeted level: %u\n", count);
+
+	printf("\n\nSave nodes on the path root->specified node in the tree:\n");
+	Node* list = NULL;
+	save_nodes_path(root, "6234999912349807", &list);
+	printf("\n\nList of nodes on the path root -> card no\n");
+
+	Node* temp = list;
+	while(temp)
+	{
+		printf("Card no %s \n", temp->node_adr->data.card_no);
+		temp = temp->next;
+	}
 	printf("\n\nBST deallocation:\n");
 	root = BST_deallocation_Postorder(root);
 	printf("\n\nBST after deallocation:\n");
 	parse_BST_Inorder(root);
+
+	printf("\n\nList deallocation:\n");
+	temp = list;
+	while (temp)
+	{
+		list = list->next;
+		free(temp);
+		temp = list;
+	}
+	temp = list;
+	printf("\nList after deallocation:\n");
+	while (temp)
+	{
+		printf("Card no %s \n", temp->node_adr->data.card_no);
+		temp = temp->next;
+	}
 }
