@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="12_Arbori.c" />
+    <ClCompile Include="13_AVL.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="HeapKeys.txt" />

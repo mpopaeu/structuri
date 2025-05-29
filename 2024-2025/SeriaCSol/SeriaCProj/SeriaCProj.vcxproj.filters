@@ -18,6 +18,9 @@
     <ClCompile Include="12_Arbori.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="13_AVL.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Studenti.txt">
