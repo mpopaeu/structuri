@@ -139,10 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="11_BSTrees.c" />
+    <ClCompile Include="14_Graph_adjList.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CardData.txt" />
+    <Text Include="Graph.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
