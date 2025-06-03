@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define LINESIZE 128
 
 struct  Student {
 	int id;
@@ -13,7 +14,7 @@ struct  Student {
 
 struct NodAVL {
 	struct Student stud;
-	int GE;
+	char GE;
 	struct NodAVL* st, * dr;
 };
 
@@ -47,19 +48,19 @@ void calculGENod(NodAVL* r) {
 
 // rotire simpla la dreapta
 NodAVL* rotireSimplaDr(NodAVL* pivot, NodAVL* fiuSt) {
-	pivot->st = fiuSt->dr;
-	calculGENod(pivot);
-	fiuSt->dr = pivot;
-	calculGENod(fiuSt);
+	pivot->st = fiuSt->dr; // stanga pivotului devine subarbore Y (vezi curs)
+	calculGENod(pivot);	   // recalculare GE pivot
+	fiuSt->dr = pivot;     // fiul pivotului promoveaza (dreapta devine pivot) pe nivel superior
+	calculGENod(fiuSt);    // recalculare GE fiu al pivotului
 
 	return fiuSt;
 }
 
 // rotire simpla la stanga
 NodAVL* rotireSimplaSt(NodAVL* pivot, NodAVL* fiuDr) {
-	pivot->dr = fiuDr->st;
+	pivot->dr = fiuDr->st; // dreapta pivot devine subarbore Y
 	calculGENod(pivot);
-	fiuDr->st = pivot;
+	fiuDr->st = pivot;     // fiul pivotului promoveaza (stanga sa devine pivot) pe nivel superior
 	calculGENod(fiuDr);
 
 	return fiuDr;
@@ -68,11 +69,11 @@ NodAVL* rotireSimplaSt(NodAVL* pivot, NodAVL* fiuDr) {
 // rotire dubla stanga-dreapta
 NodAVL* rotireDblStDr(NodAVL* pivot, NodAVL* fiuSt) {
 	//aducerea dezechilibrului pe aceeasi directie
-	pivot->st = rotireSimplaSt(fiuSt, fiuSt->dr);
+	pivot->st = rotireSimplaSt(fiuSt, fiuSt->dr); // rotire de pregatire (efectuata in fiu stanga al pivotului care devine pivot la rotirea #1)
 	calculGENod(pivot);
-	fiuSt = pivot->st;
+	fiuSt = pivot->st; // actualizare fiu stanga al pivotului
 	//rotire propriu-zisa in pivot
-	fiuSt = rotireSimplaDr(pivot, fiuSt);
+	fiuSt = rotireSimplaDr(pivot, fiuSt); // dezechilibrul este pe aceeasi directie
 	calculGENod(fiuSt);
 
 	return fiuSt;
@@ -144,12 +145,52 @@ NodAVL* insNodAVL(NodAVL* r, Student s, int* err) {
 void InordineAVL(NodAVL* rAVL) {
 	if (rAVL) {
 		InordineAVL(rAVL->st);
-		printf(" %d %d ", rAVL->stud.id, rAVL->GE);
+		printf(" cheie nod: %d grad de echilibru: %d \n", rAVL->stud.id, rAVL->GE);
 		InordineAVL(rAVL->dr);
 	}
 }
 
 int main() {
+	struct Student stud;
+	struct NodAVL* root = NULL;
+
+	FILE* f;
+	f = fopen("Studenti.txt", "r");
+
+	char* token, file_buf[LINESIZE], sep_list[] = ",\n";
+
+	while (fgets(file_buf, sizeof(file_buf), f)) {
+		token = strtok(file_buf, sep_list);
+		stud.id = atoi(token);
+
+		token = strtok(NULL, sep_list);
+		stud.nume = (char*)malloc((strlen(token) + 1) * sizeof(char));
+		strcpy(stud.nume, token);
+
+		token = strtok(NULL, sep_list);
+		stud.medie = (float)atof(token);
+
+		token = strtok(NULL, sep_list);
+		if (token)
+			printf("\nEroare preluare token!");
+
+		// inserare student in AVL
+		int err = 0;
+
+		root = insNodAVL(root, stud, &err);
+		if (err) {
+			printf("\nStudentul cu id %d exista in arbore.\n", stud.id);
+			free(stud.nume);
+		}
+		else
+			printf("\nStudentul %s a fost inserat\n", stud.nume);
+	}
+
+	fclose(f);
+
+	// traversare in inordine (ordine crescatoare id-uri studenti)
+	printf("\nTraversare arbore AVL inordine:\n\n");
+	InordineAVL(root);
 
 	return 0;
 }
