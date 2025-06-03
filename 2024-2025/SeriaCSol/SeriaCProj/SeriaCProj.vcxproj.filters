@@ -15,19 +15,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="12_Arbori.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="13_AVL.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="Studenti.txt">
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="HeapKeys.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Graf.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="14_Graf_mat.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
