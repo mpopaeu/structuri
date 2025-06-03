@@ -18,9 +18,12 @@
     <Text Include="CardData.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Graph.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="11_BST.c">
+    <ClCompile Include="14_Graph_list.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
