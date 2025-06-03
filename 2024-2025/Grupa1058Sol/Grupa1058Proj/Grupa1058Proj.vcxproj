@@ -139,10 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="11_ArbBinar.c" />
+    <ClCompile Include="14_Graf_lst.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CarduriBancare.txt" />
+    <Text Include="Graf.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

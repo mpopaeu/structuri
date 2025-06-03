@@ -189,6 +189,9 @@ NodABC* stergere_nod_ABC(NodABC* r, char* cheie, unsigned char* flag_stergere)
 	return r; 
 }
 
+// functie creare vector de carduri bancare (nr. card) cu sold maxim in ABC
+
+
 int main()
 {
 	FILE* f = NULL;
