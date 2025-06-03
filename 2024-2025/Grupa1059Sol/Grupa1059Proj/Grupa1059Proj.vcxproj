@@ -140,9 +140,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="CarduriBancare.txt" />
+    <Text Include="Graf.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="11_ArbBin.c" />
+    <ClCompile Include="14_Graf.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

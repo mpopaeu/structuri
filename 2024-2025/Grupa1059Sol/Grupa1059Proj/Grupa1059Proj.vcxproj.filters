@@ -18,9 +18,12 @@
     <Text Include="CarduriBancare.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Graf.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="11_ArbBin.c">
+    <ClCompile Include="14_Graf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
