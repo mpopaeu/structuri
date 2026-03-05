@@ -49,15 +49,39 @@ int main()
 	pm = malloc(2 * sizeof(char*));
 	for (unsigned char i = 0; i < 2; i++)
 	{
-		pm[i] = malloc(3 * sizeof(char));
+		pm[i] = malloc((3 + 1) * sizeof(char)); // +1 to store the end byte of the string (byte 0x00)
 	}
 
 	for (unsigned char i = 0; i < 2; i++)
 	{
 		for (unsigned char j = 0; j < 3; j++)
-			pm[i][j] = m[i][j] - 1;
+			pm[i][j] = 'G' - j;
+		pm[i][3] = 0; // null byte is added to the end of the row #i to stop any string handling operations
 	}
 
+	for (unsigned char i = 0; i < 2; i++)
+	{
+		for (unsigned char j = 0; j < 3; j++)
+			printf(" %d->%c ", pm[i][j], pm[i][j]);
+		printf("\n");
+	}
+
+	for (unsigned char i = 0; i < 2; i++)
+		printf("%s\n", pm[i]);
+
+	// deallocate the byte array
 	free(p);
+	p = NULL;
+	//printf("Heap memory content of p after deallocation:\n");
+	//for (unsigned char i = 0; i < sizeof(v); i++)
+	//	printf(" %d ", p[i]);
+	//printf("\n\n");
+
+	// deallocate the matrix stored in heap seg
+	// reverse way as allocation has been done
+	for (unsigned char i = 0; i < 2; i++)
+		free(pm[i]); // deallocation of row #i
+	free(pm); // deallocation of the intermediary structure
+
 	return 0;
 }
