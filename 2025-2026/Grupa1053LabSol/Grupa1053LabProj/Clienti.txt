@@ -1,0 +1,3 @@
+Popescu Georgia,12765,F,187,289.49
+Soc Com SRL,8976,J,1097,8976.03
+Georgescu Marian,12767,F,298,128.00
