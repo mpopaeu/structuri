@@ -55,7 +55,36 @@ int main()
 
 	char m[][3] = { {1, 1, 1}, {5, 6, 7} };
 
+	char** pm;
+
+	pm = malloc(2 * sizeof(char*)); // allocation of the intermediary structure (starting addresses of the rows)
+	for (unsigned char i = 0; i < 2; i++)
+		pm[i] = malloc((3 + 1) * sizeof(char)); // allocation of row i; +1 to make room for the null byte terminator
+
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		for (unsigned char j = 0; j < 3; j++)
+			pm[i][j] = 'A' + m[i][j];
+		pm[i][3] = 0; // add null byte terminator on the last item of the row i
+	}
+
+	for (unsigned char i = 0; i < 2; i++)
+	{
+		for (unsigned char j = 0; j < (3 + 1); j++)
+			printf(" %d->%c ", pm[i][j], pm[i][j]);
+		printf("\n");
+	}
+
+	for (unsigned char i = 0; i < 2; i++)
+		printf(" %s\n", pm[i]);
+
 	// deallocation of bytearray p
 	free(p);
+
+	// deallocation of matrix pm
+	for (unsigned char i = 0; i < 2; i++)
+		free(pm[i]); // deallocation of the row i
+	free(pm); // deallocate the intermediary structure (strating addresses of the rows)
+
 	return 0;
 }
