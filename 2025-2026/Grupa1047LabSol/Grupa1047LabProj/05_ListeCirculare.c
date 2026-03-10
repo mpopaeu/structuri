@@ -21,28 +21,50 @@ struct Nod {
 
 typedef struct Nod Nod;
 
-Nod* inserareNod(Nod* p, Client client)
+Nod* inserareCirculara(Nod* p, Client client)
 {
 	Nod* nou = malloc(sizeof(Nod)); // alocare heap mem pentru un nod al listei simple (Nod)
 
 	nou->cl = client; // salvare date in nodul nou alocat
-	nou->next = p;	  // salvare date de organizare a structurii (implementare relatie de ordine pe structura liniar lista simpla)
-	
-	return nou; // return nod nou alocat si initializat in apelator => inserare nod nou la inceputul listei (pozitia 1)
+
+	if (p == NULL)
+	{
+		nou->next = nou; // succesorul lui nou este nou; inserare prim nod in lista circulara
+		
+	}
+	else
+	{
+		nou->next = p;
+
+		Nod* t = p->next;
+		while (t->next != p) // parsare lista circulara pana pe ultimul nod t
+		{
+			t = t->next;
+		}
+
+		t->next = nou; // actualizare legatura ultim nod la primul nod
+	}
+
+	return nou; // nou devine primul nod in lista circulara 
 }
 
 void traversare(Nod* p)
 {
-	Nod* t = p; // t temporar de acces la un nod al listei simple
-	while (t) // t not NULL insemna inca un nod de prelucrat identificat pe structura liniara lista simpla
+	if (p != NULL)
 	{
-		printf("id client = %d\n", t->cl.id);
+		printf("id client = %d\n", p->cl.id); // primul nod tratat separat fata de restul de noduri
 
-		t = t->next; // actualizare/rescriere temporar pentru acces la nod succesor in interatia urmatoare
+		Nod* t = p->next; // t temporar de acces la un nod al listei simple, incepand cu nodul #2
+		while (t != p) // t not p insemna inca un nod de prelucrat identificat pe structura liniara lista simpla
+		{
+			printf("id client = %d\n", t->cl.id);
+
+			t = t->next; // actualizare/rescriere temporar pentru acces la nod succesor in interatia urmatoare
+		}
 	}
 }
 
-Nod* stergereNod(Nod* p, unsigned int id_client)
+Nod* stergereCirculara(Nod* p, unsigned int id_client)
 {
 	Nod* x = p;
 
@@ -50,6 +72,16 @@ Nod* stergereNod(Nod* p, unsigned int id_client)
 	{
 		// nodul de sters este primul nod din lista simpla
 		p = p->next;// actualizare inceput de lista simpla
+
+		if (p == x)
+			p = NULL; // nodul de sters este primul si unicul din lista circulara
+		else
+		{
+			Nod* t = p;
+			while (t->next != x)
+				t = t->next;
+			t->next = p;
+		}
 
 		free(x->cl.denumire); // dezalocare denumire client (mai indepartat fata de sursa x)
 		free(x);   // dezalocare nod din lista simpla (Nod)
@@ -62,7 +94,7 @@ Nod* stergereNod(Nod* p, unsigned int id_client)
 		// t este nodul predecesor al lui x
 		Nod* t = p;
 
-		while (x != NULL)
+		while (x != p)
 		{
 			if (x->cl.id == id_client)
 			{
@@ -83,6 +115,7 @@ Nod* stergereNod(Nod* p, unsigned int id_client)
 
 	return p;
 }
+
 
 int main()
 {
@@ -113,26 +146,24 @@ int main()
 		token = strtok(NULL, sep); // identificare token urmator in buffer
 		c.valoare_totala_comenzi = (float)atof(token); // conversie ASCII-to-float si salvare rezultat in campul valoare_totala_comenzi
 
-		prim = inserareNod(prim, c); // inserare date pregatite in variabila client c intr-un nod de lista simpla
+		prim = inserareCirculara(prim, c); // inserare date pregatite in variabila client c intr-un nod de lista simpla
 		// inseare nod cu datele pregatite in c are la inceput, deci prim se rescrie nu adresa noua dupa fiecare apel al functiei inserareNod
 	}
-
-	printf("Lista simpla dupa creare: \n");
-	traversare(prim);
-
-	prim = stergereNod(prim, 1230);
-	printf("Lista simpla dupa stergere nod: \n");
-	traversare(prim);
-
-	// dezalocare structura lista simpla
-	while (prim)
-	{
-		prim = stergereNod(prim, prim->cl.id);
-	}
-
-	printf("Lista simpla dupa dezalocare:\n");
-	traversare(prim);
-
 	fclose(f);
+
+	printf("Lista circulara dupa creare:\n");
+	traversare(prim);
+
+	prim = stergereCirculara(prim, 1230);
+	printf("Lista circulara dupa stergere nod:\n");
+	traversare(prim);
+
+	//dealocare structura lista circulara
+	while (prim)
+		prim = stergereCirculara(prim, prim->cl.id);
+
+	printf("Lista circulara dupa dezalocare structura:\n");
+	traversare(prim);
+
 	return 0;
 }

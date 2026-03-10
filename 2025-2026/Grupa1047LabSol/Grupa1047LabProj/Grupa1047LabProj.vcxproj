@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="04_ListeSImple.c" />
+    <ClCompile Include="05_ListeCirculare.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Clienti.txt" />
