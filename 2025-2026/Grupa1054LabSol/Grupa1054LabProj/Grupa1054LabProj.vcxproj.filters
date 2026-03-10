@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="03_ListaSimpla.c">
+    <ClCompile Include="04_ListeCirculare.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -19,18 +19,20 @@ struct Nod {
 
 typedef struct Nod Nod;
 
-Nod* inserareNodLS(Nod* p, Angajat a)
+Nod* inserareNodCirculara(Nod* p, Angajat a)
 {
-	Nod* nou = malloc(sizeof(Nod));
-	nou->next = NULL; // inserare la sfarsitul listei simple, deci nu exista succesor pentru nodul nou
+	Nod* nou = malloc(sizeof(Nod));	
 	nou->ang = a;	  // copiere date angajat in nodul nou
-	if (p == NULL)
+	if (p == NULL) {
+		nou->next = nou;
 		return nou; // nodul nou devine primul si unicul nod din lista simpla
+	}
 	else
 	{
+		nou->next = p; // inserare la sfarsitul listei simple circulara, succesor pentru nodul nou este primul nod
 		// parsare lista simpla la ultimul nod
 		Nod* t = p;
-		while (t->next) // cautarea ultimului nod din lista simpla
+		while (t->next != p) // cautarea ultimului nod din lista simpla circulara
 			t = t->next;
 
 		t->next = nou; // actualizare legatura ultim nod catre nodul nou care se insereaza
@@ -39,25 +41,46 @@ Nod* inserareNodLS(Nod* p, Angajat a)
 	return p; // functie trebuie sa intoarca rezultat si in cazul in care lista contine cel putin 1 nod
 }
 
-void traversare(Nod* p)
+void traversareCirculara(Nod* p)
 {
-	Nod* t = p;
-	while (t) // t NULL corespunde prelucrarii in iteratiile anterioare a tuturor nodurilor
-			  // t NULL trebuie sa opreasca parsarea listei simple (iesiere din DO-WHILE)
+	if (p != NULL)
 	{
-		printf("id = %s\n", t->ang.id);
-		t = t->next;
+		// prelucrare nod p inainte de parsare noduri incepand cu nodul #2
+		printf("id = %s\n", p->ang.id);
+
+		Nod* t = p->next; // t incepe parsare liste cu nodul #2
+
+		while (t != p) // t == p corespunde prelucrarii in iteratiile anterioare a tuturor nodurilor
+				  // t == p trebuie sa opreasca parsarea listei simple circulare (iesiere din DO-WHILE)
+		{
+			printf("id = %s\n", t->ang.id);
+			t = t->next;
+		}
 	}
 }
 
-Nod* stergereNod(Nod*p, char* id_cautat)
+
+Nod* stergereCirculara(Nod* p, char* id_cautat)
 {
 
 	Nod* t = p;
 
-	if (strcmp(p->ang.id, id_cautat) == 0)
+	if (strcmp(p->ang.id, id_cautat) == 0) // nodul de sters este primul din lista circulara
 	{
 		t = p->next; // t contine adresa nodului #2 din lista simpla
+
+		if (t == p)
+			t = NULL; // nodul de sters este primul si unicul din lista circulara; dupa stergere lista circ devine empty
+		else
+		{
+			while (t->next != p) // pozitionare t pe ultimul nod din lista circulara
+			{
+				t = t->next;
+			}
+			t->next = p->next; // actualizare succesor al ultimului nod catre nodul #2 din lista circulara
+			t = p->next; // t devine primul nod din lista circulara; vezi return t mai jos ca unic punct de return
+		}
+
 		// nodul de sters este primul din lista simpla
 		free(p->ang.functie); // dezalocare mem heap pentru string functie
 		free(p->ang.nume);	  // dezalocare mem heap pentru string nume
@@ -68,7 +91,7 @@ Nod* stergereNod(Nod*p, char* id_cautat)
 
 	// nodul de sters nu este primul din lista simpla
 	// traversare lista simpla cu verificare id cautat in nodul succesor al nodului curent t
-	while (t->next != NULL)
+	while (t->next != p)
 	{
 		if (strcmp(t->next->ang.id, id_cautat) == 0)
 		{
@@ -86,7 +109,7 @@ Nod* stergereNod(Nod*p, char* id_cautat)
 			free(de_sters);
 		}
 
-		if(t->next != NULL)
+		if (t->next != p)
 			t = t->next;
 	}
 
@@ -124,27 +147,17 @@ int main()
 		angajat.functie = malloc(strlen(token) + 1); // alocare heap seg pentru stocare string functie
 		strcpy(angajat.functie, token);				 // copiere string in campul functie
 
-		prim = inserareNodLS(prim, angajat); // inseare in lista simpla date pregatite in angajat 
+		prim = inserareNodCirculara(prim, angajat); // inseare in lista simpla date pregatite in angajat 
 	}
 
 	fclose(f);
 
-	printf("Lista simpla dupa creare:\n");
-	traversare(prim);
+	printf("Lista circulara dupa creare:\n");
+	traversareCirculara(prim);
 
-	prim = stergereNod(prim, "ID951");
-
-	printf("Lista simpla dupa stergere nod:\n");
-	traversare(prim);
-
-	// stergere lista simpla prin dezalocare repetata a primului nod
-	while (prim != NULL)
-	{
-		prim = stergereNod(prim, prim->ang.id); // id_cautat este cel din primul nod al listei simple
-	}
-
-	printf("Lista simpla dupa dezalocare:\n");
-	traversare(prim);
+	prim = stergereCirculara(prim, "ID13");
+	printf("Lista circulara dupa stergere nod:\n");
+	traversareCirculara(prim);
 
 	return 0;
 }
