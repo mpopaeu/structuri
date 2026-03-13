@@ -18,6 +18,9 @@
     <ClCompile Include="04_ListeSImple.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="05_ListeDuble.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Clienti.txt">
