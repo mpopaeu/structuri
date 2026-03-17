@@ -60,7 +60,7 @@ void traversareCirculara(Nod* p)
 }
 
 
-Nod* stergereCirculara(Nod* p, char* id_cautat)
+Nod* stergereNodCirculara(Nod* p, char* id_cautat)
 {
 
 	Nod* t = p;
@@ -117,6 +117,50 @@ Nod* stergereCirculara(Nod* p, char* id_cautat)
 
 }
 
+Nod* interschimb(Nod* a, char* b_id) {
+	if (a) {
+		if (a->next != a) {
+			Nod* src = a;
+			while (src->next->next != a) {
+				if (!strcmp(src->next->ang.id, b_id)) {
+					Nod* p = src->next;
+					Nod* q = p->next;
+					Nod* s = q->next;
+
+					src->next = q;
+					q->next = p;
+					p->next = s;
+					return a;
+				}
+				src = src->next;
+			}
+			if (!strcmp(a->ang.id, b_id)) {
+				Nod* p = src->next;
+				Nod* q = p->next;
+				Nod* s = q->next;
+
+				src->next = q;
+				q->next = p;
+				p->next = s;
+
+				return q;
+			}
+			else if(!strcmp(src->next->ang.id, b_id)) { 
+				Nod* p = src->next;
+				Nod* q = p->next;
+				Nod* s = q->next;
+
+				src->next = q;
+				q->next = p;
+				p->next = s;
+
+				return p;
+			}
+		}
+	}
+	return a;
+}
+
 int main()
 {
 	Nod* prim = NULL; // prim variabila locala; adresa primul nod din lista simpla; prim NULL echivalent cu lista empty
@@ -155,9 +199,24 @@ int main()
 	printf("Lista circulara dupa creare:\n");
 	traversareCirculara(prim);
 
-	prim = stergereCirculara(prim, "ID13");
+	prim = interschimb(prim, "ID99");
+	printf("Lista circulara dupa interschimbare noduri adiacente:\n");
+	traversareCirculara(prim);
+
+	prim = stergereNodCirculara(prim, "ID13");
 	printf("Lista circulara dupa stergere nod:\n");
 	traversareCirculara(prim);
+
+	// dezalocare lista circulara
+	while (prim)
+	{
+		prim = stergereNodCirculara(prim, prim->ang.id);
+	}
+	printf("Lista circulara dupa dezalocare:\n");
+	traversareCirculara(prim);
+
+	// implementare operatii de baza cu liste duble
+	// migrare implementare 03_ListeSimple.c
 
 	return 0;
 }
