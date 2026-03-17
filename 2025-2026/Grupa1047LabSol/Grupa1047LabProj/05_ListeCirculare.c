@@ -30,7 +30,6 @@ Nod* inserareCirculara(Nod* p, Client client)
 	if (p == NULL)
 	{
 		nou->next = nou; // succesorul lui nou este nou; inserare prim nod in lista circulara
-		
 	}
 	else
 	{
@@ -68,9 +67,9 @@ Nod* stergereCirculara(Nod* p, unsigned int id_client)
 {
 	Nod* x = p;
 
-	if (x->cl.id == id_client)
+	if (p != NULL && x->cl.id == id_client)
 	{
-		// nodul de sters este primul nod din lista simpla
+		// codul de sters este primul nod din lista simpla
 		p = p->next;// actualizare inceput de lista simpla
 
 		if (p == x)
@@ -86,36 +85,70 @@ Nod* stergereCirculara(Nod* p, unsigned int id_client)
 		free(x->cl.denumire); // dezalocare denumire client (mai indepartat fata de sursa x)
 		free(x);   // dezalocare nod din lista simpla (Nod)
 	}
-	else
+	else 
 	{
-		// cautarea incepe cu nodul #2
-		x = p->next;
+		if (p != NULL) {
 
-		// t este nodul predecesor al lui x
-		Nod* t = p;
 
-		while (x != p)
-		{
-			if (x->cl.id == id_client)
+			// cautarea incepe cu nodul #2
+			x = p->next;
+
+			// t este nodul predecesor al lui x
+			Nod* t = p;
+
+			while (x != p)
 			{
-				// client de sters este identificat in lista simpla
-				t->next = x->next; // nodul x este izolat de lista simpla (stergere logica al lui x)
+				if (x->cl.id == id_client)
+				{
+					// client de sters este identificat in lista simpla
+					t->next = x->next; // nodul x este izolat de lista simpla (stergere logica al lui x)
 
-				// stergere/dezalocare fizica nod x
-				free(x->cl.denumire);
-				free(x);
+					// stergere/dezalocare fizica nod x
+					free(x->cl.denumire);
+					free(x);
 
-				return p; // opresc fortat traversarea inutila a nodurilor ramase (id client este unic)
+					return p; // opresc fortat traversarea inutila a nodurilor ramase (id client este unic)
+				}
+
+				t = x; // actualizare cu x curent care devine predecesor pe linia urmatoare
+				x = x->next; // modific x cu adresa nod succesor
 			}
-
-			t = x; // actualizare cu x curent care devine predecesor pe linia urmatoare
-			x = x->next; // modific x cu adresa nod succesor
 		}
 	}
 
 	return p;
 }
 
+Nod* stergereNodTipClient(Nod* lista, unsigned char tip_client) {
+	if (lista != NULL) {
+
+		Nod* q = lista;
+		while (q->next != lista) {
+			if (q->next->cl.tip == tip_client) {
+				Nod* p = q->next;
+				Nod* r = p->next;
+				q->next = r;
+				free(p->cl.denumire);
+				free(p);
+			}
+			else // daca are loc stergerea lui p atunci q trebuie pastrat pe nod curent (nu se actualizeaza q)
+				q = q->next; 
+		}
+
+		if (lista->cl.tip == tip_client) {
+			Nod* r = lista->next;
+			q->next = r;
+			free(lista->cl.denumire);
+			free(lista);
+			if (lista == q)
+				lista = NULL; // se dezaloca singurul nod din lista circulara
+			else
+				lista = r; // noul inceput de lista este nodul 2
+		}
+	}
+
+	return lista;
+}
 
 int main()
 {
@@ -124,7 +157,7 @@ int main()
 
 	f = fopen("Clienti.txt", "r");
 
-	char buffer[256]; // buffer pentru stocarea unei linii din fisierul text Clienti.txt
+	char buffer[256];   // buffer pentru stocarea unei linii din fisierul text Clienti.txt
 	char sep[] = ",\n"; // lista separatori pentru identificare de tokeni (sub-stringuri)
 	Client c;
 
@@ -154,11 +187,15 @@ int main()
 	printf("Lista circulara dupa creare:\n");
 	traversare(prim);
 
+	prim = stergereNodTipClient(prim, 'F');
+	printf("Lista circulara dupa stergee tip client\n");
+	traversare(prim);
+
 	prim = stergereCirculara(prim, 1230);
 	printf("Lista circulara dupa stergere nod:\n");
 	traversare(prim);
 
-	//dealocare structura lista circulara
+	//dezalocare structura lista circulara
 	while (prim)
 		prim = stergereCirculara(prim, prim->cl.id);
 
