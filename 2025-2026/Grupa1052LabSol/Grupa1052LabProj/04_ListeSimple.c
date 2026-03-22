@@ -118,6 +118,45 @@ Nod* stergereNodNume(Nod* p, char* nume_ang)
 	return p;
 }
 
+Angajat* angajatiVechime(Nod* lista, unsigned char vechime_angajati, unsigned char* size_vector)
+{
+	// 1 Trebuie sa stiu marimea la size_vector
+	// adica nr angajati vector
+	Nod* t = lista;
+	*size_vector = 0;
+	while (t) {
+		if (t->angajat.vechime_ani == vechime_angajati) {
+			*size_vector += 1;
+		}
+		t = t->next;
+	}
+	// 2 Alocare vector pentru numarul de angajati
+	
+	Angajat* v = NULL;
+
+	if (*size_vector > 0) {
+		v = malloc(sizeof(Angajat) * (*size_vector));
+
+		// 3 Scrierea datelor din lista in vector (fara partajare de zone heap angajati)
+
+		t = lista;
+		int poz = 0;
+		while (t) {
+			if (t->angajat.vechime_ani == vechime_angajati) {
+				v[poz] = t->angajat; // temporar vectorul si lista partajeaza zone de heap pentru nume si functie angajat
+				v[poz].nume = malloc(strlen(t->angajat.nume) + 1);
+				v[poz].functie = malloc(strlen(t->angajat.functie) + 1);
+				strcpy(v[poz].nume, t->angajat.nume);
+				strcpy(v[poz].functie, t->angajat.functie);
+				poz++;
+			}
+			t = t->next;
+		}
+	}
+
+	return v;
+}
+
 int main()
 {
 	Nod* prim = NULL; // initial, lista simpla este empty
@@ -156,6 +195,19 @@ int main()
 	printf("Lista dupa creare:\n");
 	traversareLista(prim);
 
+	// copiere angajati care au aceeasi vechime pentru datele stocate in lista simpla
+	// structura output este un vector
+	// functie + apel + dezalocari (eventual)
+
+	Angajat* v;
+	unsigned char size;
+
+	v = angajatiVechime(prim, 10, &size);
+	printf("Angajati cu aceasi vechime \n");
+	for (int i = 0; i < size; i++) {
+		printf("%s %s\n", v[i].CNP, v[i].nume);
+	}
+
 	prim = stergereNodNume(prim, "Vasilescu Rodica");
 	printf("Lista dupa stergere nod:\n");
 	traversareLista(prim);
@@ -169,6 +221,16 @@ int main()
 
 	printf("Lista dupa dezalocare lista:\n");
 	traversareLista(prim);
+
+	// dezalocare vector de angajati
+
+	for (int i = 0; i < size; i++) {
+		free(v[i].nume);
+		free(v[i].functie);
+	}
+
+	free(v);
+	v = NULL;
 
 	// migrare implementare pe liste duble
 
