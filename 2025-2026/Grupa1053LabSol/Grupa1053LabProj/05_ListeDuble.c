@@ -29,6 +29,133 @@ struct ListaDubla
 
 typedef struct ListaDubla ListaDubla;
 
+ListaDubla inserareAscId(ListaDubla lista, Client c)
+{
+	NodD* nou = malloc(sizeof(NodD));
+	nou->cl = c; // datele sunt salvate in nod alocat in heap seg
+
+	if (lista.prim == NULL)
+	{
+		// lista este empty; nou devine primul si unicul nod din lista
+		nou->next = NULL;
+		nou->prev = NULL;
+		lista.prim = lista.ultim = nou;
+	}
+	else
+	{
+		NodD* t = lista.prim;
+		while (t)
+		{
+			if (t->cl.id > nou->cl.id)
+			{
+				NodD* p = t->prev; // p este nodul din fata lui t; nou se insereaza intre p si t
+				nou->next = t;
+				nou->prev = p;
+				t->prev = nou;
+				if (p == NULL)
+				{
+					// nou va fi inserat pe pozitia 1 din lista dubla
+					lista.prim = nou;
+				}
+				else {
+					p->next = nou;
+				}
+				return lista; // pentru a nu continua cautarea pozitiei de inserat, operatia fiind deja efectuata mai sus
+			}
+
+			t = t->next;
+		}
+		
+		// t este NULL, deci nou va fi inserat pe ultima pozitie din lista dubla
+		nou->next = NULL;
+		nou->prev = lista.ultim;
+
+		lista.ultim->next = nou; // succesorului lui ultim va fi nou dupa inserare lui nou la sfarsit lista dubla
+		lista.ultim = nou;
+	}
+
+	return lista;
+}
+
+void traversareListaDubla(ListaDubla lista)
+{
+	NodD* t = lista.prim;
+	printf("Traversare lista dubla prim->ultim:\n");
+
+	while (t != NULL)
+	{
+		printf("%d %s\n", t->cl.id, t->cl.nume);
+
+		t = t->next;
+	}
+
+	printf("Traversare lista dubla ultim->prim:\n");
+	t = lista.ultim;
+	while (t != NULL)
+	{
+		printf("%d %s\n", t->cl.id, t->cl.nume);
+		t = t->prev;
+	}
+}
+
+ListaDubla stergereNodDCosMediu(ListaDubla lista, float cos_mediu)
+{
+	NodD* t = lista.prim;
+
+	while (t != NULL)
+	{
+		if (t->cl.medie_cos == cos_mediu)
+		{
+			// t este nodul care se sterge
+			NodD* p, * r;
+			p = t->prev;
+			r = t->next;
+
+			free(t->cl.nume);
+			free(t); // dezalocare nod lista dubla
+
+			if (p == NULL && r == NULL)
+			{
+				// nodul t care se sterge este primul, ultimul si unicul nod in lista dubla
+				lista.prim = lista.ultim = NULL; // lista dubla devine empty
+				t = NULL;
+			}
+			else
+			{
+				if (p == NULL)
+				{
+					// t este primul nod din lista
+					r->prev = p;
+					lista.prim = r;
+					t = r;
+				}
+				else
+				{
+					if (r == NULL)
+					{
+						// t este ultimul nod din lista dubla
+						p->next = r;
+						lista.ultim = p;
+						t = NULL;
+					}
+					else
+					{
+						// caz general
+						p->next = r;
+						r->prev = p;
+
+						t = r; // actualizare t curent pentru a fi verificat in iteratia urmatoare
+					}
+				}
+			}
+		}
+		else
+			t = t->next;
+	}
+
+	return lista;
+}
+
 int main()
 {
 	ListaDubla lista;
@@ -65,6 +192,25 @@ int main()
 	} // variabila temporara client este dezalocata din stack seg dupa fiecare apel de inserare nod
 
 	fclose(f);
+
+	
+	// traversare in ambele sensuri a listei duble
+	printf("Lista dubla dupa creare:\n");
+	traversareListaDubla(lista);
+
+
+	// stergere nod din lista dubla pe baza medie cos
+	lista = stergereNodDCosMediu(lista, (float)289.91);
+	printf("\n\nLista dubla dupa stergere nod cos mediu:\n");
+	traversareListaDubla(lista);
+
+	// dezalocare lista dubla
+	while (lista.prim != NULL)
+	{
+		lista = stergereNodDCosMediu(lista, lista.prim->cl.medie_cos);
+	}
+	printf("\n\nLista dubla dupa dezalocare noduri:\n");
+	traversareListaDubla(lista);
 
 	return 0;
 }

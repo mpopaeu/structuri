@@ -126,6 +126,20 @@ Nod* stergereNodMedie(Nod* p, float medie)
 	return p;
 }
 
+Nod* creareListaCuPrag(Nod* lista, unsigned int prag) {
+	Nod* lista_prag = NULL;
+	Nod* t = lista;
+	while (t) {
+		if (t->cl.puncte > prag) {
+			Client c = t->cl;
+			c.nume = malloc(strlen(t->cl.nume) + 1);
+			strcpy(c.nume, t->cl.nume);
+			lista_prag = inserareAscId(lista_prag, c);
+		}
+		t = t->next;
+	}
+	return lista_prag;
+}
 int main()
 {
 	Nod* prim = NULL; // lista marcata ca fiind empty
@@ -164,6 +178,11 @@ int main()
 	printf("Lista simpla dupa creare: \n");
 	traversare(prim);
 
+	Nod* lista_cu_prag = creareListaCuPrag(prim, 200);
+	printf("\n\nLista cu clienti cu prag:\n");
+	traversare(lista_cu_prag);
+
+
 	prim = stergereNodMedie(prim, (float)289.49);
 	printf("Lista simpla dupa stergere nod:\n");
 	traversare(prim);
@@ -176,7 +195,12 @@ int main()
 
 	printf("Lista simpla dupa dezalocare:\n");
 	traversare(prim);
-
+	// dezalocare lista simpla cu prag 
+	while (lista_cu_prag) {
+		lista_cu_prag = stergereNodMedie(lista_cu_prag, lista_cu_prag->cl.medie_cos);
+	}
+	printf("\n\nLista cu prag dupa dezalocare:\n");
+	traversare(lista_cu_prag);
 
 	return 0;
 }

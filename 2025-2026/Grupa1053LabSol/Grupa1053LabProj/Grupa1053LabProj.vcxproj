@@ -139,7 +139,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="04_ListeSImple.c" />
     <ClCompile Include="05_ListeDuble.c" />
   </ItemGroup>
   <ItemGroup>

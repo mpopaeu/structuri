@@ -1,3 +1,3 @@
 Popescu Georgia,12765,F,187,289.91
-Soc Com SRL,8976,J,1097,2890.09
-Georgescu Marian,12767,F,2098,289.49
+Soc Com SRL,8976,J,1097,2809.91
+Georgescu Marian,12767,F,2098,289.01
