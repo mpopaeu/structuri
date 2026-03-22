@@ -14,74 +14,59 @@ struct Employee
 
 typedef struct Employee Employee;
 
-struct Node
+struct NodeD
 {
 	Employee emp;
-	struct Node* next;
+	struct NodeD * next, *prev;
 };
 
-typedef struct Node Node;
+typedef struct NodeD NodeD;
 
-Node* insertNode(Node* list, Employee data)
+struct DList {
+	NodeD* head, * tail;
+};
+typedef struct DList DList;
+
+
+DList insertNodeD(DList list, Employee data)
 {
-	Node* new_node = malloc(sizeof(Node)); // allocation of the new node in heap seg
+	NodeD* new_node = malloc(sizeof(NodeD));
+	new_node->emp = data;
+	new_node->next = list.head;
+	new_node->prev = NULL;
 
-	new_node->emp = data; // put data buye-by-byte into emp
-	new_node->next = list; // link the new node to the current head of the list; hence, new node must be the new start of the list
+	if (list.head == NULL)
+	{
+		list.head = list.tail = new_node;
+	}
+	else
+	{
+		list.head->prev = new_node;
+		list.head = new_node;
+	}
 
-	return new_node; // update in the caller the head of the list to be new node
+	return list;
 }
 
-void parsingList(Node* list)
+void parsingDList(DList list)
 {
-	Node* t = list;
+	NodeD* t = list.head;
+	printf("Double list head->tail:\n");
 	while (t != NULL)
 	{
 		printf("%s %s\n", t->emp.CNP, t->emp.name);
 
 		t = t->next;
 	}
-}
 
-Node* deleteNodePosition(Node* list, unsigned short int pos)
-{
-	if (list != NULL)
+	t = list.tail;
+	printf("Double list tail->head:\n");
+	while (t != NULL)
 	{
-		if (pos == 1)
-		{
-			// current head of the list will be deleted
-			Node* t = list;
-			list = list->next;
+		printf("%s %s\n", t->emp.CNP, t->emp.name);
 
-			free(t->emp.name); // dellocate the employee's name
-			free(t); // dellocate the node itself
-		}
-		else
-		{
-			// we need to parse the list to identify the node place on pos
-			Node* p = list;
-			unsigned short int count = 2; // it starts from the second node in simple list
-
-			while (p->next && count < pos)
-			{
-				p = p->next;
-				count += 1;
-			}
-
-			if (p->next != NULL)
-			{
-				// p->next node should be deleted
-				Node* t = p->next; // t node to be deleted
-				p->next = t->next; // update the next node to be the next one right after t
-
-				free(t->emp.name);
-				free(t);
-			}
-
-		}
+		t = t->prev;
 	}
-
-	return list;
 }
 
 int main()
@@ -90,7 +75,8 @@ int main()
 
 	f = fopen("Employees.txt", "r");
 
-	Node* head = NULL;
+	DList double_list; //local variable containing the both pointers to get access to the double list
+	double_list.head = double_list.tail = NULL; // mark my double list as an empty one
 
 	char buffer[256];
 	char sep_list[] = ",\n";
@@ -115,26 +101,16 @@ int main()
 		temp.no_directs = atoi(token); // coversion text-to-binary (integer)
 
 		// data has been prepated within temporary local variable temp; ready to send data to simple list
-		head = insertNode(head, temp);
+		double_list = insertNodeD(double_list, temp);
 	}
 
 	fclose(f);
 
-	printf("Employees's list after creation:\n");
-	parsingList(head);
+	printf("Double list after creation (both directions):\n");
+	parsingDList(double_list);
 
-	head = deleteNodePosition(head, 4);
-	printf("Employees's list after node deletion:\n");
-	parsingList(head);
-
-	while (head != NULL)
-	{
-		head = deleteNodePosition(head, 1); // the node on pos 1 will be deleted in a loop
-	}
-
-	//head = NULL;
-	printf("Employees's list after list deallocation:\n");
-	parsingList(head);
+	// delete a node on a certain position in double list
+	// deallocate the entire double list
 
 	return 0;
 }
