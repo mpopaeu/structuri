@@ -69,6 +69,62 @@ void parsareListaDubla(ListaDubla list)
 	}
 }
 
+ListaDubla stergereNod(ListaDubla list, unsigned int id_client)
+{
+	if (list.prim != NULL)
+	{
+		NodD* t = list.prim;
+
+		while ((t != NULL) && (t->cl.id != id_client))
+		{
+			t = t->next;
+		}
+
+		if (t != NULL)
+		{
+			// am identificat nodul de sters
+			NodD* p, * q;
+			p = t->prev;
+			q = t->next;
+
+			if ((t != list.prim) && (t != list.ultim))
+			{
+				// t nu este nici unul din cele doua capete ale liste
+				p->next = q;
+				q->prev = p;
+			}
+			else
+			{
+				if ((t == list.prim) && (t == list.ultim))
+				{
+					list.prim = list.ultim = NULL; // lista devine empty dupa stergerea lui t
+				}
+				else
+				{
+					if (t == list.prim)
+					{
+						// t este primul nod
+						q->prev = NULL;
+						list.prim = q;
+					}
+					else
+					{
+						// t este ultimul nod
+						p->next = NULL;
+						list.ultim = p;
+					}
+				}
+			}
+
+			free(t->cl.denumire); // dezalocare string denumire client
+			free(t);			  // dezalocare nod t
+		}
+
+	}
+
+	return list;
+}
+
 int main()
 {
 	ListaDubla listaD;
@@ -108,7 +164,17 @@ int main()
 	parsareListaDubla(listaD);
 
 	// stergere noduri in lista dubla
+	listaD = stergereNod(listaD, 765);
+	printf("\n\nLista dubla dupa stergere nod:\n");
+	parsareListaDubla(listaD);
+
 	// dezalocare structura lista dubla
+	while (listaD.prim != NULL) // stergere repetata a primului nod cu id client preluat din primul nod
+	{
+		listaD = stergereNod(listaD, listaD.prim->cl.id); 
+	}
+	printf("\n\nLista dubla dupa dezalocare structura:\n");
+	parsareListaDubla(listaD);
 
 	return 0;
 }
