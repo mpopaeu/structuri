@@ -125,6 +125,40 @@ ListaDubla stergereNod(ListaDubla list, unsigned int id_client)
 	return list;
 }
 
+// functia care extrage (sterge) din lista dubla clientii pe baza de tip_client
+// clientii extrasi din LD se salveza intr-un vector
+
+Client* extragereVectorClienti(ListaDubla *list,char tip,unsigned int *size) {
+	*size = 0;
+	NodD* t = list->prim;
+	Client* vectorClienti = NULL;
+	while (t) {
+		if (t->cl.tip == tip)
+			*size += 1;
+		t = t->next;
+	}
+	if (*size > 0) {
+		vectorClienti = malloc(*size * sizeof(Client));
+		t = list->prim;
+		int i = 0;
+		while (t) {
+			if (t->cl.tip == tip) {
+				char* denumire = malloc(strlen(t->cl.denumire) + 1);
+				vectorClienti[i] = t->cl;
+				strcpy(denumire,t->cl.denumire);
+				vectorClienti[i].denumire = denumire;
+				NodD* succesor_t = t->next;
+				*list = stergereNod(*list, t->cl.id);
+				t = succesor_t;
+				i++;
+			}
+			else
+				t = t->next;
+		}
+	}
+	return vectorClienti;
+}
+
 int main()
 {
 	ListaDubla listaD;
@@ -168,6 +202,15 @@ int main()
 	printf("\n\nLista dubla dupa stergere nod:\n");
 	parsareListaDubla(listaD);
 
+	//extragere clienti din lista dubla
+	unsigned int size_vector;
+	Client* client_functie = extragereVectorClienti(&listaD, 'F', &size_vector);
+	unsigned int i = 0;
+	printf("\n\nVector clienti extrasi din lista dubla\n");
+	for (i = 0; i < size_vector; i++) {
+		printf("%d %s\n", client_functie[i].id, client_functie[i].denumire);
+	}
+
 	// dezalocare structura lista dubla
 	while (listaD.prim != NULL) // stergere repetata a primului nod cu id client preluat din primul nod
 	{
@@ -175,6 +218,11 @@ int main()
 	}
 	printf("\n\nLista dubla dupa dezalocare structura:\n");
 	parsareListaDubla(listaD);
-
+	//dezalocare vector clienti
+	for (i = 0; i < size_vector; i++) {
+		free(client_functie[i].denumire);
+	}
+	free(client_functie);
+	client_functie = NULL;
 	return 0;
 }
