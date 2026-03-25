@@ -1,3 +1,3 @@
-1012,Popescu Georgian,7654.35,28,12/12/2024
-2871,Jack Davodson,9546.27,32,07/06/2008
-1782,Vasilescu Marian Alexandru,8822.51,26,28/03/2013
+1012,Popescu Georgian,9654.35,28,12/12/2024
+2871,Jack Davodson,154.35,32,07/06/2008
+1782,Vasilescu Marian Alexandru,54.35,26,28/03/2013

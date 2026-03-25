@@ -84,6 +84,57 @@ Node* deleteNodeEnd(Node* list)
 	return list;
 }
 
+
+// function to remove all nodes/employess having salary less the average in a simple list
+
+Node* deleteNodesBelowAverageSalary(Node* list) {
+	if (list == NULL) {
+		return NULL;
+	}
+
+	Node* temp = list;
+	double sum = 0;
+	unsigned int count = 0;
+
+	while (temp != NULL) {
+		sum += (double)temp->emp.salary;
+		count++;
+		temp = temp->next;
+	}
+
+	double avg = (double)sum / count;
+
+	temp = list;
+
+	// remove if salary < avg
+	while (temp != NULL && temp->emp.salary <= avg) {
+		list = temp->next;
+		free(temp->emp.name);
+		free(temp);
+		temp = list;
+	}
+
+	if (list == NULL) {
+		return NULL;
+	}
+
+	while (temp->next != NULL) {
+		if (temp->next->emp.salary <= avg) {
+			Node* temp2 = temp->next->next;
+			free(temp->next->emp.name);
+			free(temp->next);
+			temp->next = temp2;
+		}
+		else {
+			temp = temp->next;
+		}
+
+	}
+
+	return list;
+}
+
+
 int main()
 {
 	Node* first = NULL;
@@ -119,6 +170,10 @@ int main()
 	fclose(f);
 
 	printf("Simple list just after creation: \n");
+	parseList(first);
+
+	printf("\nSimple list after deleting nodes with salaries less than average:\n");
+	first = deleteNodesBelowAverageSalary(first);
 	parseList(first);
 
 	first = deleteNodeEnd(first);
