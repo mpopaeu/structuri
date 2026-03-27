@@ -156,6 +156,84 @@ ListaDubla stergereNodDCosMediu(ListaDubla lista, float cos_mediu)
 	return lista;
 }
 
+ListaDubla interschimbAdiacentePozitie(ListaDubla list, unsigned short int poz)
+{
+	if (list.prim != list.ultim)
+	{
+		// lista dubla contine cel putin doua noduri
+		unsigned short int counter = 1;
+		NodD* t = list.prim;
+
+		while (t->next != NULL)
+		{
+			if (counter < poz)
+			{
+				t = t->next;
+				counter += 1;
+			}
+			else
+			{
+				NodD* p, * q, * r;
+				p = t->prev;
+				q = t->next;
+				r = q->next;
+
+				if (t != list.prim && t != list.ultim->prev)
+				{
+					// t nu este nici unul din cele doua capete ale listei duble
+					p->next = q;
+					t->next = r;
+					q->next = t;
+
+					t->prev = q;
+					q->prev = p;
+					r->prev = t;
+				}
+				else
+				{
+					q->next = t;
+					t->prev = q;
+					if (t == list.prim && t == list.ultim->prev)
+					{
+						// lista dubla contine doar doua noduri care se interschimba
+						t->next = NULL;
+						q->prev = NULL;
+
+						list.prim = q;
+						list.ultim = t;
+					}
+					else
+					{
+						t->next = r;
+						q->prev = p;
+						if (t == list.prim)
+						{
+							// t este primul nod din lista
+							r->prev = t;
+
+							list.prim = q;
+						}
+						else
+						{
+							// t este penultimul nod din lista
+							p->next = q;
+
+							list.ultim = t;
+						}
+					}
+				}
+
+				return list;
+			} // else
+		}
+	}
+
+	return list;
+}
+
+
+
+
 int main()
 {
 	ListaDubla lista;
@@ -193,11 +271,13 @@ int main()
 
 	fclose(f);
 
-	
 	// traversare in ambele sensuri a listei duble
 	printf("Lista dubla dupa creare:\n");
 	traversareListaDubla(lista);
 
+	lista = interschimbAdiacentePozitie(lista, 1);
+	printf("\n\nLista dubla dupa interschimb adiacente pe baza de pozitie:\n");
+	traversareListaDubla(lista);
 
 	// stergere nod din lista dubla pe baza medie cos
 	lista = stergereNodDCosMediu(lista, (float)289.91);

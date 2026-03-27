@@ -140,6 +140,8 @@ Nod* creareListaCuPrag(Nod* lista, unsigned int prag) {
 	}
 	return lista_prag;
 }
+
+
 int main()
 {
 	Nod* prim = NULL; // lista marcata ca fiind empty
