@@ -122,6 +122,7 @@ ListaDubla stergereNodNume(ListaDubla list, char* nume_ang)
 				free(t->angajat.nume);
 				free(t->angajat.functie);
 				free(t); // dezalocare nod
+				t = NULL; // lista nu mai contine noduri, deci t curent devine NULL
 				list.prim = list.ultim = NULL; // lista dubla devine empty
 			}
 			else
@@ -178,6 +179,81 @@ ListaDubla stergereNodNume(ListaDubla list, char* nume_ang)
 	return list;
 }
 
+ListaDubla interschimbAdiacentePoz(ListaDubla list, unsigned short int pozitie)
+{
+	if (list.prim != NULL && list.prim->next != NULL)
+	{
+		// exista cel putin 2 noduri in lista dubla
+		NodD* t = list.prim;
+		unsigned short int counter = 1;
+		while (t != list.ultim && counter < pozitie)
+		{
+			t = t->next;
+			counter += 1;
+		}
+
+		if (t != list.ultim)
+		{
+			// t este nodul care se interschimba cu succesorul sau
+			NodD* p, * q, * r;
+			p = t->prev;
+			q = t->next;
+			r = q->next;
+
+			q->next = t;
+			t->prev = q;
+			if (p != NULL && r != NULL)
+			{
+				// cazul general, se modifica 6 adrese de legatura
+				// nu sunt modificate capetele listei
+				p->next = q;
+				t->next = r;
+
+				q->prev = p;
+				r->prev = t;
+			}
+			else
+			{
+				if (p == NULL && r == NULL)
+				{
+					// lista dubla contine 2 noduri care se interschimba
+					t->next = NULL;
+					q->prev = NULL;
+
+					list.prim = q;
+					list.ultim = t;
+				}
+				else
+				{
+					if (t == list.prim)
+					{
+						// interschimb noduri (1,2)
+						t->next = r;
+
+						q->prev = p;
+						r->prev = t;
+
+						list.prim = q;
+					}
+					else
+					{
+						// interschimb (n-1, n)
+						p->next = q;
+						t->next = r;
+
+						q->prev = p;
+
+						list.ultim = t;
+					}
+				}
+			}
+		}
+
+	}
+
+	return list; // lista actualizata daca se modifica cel putin unul din cele doua capete (prim, ultim)
+}
+
 int main()
 {
 	ListaDubla listaD;
@@ -218,6 +294,21 @@ int main()
 	printf("\n\nTraversare lista dubla dupa creare:\n");
 	traversareListaDubla(listaD);
 
+	listaD = interschimbAdiacentePoz(listaD, 1);
+	printf("\n\nTraversare lista dubla dupa interschimb adiacente:\n");
+	traversareListaDubla(listaD);
+
+	listaD = stergereNodNume(listaD, "Pop Ionel");
+	printf("\n\nTraversare lista dubla dupa stergere nod:\n");
+	traversareListaDubla(listaD);
+
 	// dezalocare lista dubla 
+	while (listaD.prim != NULL)
+	{
+		listaD = stergereNodNume(listaD, listaD.prim->angajat.nume);
+	}
+	printf("\n\nTraversare lista dubla dupa dezalocare:\n");
+	traversareListaDubla(listaD);
+
 	return 0;
 }
