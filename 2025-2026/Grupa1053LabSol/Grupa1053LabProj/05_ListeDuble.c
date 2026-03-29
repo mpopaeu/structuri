@@ -231,8 +231,44 @@ ListaDubla interschimbAdiacentePozitie(ListaDubla list, unsigned short int poz)
 	return list;
 }
 
+// functie pentru extragere (stergere) clienti de acelasi tip din lista dubla
+// si salvarea acestora intr-un vector de clienti
 
-
+// parametrul l trimis obligatoriu prin adresa deoarece stergereNodDCosMediu poate modifica
+// unul sau ambele capete ale listei duble
+Client* extragere_nod(ListaDubla *l, unsigned char tip, unsigned short int* dim) {
+	Client* vcl = NULL;
+	*dim = 0;
+	if (l->prim) {
+		NodD* t = l->ultim;
+		while (t) {
+			if (t->cl.tip == tip) {
+				*dim += 1;
+			}
+			t = t->prev;
+		}
+		if (*dim > 0) {
+			vcl = malloc(sizeof(Client) * (*dim));
+			t = l->ultim;
+			unsigned short int i = 0;
+			while (t) {
+				if (t->cl.tip == tip) {
+					//Nodul t trebuie sters din lista dubla, clientul trebuie salvat in vector
+					vcl[i] = t->cl;
+					vcl[i].nume = malloc(strlen(t->cl.nume) + 1);
+					strcpy(vcl[i].nume, t->cl.nume);
+					t = t->prev; //t se actualizeaza inainte de a fi sters din lista dubla
+					*l = stergereNodDCosMediu(*l, t->next->cl.medie_cos); //t-ul care se sterge este in succesor pentru t modificat in linia anterioara
+					i += 1;
+				}
+				else {
+					t = t->prev;
+				}
+			}
+		}
+	}
+	return vcl;
+}
 
 int main()
 {
@@ -275,6 +311,14 @@ int main()
 	printf("Lista dubla dupa creare:\n");
 	traversareListaDubla(lista);
 
+	Client* vcl;
+	unsigned short int size;
+	vcl = extragere_nod(&lista, 'F', &size);
+	printf("Vector de clienti extrasi din lista dubla\n");
+	for (int i = 0; i < size; i++) {
+		printf("%d %s\n", vcl[i].id, vcl[i].nume);
+	}
+
 	lista = interschimbAdiacentePozitie(lista, 1);
 	printf("\n\nLista dubla dupa interschimb adiacente pe baza de pozitie:\n");
 	traversareListaDubla(lista);
@@ -291,6 +335,12 @@ int main()
 	}
 	printf("\n\nLista dubla dupa dezalocare noduri:\n");
 	traversareListaDubla(lista);
+
+	//dezalocare vector clienti
+	for (int i = 0; i < size; i++) {
+		free(vcl[i].nume);
+	}
+	free(vcl);
 
 	return 0;
 }
