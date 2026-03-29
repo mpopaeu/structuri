@@ -132,7 +132,37 @@ Employee deleteDNode(DList *list, unsigned char pos)
 
 // function to remove all employess having the salary over a specified threshold
 // removed employees will be inserted into a different/separate double list
+DList deleteSalaryNodes(DList* list, float threshold)
+{
+	DList secondList;
+	secondList.head = NULL;
+	secondList.tail = NULL;
 
+	if (list->head)
+	{
+		int counter = 1;
+		NodeD* temp = list->head;
+		while (temp)
+		{
+			if (temp->emp.salary > threshold)
+			{
+				temp = temp->next;
+				Employee empToD = deleteDNode(list, counter);
+				secondList = insertNodeD(secondList, empToD);
+			
+			}
+			else
+			{
+				temp = temp->next;
+				counter += 1;
+			}
+			
+		}
+	}
+
+
+	return secondList;
+}
 int main()
 {
 	FILE* f;
@@ -173,6 +203,12 @@ int main()
 	printf("Double list after creation (both directions):\n");
 	parsingDList(double_list);
 
+	DList secondSalaryList;
+	secondSalaryList = deleteSalaryNodes(&double_list, 10000);
+	printf("\nSecond double list is:\n");
+	parsingDList(secondSalaryList);
+
+
 	// delete a node on a certain position in double list
 	Employee result = deleteDNode(&double_list, 2);
 	if (result.name != NULL)
@@ -182,7 +218,7 @@ int main()
 	free(result.name); // deallocate the employee's name 
 	printf("\n\nDouble list after node deletion (both directions):\n");
 	parsingDList(double_list);
-
+	
 
 	// deallocate the entire double list
 	while (double_list.head)
