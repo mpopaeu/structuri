@@ -254,6 +254,75 @@ ListaDubla interschimbAdiacentePoz(ListaDubla list, unsigned short int pozitie)
 	return list; // lista actualizata daca se modifica cel putin unul din cele doua capete (prim, ultim)
 }
 
+ListaDubla stergereNodCNP(ListaDubla list, char* id)
+{
+	if (list.prim)
+	{
+		NodD* t = list.prim;
+		while (t != NULL)
+		{
+			if (strcmp(t->angajat.CNP, id) == 0)
+			{
+
+			}
+			else
+				t = t->next;
+		}
+	}
+
+	return list;
+}
+
+// functia pentru stergerea angajatilor cu salariu sub medie din lista dubla
+// angajatii eliminati vor fi salvati intr-o lista dubla diferita (separata)
+ListaDubla extragereAngajatiSalariuMediu(ListaDubla *list)
+{
+	ListaDubla lista_salarii;
+	lista_salarii.prim = lista_salarii.ultim = NULL; // lista #2 in care se vor salva angajatii cu salariul dub medie
+
+	if (list->prim)
+	{
+		// exista cel putin un angajat in lista
+		// 1. Calcul salariu mediu angajati stocati in lista
+		float salariu_mediu = 0;
+		NodD* t = list->prim;
+		unsigned short int nr_angajati = 0;
+		while (t)
+		{
+			salariu_mediu += t->angajat.salariu;
+			nr_angajati += 1;
+
+			t = t->next;
+		}
+		salariu_mediu = salariu_mediu / nr_angajati;
+
+		// 2. Salavare angajati in noua lista si stergerea lor din lista initiala
+		t = list->prim;
+		while (t)
+		{
+			if (t->angajat.salariu < salariu_mediu)
+			{
+				// t este nodul care se sterge din lista initiala si se salveaza in lista #2
+				Angajat ang = t->angajat;
+				ang.nume = malloc(strlen(t->angajat.nume) + 1); // ang nu partajeaza zona heap cu nodul t
+				strcpy(ang.nume, t->angajat.nume);
+				ang.functie = malloc(strlen(t->angajat.functie) + 1); // ang nu partajeaza zona heap cu nodul t
+				strcpy(ang.functie, t->angajat.functie);
+				// ang este inserat in lista #2
+				lista_salarii = inserareNodPozitie(lista_salarii, ang, 1);
+				NodD* succesor = t->next;
+				*list = stergereNodCNP(*list, t->angajat.CNP); // t este nodul de sters
+				t = succesor; // actualizare t dupa dezalocarea lui t din lista initiala
+			}
+			else
+				t = t->next;
+		}
+	}
+
+	return lista_salarii;
+}
+
+
 int main()
 {
 	ListaDubla listaD;
@@ -294,6 +363,10 @@ int main()
 	printf("\n\nTraversare lista dubla dupa creare:\n");
 	traversareListaDubla(listaD);
 
+	ListaDubla lista_salarii = extragereAngajatiSalariuMediu(&listaD);
+	printf("\n\nTraversare lista dubla salarii sub medie:\n");
+	traversareListaDubla(lista_salarii);
+
 	listaD = interschimbAdiacentePoz(listaD, 1);
 	printf("\n\nTraversare lista dubla dupa interschimb adiacente:\n");
 	traversareListaDubla(listaD);
@@ -309,6 +382,14 @@ int main()
 	}
 	printf("\n\nTraversare lista dubla dupa dezalocare:\n");
 	traversareListaDubla(listaD);
+
+	// dezalocare lista dubla cu salarii sub medie
+	while (lista_salarii.prim != NULL)
+	{
+		lista_salarii = stergereNodNume(lista_salarii, lista_salarii.prim->angajat.nume);
+	}
+	printf("\n\nTraversare lista dubla cu salarii sub medie dupa dezalocare:\n");
+	traversareListaDubla(lista_salarii);
 
 	return 0;
 }
