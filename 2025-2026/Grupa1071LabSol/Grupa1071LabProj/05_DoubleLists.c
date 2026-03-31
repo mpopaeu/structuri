@@ -96,6 +96,21 @@ DoubleList deleteNodeEnd(DoubleList list)
 	return list;
 }
 
+// delete all nodes having salary under average
+// deleted data are moved into an array of employees
+// function to return the array of deleted employees from the double list
+// 1. compute the average
+// 2. count the employees under the average
+// 3. allocate the output array
+// 4. get employee from the list into output array and remove that node in double list
+// function must returan the array and size of that (exact number of employees under the average)
+// after removals, double list must have the right content as number of node and employees over the average
+
+Employee* getEmployeesUnderAverage(DoubleList* list, unsigned short int* size_array)
+{
+
+}
+
 int main()
 {
 	DoubleList DList;

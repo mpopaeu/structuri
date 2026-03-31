@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="05_DoubleLists.c" />
+    <ClCompile Include="06_HashTable_Chain.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="EMployees.txt" />
