@@ -266,6 +266,13 @@ ListaDubla interschimbNoduriIdAngajat(ListaDubla list, char* id_ang1, char* id_a
 	return list;
 }
 
+// functie care extrage/sterge angajatii din lista dubla pe baza de functie
+// angajatii extrasi sunt salvati in alta lista dubla
+ListaDubla extragereAngajatiFunctie(ListaDubla* list, char* functie)
+{
+
+}
+
 int main()
 {
 	ListaDubla listaD; // listaD variabila locala care include 2 adrese: adresa prim nod, adres ultim nod in lista dubla
