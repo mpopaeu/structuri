@@ -1,3 +1,5 @@
 Popescu Georgia,12765,F,187,289.91
 Soc Com SRL,8976,J,1097,2809.91
 Georgescu Marian,12767,F,2098,289.01
+Ionescu Alex,386,F,91,2309.31
+Vasilescu Mircea,1488,F,178,593.72
