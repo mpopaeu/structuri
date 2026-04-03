@@ -163,6 +163,72 @@ DList deleteSalaryNodes(DList* list, float threshold)
 
 	return secondList;
 }
+
+// swap nodes (pos, pos+1) in the double list
+DList swap(DList list, unsigned char pos)
+{
+	if (list.head == NULL || list.head == list.tail)
+		return list;
+
+	// double list contains 2 node at least
+	NodeD* t = list.head;
+	unsigned char counter = 1;
+	while (t->next != NULL && counter < pos)
+	{
+		t = t->next;
+		counter += 1;
+	}
+
+	if (t->next != NULL)
+	{
+		// the swap operation will be performed
+		NodeD* p, * q, * r;
+		p = t->prev; 
+		q = t->next;
+		r = q->next;
+
+		t->next = r;
+		t->prev = q;
+		q->next = t;
+		q->prev = p;
+
+		if (p == NULL && r == NULL)
+		{
+			// double list contains only 2 nodes to ve swaped
+			list.head = q; // update the head of the double list
+			list.tail = t; // update the tail of the double list
+		}
+		else
+		{
+			if (p != NULL && r != NULL)
+			{
+				// general case
+				p->next = q;
+				r->prev = t;
+			}
+			else
+			{
+				if (p == NULL)
+				{
+					// swaping applied beteween nodes #1 and #2
+					r->prev = t;
+
+					list.head = q; // the new head will be q 
+				}
+				else
+				{
+					// swaping applied between nodes #n-1 and #n
+					p->next = q;
+					
+					list.tail = t; // the new tail will be t
+				}
+			}
+		}
+	}
+
+	return list;
+}
+
 int main()
 {
 	FILE* f;
@@ -203,11 +269,14 @@ int main()
 	printf("Double list after creation (both directions):\n");
 	parsingDList(double_list);
 
+	double_list = swap(double_list, 1);
+	printf("\nDouble list after swapping (both directions):\n");
+	parsingDList(double_list);
+
 	DList secondSalaryList;
 	secondSalaryList = deleteSalaryNodes(&double_list, 10000);
 	printf("\nSecond double list is:\n");
 	parsingDList(secondSalaryList);
-
 
 	// delete a node on a certain position in double list
 	Employee result = deleteDNode(&double_list, 2);

@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="05_DoubleList.c" />
+    <ClCompile Include="06_CircularList.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Employees.txt" />
