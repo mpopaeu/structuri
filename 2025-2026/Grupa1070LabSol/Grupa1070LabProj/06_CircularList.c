@@ -5,9 +5,9 @@
 
 struct Employee
 {
-	char* name;		// 4 bytes
-	float salary;	// 4 bytes
-	char CNP[14];	// 14 bytes
+	char* name;			// 4 bytes
+	float salary;		// 4 bytes
+	char CNP[14];		// 14 bytes
 	char emp_date[11];	// 11 bytes
 	unsigned short int no_directs; // 2 bytes
 };
