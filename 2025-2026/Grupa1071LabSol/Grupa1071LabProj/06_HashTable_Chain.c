@@ -51,6 +51,7 @@ Node* insertNodeEnd(Node* list, Employee data)
 	}
 }
 
+// insert one employee into hash table where the key is the employee's id
 void insertEmployeeHashTable(Node** HT, unsigned short int size_ht, Employee data)
 {
 	// 1. compute the position where data must be inserted into
@@ -59,6 +60,7 @@ void insertEmployeeHashTable(Node** HT, unsigned short int size_ht, Employee dat
 	HT[pos] = insertNodeEnd(HT[pos], data);
 }
 
+// search employee's data where key (employee's id) is passed to function
 Employee* searchEmployee(Node** HT, unsigned short int size_ht, unsigned short int search_key)
 {
 	unsigned short int pos = hash_function(search_key, size_ht);
@@ -80,6 +82,93 @@ Employee* searchEmployee(Node** HT, unsigned short int size_ht, unsigned short i
 	}
 
 	return NULL; // if there is not any employee having search_id
+}
+
+Employee* recCheckList(Node*, unsigned short int);
+Employee* searchEmployeeRec(Node** HT, unsigned short int size_ht, unsigned short int search_key)
+{
+	unsigned short int pos = hash_function(search_key, size_ht);
+
+	if (HT[pos])
+	{
+		return recCheckList(HT[pos], search_key);
+	}
+
+	return NULL; // if there is not any employee having search_id
+}
+
+Employee* recCheckList(Node* list, unsigned short int search_key)
+{
+	if (list != NULL)
+	{
+		if (list->emp.id == search_key)
+			return  &list->emp;
+		else
+			return recCheckList(list->next, search_key);
+	}
+	return NULL;
+}
+
+Node* searchEmployeeNameHashTable(Node** HT, unsigned short int size_ht, char* empl_name)
+{
+	Node* list = NULL; // output data structure containing all employees with the same name (empl_name)
+
+	for (unsigned short int i = 0; i < size_ht; i++)
+	{
+		Node* temp = HT[i];
+		while (temp != NULL)
+		{
+			if (strcmp(temp->emp.name, empl_name) == 0)
+			{
+				Employee emp_insert = temp->emp;
+				emp_insert.name = malloc(strlen(temp->emp.name) + 1); // make room for the employee's name to be inserted into output list
+				strcpy(emp_insert.name, temp->emp.name);
+				list = insertNodeEnd(list, emp_insert);
+			}
+			temp = temp->next;
+		}
+	}
+
+
+	return list;
+}
+
+char deleteEmployeeHashTable(Node** HT, unsigned short int size_ht, unsigned short int empl_key)
+{
+	// 1. compute the position of the simple list where employee with empl_key should be stored
+	unsigned short int pos = hash_function(empl_key, size_ht);
+
+	// 2. if employee has been found then perform the deletion
+	Node* temp = HT[pos]; // temp contains the heap address of the first node for simple list HT[pos]
+	if (temp != NULL)
+	{
+		if (temp->emp.id == empl_key)
+		{
+			// head of the list must be deleted
+			HT[pos] = HT[pos]->next; // update the head of the list HT[pos]
+			free(temp->emp.name); // delete extension of employee into other heap area
+			free(temp); // delete the node
+			return 1; // 1 means deletion has been performed
+		}
+		else
+		{
+			while (temp->next != NULL)
+			{
+				if (temp->next->emp.id == empl_key)
+				{
+					// identified employee; perform deletion of node temp->next
+					Node* deleteNode = temp->next;
+					temp->next = deleteNode->next;
+					free(deleteNode->emp.name);
+					free(deleteNode);
+					return 1;
+				}
+				temp = temp->next;
+			}
+		}
+	}
+
+	return 0; // there is no employee having empl_key
 }
 
 int main()
@@ -144,7 +233,7 @@ int main()
 	}
 
 	// search a particular employee based on the hash table key
-	Employee* pEmp = searchEmployee(HashTable, size_hashTable, 2012);
+	Employee* pEmp = searchEmployee(HashTable, size_hashTable, 2021);
 
 	printf("\n\n Employee search in the Hash Table:\n");
 	if (pEmp != NULL)
@@ -152,7 +241,61 @@ int main()
 	else
 		printf("\nEmployee does not exist in the Hash Table.\n\n");
 
+	// create a simple with emloyees having the same name
+	Node* listEmployeesSameName = searchEmployeeNameHashTable(HashTable, size_hashTable, "Popescu Georgian");
+	printf("\nEmployee list having the same employee's name:\n");
+	Node* temp = listEmployeesSameName;
+	while (temp)
+	{
+		printf("%d %s\n", temp->emp.id, temp->emp.name);
+		temp = temp->next;
+	}
+
+
+	pEmp = searchEmployeeRec(HashTable, size_hashTable, 2021);
+	printf("\n\n Employee search in the Hash Table (self-calling function):\n");
+	if (pEmp != NULL)
+		printf("%d %s\n", pEmp->id, pEmp->name);
+	else
+		printf("\nEmployee does not exist in the Hash Table.\n\n");
+
 	// deletion of an employee based on id (the key of Hash Table)
+	char delete_result = deleteEmployeeHashTable(HashTable, size_hashTable, 2021);
+	printf("\nDeletion -> ");
+	if (delete_result != 0)
+	{
+		// deletion has been performed
+		printf("Employee has been deleted in the hash table.\n\n");
+	}
+	else
+	{
+		// there is no employee with the specified deletion key (employee's id)
+		printf("Employee does not exist in the hash table.\n\n");
+	}
+
+	pEmp = searchEmployee(HashTable, size_hashTable, 2021);
+	printf("\n Employee search in the Hash Table after deletion:\n");
+	if (pEmp != NULL)
+		printf("%d %s\n", pEmp->id, pEmp->name);
+	else
+		printf("\nEmployee does not exist in the Hash Table.\n\n");
+
+	// deallocate the entire hash table
+
+	for (unsigned short int i = 0; i < size_hashTable; i++)
+	{
+		// each HT[i] means a simple list
+		while (HashTable[i] != NULL)
+		{
+			// list i exists in the HashTable array
+			delete_result = deleteEmployeeHashTable(HashTable, size_hashTable, HashTable[i]->emp.id);
+		}
+	}
+	free(HashTable); // deallocate the array as storage support for the hash table with chaining
+
+
+	// deallocation of the list with employees having the same name (listEmployeesSameName)
+
 
 	return 0;
 }
