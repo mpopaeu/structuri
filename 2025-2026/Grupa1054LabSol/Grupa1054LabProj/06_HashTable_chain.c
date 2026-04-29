@@ -19,6 +19,14 @@ struct Nod {
 
 typedef struct Nod Nod;
 
+struct NodAdr
+{
+	Angajat* pang;
+	struct NodAdr* next;
+};
+
+typedef struct NodAdr NodAdr;
+
 Nod* inserareNodLS(Nod* p, Angajat a)
 {
 	Nod* nou = malloc(sizeof(Nod));
@@ -37,6 +45,15 @@ Nod* inserareNodLS(Nod* p, Angajat a)
 	}
 
 	return p; // functie trebuie sa intoarca rezultat si in cazul in care lista contine cel putin 1 nod
+}
+
+NodAdr* inserareNodAdrLS(NodAdr *p, Angajat *ang)
+{
+	NodAdr* nou = malloc(sizeof(NodAdr));
+	nou->next = p;
+	nou->pang = ang;
+
+	return nou;
 }
 
 unsigned short int functie_hash(char * cheie, unsigned short int sizeht)
@@ -73,6 +90,95 @@ Angajat* cautaAngajatHT(Nod** hasht, unsigned short int sizeht, char* cheie_caut
 	}
 
 	return NULL; // angajat cu cheie_cautare nu a fost identificat in lista simpla hasht[poz]
+}
+
+Angajat* traversareLSRec(Nod* nod, char* cheie_cautare)
+{
+	if(nod != NULL)
+	{ 
+		if (strcmp(nod->ang.id, cheie_cautare) == 0)
+			return &nod->ang;
+		else
+			return traversareLSRec(nod->next, cheie_cautare);
+	}
+
+	return NULL; // nod este NULL
+}
+
+Angajat* cautaAngajatHTRec(Nod** hasht, unsigned short int sizeht, char* cheie_cautare)
+{
+	unsigned short int poz = functie_hash(cheie_cautare, sizeht);
+
+	return traversareLSRec(hasht[poz], cheie_cautare);
+}
+
+unsigned char stergereAngajatHashTable(Nod** hasht, unsigned short int sizeht, char* id_angajat)
+{
+	// 1. determinare pozitie in tabela lista in cre ar trebui sa gasim angajatul
+	unsigned short int poz = functie_hash(id_angajat, sizeht);
+
+	// 2. stergere nod cu angajatul identificat pe baza de cheie (id angajat)
+	Nod* temp = hasht[poz]; // hasht[poz] este lista simpla in care ar trebui sa fie stocat angajatul de sters 
+	if (hasht[poz] != NULL)
+	{
+		if (strcmp(hasht[poz]->ang.id, id_angajat) == 0)
+		{
+			// angajatul de sters este stocat in primul nod din lista simpla hasht[poz]
+			hasht[poz] = hasht[poz]->next; // actualizare adresa prim nod in lista simpla cu nodul 2/NULL
+			free(temp->ang.nume);
+			free(temp->ang.functie);
+			free(temp);
+
+			return 1; // stergere efectuata
+		}
+		else
+		{
+			while (temp->next != NULL)
+			{
+				if (strcmp(temp->next->ang.id, id_angajat) == 0)
+				{
+					Nod* succesor_nou = temp->next->next; // temp->next este nodul de sters
+					
+					free(temp->next->ang.nume);
+					free(temp->next->ang.functie);
+					free(temp->next);
+
+					temp->next = succesor_nou; // actualizare succesor temp
+
+					return 1; // stergere efectuata
+				}
+
+				temp = temp->next;
+			}
+		}
+	}
+
+	return 0; // angajatul cautat nu exista in tabela hash
+}
+
+NodAdr* salveazaAngajatiNume(Nod** hasht, unsigned short int sizeht, char* nume_angajat)
+{
+	NodAdr* lista = NULL;
+
+	for (unsigned short int i = 0; i < sizeht; i++)
+	{
+		if (hasht[i] != NULL)
+		{
+			Nod* temp = hasht[i];
+			while (temp != NULL)
+			{
+				if (strcmp(temp->ang.nume, nume_angajat) == 0)
+				{
+					// temp contine angajat cu nume cautat pentru salvare in lista rezultat al functiei
+					lista = inserareNodAdrLS(lista, &temp->ang);
+				}
+
+				temp = temp->next;
+			}
+		}
+	}
+
+	return lista;
 }
 
 int main()
@@ -130,7 +236,8 @@ int main()
 		}
 	}
 
-	Angajat* angajat_gasit = cautaAngajatHT(HT, size, "ID33");
+	//Angajat* angajat_gasit = cautaAngajatHT(HT, size, "ID31");
+	Angajat* angajat_gasit = cautaAngajatHTRec(HT, size, "ID31");
 	printf("Cautare angajati dupa cheie (id angajat):\n");
 	if (angajat_gasit != NULL)
 	{
@@ -138,10 +245,62 @@ int main()
 	}
 	else
 	{
-		printf("Anagajatul cautat nu este stocat in tabela hash.\n");
+		printf("Angajatul cautat nu este stocat in tabela hash.\n");
+	}
+
+	// salveaza angajatii cu acelasi nume in lista separata
+	NodAdr* lista_nume = salveazaAngajatiNume(HT, size, "Popescu Marin");
+	printf("\nAngajatii cu acelasi nume cautat in tabela hash:\n");
+	NodAdr* temp = lista_nume;
+	while (temp != NULL)
+	{
+		printf("%s %s\n", temp->pang->id, temp->pang->nume);
+
+		temp = temp->next;
 	}
 
 	// stergere angajat pe baza de cheie (id angajat)
+	unsigned char sters = stergereAngajatHashTable(HT, size, "ID31");
+	printf("\nStergere angajat in tabela hash: ");
+	if (sters != 0)
+	{
+		printf("Stergere efectuata!\n");
+	}
+	else
+	{
+		printf("Angajatul nu exista in tabela hash!\n");
+	}
+	angajat_gasit = cautaAngajatHT(HT, size, "ID31");
+	printf("Cauta angajat eliminat din tabela hash:");
+	if (angajat_gasit != NULL)
+	{
+		printf("Angajat identificat in tabela hash: %s %s\n", angajat_gasit->id, angajat_gasit->nume);
+	}
+	else
+	{
+		printf("Angajatul cautat nu este stocat in tabela hash.\n");
+	}
+
+	// dezalocare tabela hash
+	// 1. dezalocare liste simple agatate de vectorul suport al tabelei hash
+	for (unsigned short int i = 0; i < size; i++)
+	{
+		while (HT[i] != NULL)
+		{
+			sters = stergereAngajatHashTable(HT, size, HT[i]->ang.id);
+		}
+	}
+	// 2. dezalocare vector suport tabela hash
+	free(HT);
+
+	// dezalocare lista angajati cu acelasi nume
+	while (lista_nume != NULL)
+	{
+		temp = lista_nume;
+		lista_nume = lista_nume->next;
+
+		free(temp);
+	}
 
 	return 0;
 
