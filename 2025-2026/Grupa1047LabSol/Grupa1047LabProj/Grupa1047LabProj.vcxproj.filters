@@ -15,12 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="07_HashTable_Chain.c">
+    <ClCompile Include="08_HeapStruct.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Clienti.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="HeapKeys.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

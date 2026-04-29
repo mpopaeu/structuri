@@ -63,6 +63,70 @@ Client* cautareClientId(Nod** tabela, unsigned short int size_tabela, unsigned i
 	return NULL; // clientul cautat nu exista in tabela de dispersie
 }
 
+Client* cautaClientNod(Nod* nod_curent, unsigned int cheie_cautata)
+{
+	if (nod_curent != NULL)
+	{
+		if (nod_curent->cl.id == cheie_cautata)
+			return &nod_curent->cl;
+		else
+			return cautaClientNod(nod_curent->next, cheie_cautata);
+	}
+
+	return NULL;
+}
+
+Client* cautareRecClientId(Nod** tabela, unsigned short int size_tabela, unsigned int cheie_cautata)
+{
+	unsigned short int poz = functie_hash(cheie_cautata, size_tabela);
+
+	return cautaClientNod(tabela[poz], cheie_cautata);
+}
+
+Client* cautaClientiTip(Nod** tabela, unsigned short int size_tabela,
+	unsigned char tip_cautat, unsigned short int* size_vector)
+{
+	Client* vector_clienti = NULL;
+	*size_vector = 0;
+	for (unsigned short int i = 0; i < size_tabela; i++)
+	{
+		Nod* temp = tabela[i];
+		while (temp != NULL)
+		{
+			if (temp->cl.tip == tip_cautat)
+				*size_vector += 1;
+
+			temp = temp->next;
+		}
+	}
+
+	if (*size_vector > 0)
+	{
+		vector_clienti = malloc(*size_vector * sizeof(Client));
+		unsigned short int k = 0; // offset element disponibil in a fi scris cu date client
+
+		for (unsigned short int i = 0; i < size_tabela; i++)
+		{
+			Nod* temp = tabela[i];
+			while (temp != NULL)
+			{
+				if (temp->cl.tip == tip_cautat)
+				{
+					vector_clienti[k] = temp->cl;
+					vector_clienti[k].denumire = malloc(strlen(temp->cl.denumire) + 1);
+					strcpy(vector_clienti[k].denumire, temp->cl.denumire);
+
+					k += 1;
+				}
+
+				temp = temp->next;
+			}
+		}
+	}
+
+	return vector_clienti;
+}
+
 Nod* stergereNod(Nod* p, unsigned int id_client)
 {
 	Nod* x = p;
@@ -171,7 +235,14 @@ int main()
 		}
 	}
 
-	Client* client_cautat = cautareClientId(HT, size, 70);
+	unsigned short int size_clienti;
+	Client* vector_clienti_tip = cautaClientiTip(HT, size, 'F', &size_clienti);
+	printf("\nVector clienti de acelasi tip:\n");
+	for (unsigned short int i = 0; i < size_clienti; i++)
+		printf("%d %s\n", vector_clienti_tip[i].id, vector_clienti_tip[i].denumire);
+
+	//Client* client_cautat = cautareClientId(HT, size, 70);
+	Client* client_cautat = cautareRecClientId(HT, size, 70);
 	printf("\nCautare client dupa cheie in tabela de dispersie:\n");
 	if (client_cautat == NULL)
 		printf("Clientul cautat nu exista in tabela hash.\n");
@@ -200,6 +271,12 @@ int main()
 	// 2. dezalocare vector suport
 	free(HT); 
 	HT = NULL;
+
+	// dezalocare vector cu clienti de acelasi tip
+	for (unsigned short int i = 0; i < size_clienti; i++)
+		free(vector_clienti_tip[i].denumire);
+	free(vector_clienti_tip);
+	vector_clienti_tip = NULL;
 
 	return 0;
 }
