@@ -155,12 +155,14 @@ int main()
 
 	if (nKeys >= 0)
 	{
-		printf("Cheie eliminata din structura Heap: %d\n", cheie_extrasa);
+		printf("\nCheie eliminata din structura Heap: %d\n", cheie_extrasa);
 	}
 	else
 	{
-		printf("Structura Heap emtpty. Operatia de stergere nu a fost efectuata.");
+		printf("\nStructura Heap emtpty. Operatia de stergere nu a fost efectuata.");
 	}
+
+
 	printf("\n Structura Heap dupa stergere nod radacina din structura Heap: ");
 	for (int i = 0; i < nKeys; i++)
 		printf(" %d ", strHeap[i]);

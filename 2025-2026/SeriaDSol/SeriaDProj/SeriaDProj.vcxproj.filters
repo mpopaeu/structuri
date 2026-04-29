@@ -23,7 +23,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_StructHeap.c">
+    <ClCompile Include="07_Arbori.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
