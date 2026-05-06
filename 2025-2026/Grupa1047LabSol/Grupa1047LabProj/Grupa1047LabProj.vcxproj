@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="08_HeapStruct.c" />
+    <ClCompile Include="09_ABC.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Clienti.txt" />

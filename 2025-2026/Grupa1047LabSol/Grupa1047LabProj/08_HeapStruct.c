@@ -152,8 +152,12 @@ int main()
 	printf("\n");
 
 	cheie = stergere_cheie_heap(strHeap, &nKeys);
+	printf("\n Structura Heap dupa stergere cheie nod radacina (%d): ", cheie);
+	for (int i = 0; i < nKeys; i++)
+		printf(" %d ", strHeap[i]);
+	printf("\n");
 
-	printf("Stergere chei din structura Heap: ");
+	printf("\nChei sterse din structura Heap: ");
 	while (nKeys > 0)
 	{
 		printf(" %d ", stergere_cheie_heap(strHeap, &nKeys));
