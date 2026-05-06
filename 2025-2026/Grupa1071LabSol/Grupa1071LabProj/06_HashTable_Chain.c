@@ -84,7 +84,7 @@ Employee* searchEmployee(Node** HT, unsigned short int size_ht, unsigned short i
 	return NULL; // if there is not any employee having search_id
 }
 
-Employee* recCheckList(Node*, unsigned short int);
+Employee* recCheckList(Node*, unsigned short int); // function signature only; implementation after the call to it
 Employee* searchEmployeeRec(Node** HT, unsigned short int size_ht, unsigned short int search_key)
 {
 	unsigned short int pos = hash_function(search_key, size_ht);
@@ -170,6 +170,9 @@ char deleteEmployeeHashTable(Node** HT, unsigned short int size_ht, unsigned sho
 
 	return 0; // there is no employee having empl_key
 }
+
+// function to create a list/array with employees' names
+// duplicated names MUST be inserted/added one single time
 
 int main()
 {
