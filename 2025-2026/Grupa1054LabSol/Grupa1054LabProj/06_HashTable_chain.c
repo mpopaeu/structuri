@@ -181,6 +181,8 @@ NodAdr* salveazaAngajatiNume(Nod** hasht, unsigned short int sizeht, char* nume_
 	return lista;
 }
 
+// functie pentru stergere angajati din tabela hash cu salariul peste medie
+
 int main()
 {
 	Nod* *HT = NULL; // hash table chaining: vector alocat la run-time pentru stocare adrese inceput liste simple

@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_HashTable_chain.c">
+    <ClCompile Include="07_ABC.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
