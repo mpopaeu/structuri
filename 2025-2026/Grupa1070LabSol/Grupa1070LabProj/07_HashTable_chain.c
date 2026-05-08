@@ -82,6 +82,10 @@ Employee* searchEmployee(Node** HT, char* key)
 	return NULL; // there is no employee with key stored by the hash table
 }
 
+// extract into a simple list all employees having the same name
+// being stored in the hash table
+// extract means delete corresponding node in the hash table + insert employees' data into the simple list
+
 int main()
 {
 	FILE* f;
