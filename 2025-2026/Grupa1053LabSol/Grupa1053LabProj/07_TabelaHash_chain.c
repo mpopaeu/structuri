@@ -106,6 +106,9 @@ void stergereClientTabela(Nod** HT, unsigned int cheie)
 	}
 }
 
+// extragere in lista simpla separata clienti de acelasi tip specificat ca parametru al functiei
+// extragere inseamna stergere in tabela hash si mutarea datelor in lista simpla rezultat
+
 int main()
 {
 	Nod** HashTable = NULL; // variabila acces la vector suport structura hash table alocat la run-time
