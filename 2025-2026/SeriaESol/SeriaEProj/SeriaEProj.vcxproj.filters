@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06_MaxHeap.cpp">
+    <ClCompile Include="07_ArbO_FiuFrate.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

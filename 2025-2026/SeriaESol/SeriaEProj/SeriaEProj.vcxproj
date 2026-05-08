@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="06_MaxHeap.cpp" />
+    <ClCompile Include="07_ArbO_FiuFrate.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="HeapKeys.txt" />
