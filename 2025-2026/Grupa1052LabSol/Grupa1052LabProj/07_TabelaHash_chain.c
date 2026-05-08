@@ -119,9 +119,14 @@ void stergereAngajatTabelaHash(Nod** HT, unsigned short int size_ht, char* cheie
 	}
 }
 
+
+// functie pentru creare lista simpla nume angajati
+// angajatii cu acelasi nume vor aparea ca o singura intrare in lista simpla
+// (lista nu contine nume identice)
+
 int main()
 {
-	Nod** HashTable = NULL; // HashTable - vector suport pentru implemenatare tabela hash cu chaining
+	Nod** HashTable = NULL; // HashTable - vector suport pentru implementare tabela hash cu chaining
 	FILE* f;
 
 	HashTable = malloc(DIM_TABELA_HASH * sizeof(Nod*));
