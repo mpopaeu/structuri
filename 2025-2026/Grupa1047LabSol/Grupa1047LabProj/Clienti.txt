@@ -1,3 +1,6 @@
 123,Popescu Mircea,F,04/01/2026,1000.89
 70,Georgescu Marian,F,24/02/2026,8008.96
 11,Impex SA,J,21/01/2026,13889.91
+179,Ionescu Alexandru,F,04/04/2022,9980.89
+153,Ionescu Cosmin,F,14/09/2020,80.41
+81,Vasilescu Catalin,F,18/10/2025,908.96
