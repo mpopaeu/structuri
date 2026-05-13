@@ -1,3 +1,6 @@
 1012,Popescu Georgian,9654.35,28,12/12/2024
 2021,Popescu Georgian,154.35,32,07/06/2008
 1512,Vasilescu Marian Alexandru,54.35,26,28/03/2013
+901,Popescu Alexandru,154.35,32,07/06/2008
+957,Ionescu Cosmin,154.35,32,07/06/2008
+849,Georgescu Jean,154.35,32,07/06/2008

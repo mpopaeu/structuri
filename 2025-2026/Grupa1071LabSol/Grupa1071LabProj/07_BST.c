@@ -23,22 +23,23 @@ struct BSTNode
 typedef struct BSTNode BSTNode;
 
 
-BSTNode* insertEmployeeBST(BSTNode* node, Employee emp)
+BSTNode* insertEmployeeBST(BSTNode* node, Employee emp, unsigned char *flag_insert)
 {
 	if (node != NULL)
 	{
 		if (emp.id < node->emp.id)
 		{
-			node->left = insertEmployeeBST(node->left, emp);
+			node->left = insertEmployeeBST(node->left, emp, flag_insert);
 		}
 		else
 		{
 			if (emp.id > node->emp.id)
 			{
-				node->right = insertEmployeeBST(node->right, emp);
+				node->right = insertEmployeeBST(node->right, emp, flag_insert);
 			}
 			else
 			{
+				*flag_insert = 0; // the employee having same id with the new one already exists in BST
 				return node;
 			}
 		}
@@ -46,6 +47,7 @@ BSTNode* insertEmployeeBST(BSTNode* node, Employee emp)
 	else
 	{
 		// the final and right place (NULL position within the BST) has touched
+		*flag_insert = 1; // successful insertion of new data set  (param emp)
 		node = malloc(sizeof(BSTNode));
 		node->emp = emp;
 		node->left = NULL;
@@ -63,6 +65,86 @@ void BSTParse(BSTNode* node)
 		printf("%d %s\n", node->emp.id, node->emp.name); // process the node itself
 		BSTParse(node->right); // process the nodes from the right sub-tree
 	}
+}
+
+Employee* searchEmployee(BSTNode* node, unsigned short int search_key)
+{
+	Employee* emp_result = NULL;
+	if (node != NULL)
+	{
+		if (search_key < node->emp.id)
+		{
+			emp_result = searchEmployee(node->left, search_key);
+		}
+		else
+		{
+			if (search_key > node->emp.id)
+			{
+				emp_result = searchEmployee(node->right, search_key);
+			}
+			else
+			{
+				return &node->emp;
+			}
+		}
+	}
+
+	return emp_result;
+}
+
+BSTNode* deallocateBST(BSTNode *node)
+{
+	if (node != NULL)
+	{
+		node->left = deallocateBST(node->left);
+		node->right = deallocateBST(node->right);
+
+		free(node->emp.name);
+		free(node);
+
+		node = NULL;
+	}
+
+	return node;
+}
+
+BSTNode* deleteNodeBST(BSTNode * node, unsigned short int search_key, Employee* empl)
+{
+	if (node != NULL)
+	{
+		if (node->emp.id == search_key)
+		{
+			// node must be deleted
+			// employee's data must be stored by empl
+
+			*empl = node->emp; // save employee's data to be pushed back
+			BSTNode* left_subtree = node->left;
+			BSTNode* right_subtree = node->right;
+
+			// parse the right sub-tree till the leftmost node with minimum value of the employee's id
+			BSTNode* temp = right_subtree;
+			while (temp->left != NULL)
+				temp = temp->left;
+
+			temp->left = left_subtree;
+			free(node); 
+
+			node = right_subtree;
+		}
+		else
+		{
+			if (node->emp.id > search_key)
+			{
+				node->left = deleteNodeBST(node->left, search_key, empl);
+			}
+			else
+			{
+				node->right = deleteNodeBST(node->right, search_key, empl);
+			}
+		}
+	}
+
+	return node;
 }
 
 int main()
@@ -95,12 +177,53 @@ int main()
 		strcpy(empl.hire_date, token); // hire_date is a compile-time allocated byte array, hence there is storage and copy is enough
 
 		// insert empl data into a Binary Search Tree
-		root = insertEmployeeBST(root, empl);
-		
+		unsigned char insert;
+		root = insertEmployeeBST(root, empl, &insert);
+
+		if (insert != 0)
+		{
+			// insertion took place
+			printf("Sucesful insertion of employee: %d\n", empl.id);
+		}
+		else
+		{
+			printf("Deallocations to be done because employee with %d already has been inserted into BST\n", empl.id);
+			free(empl.name);
+		}
 	}
 
 	printf("Content of the BST:\n");
 	BSTParse(root);
 
+	Employee* pEmp = searchEmployee(root, 848);
+	printf("\n/////////////SEARCH operation////////////////\n");
+	if (pEmp != NULL)
+	{
+		printf("Employee data: %d %s\n", pEmp->id, pEmp->name);
+	}
+	else
+	{
+		printf("There is no employee having the specified id in searh operation\n");
+	}
+
+	// deletae one single node based on search key
+	Employee delete_empl;
+	delete_empl.name = NULL;
+	root = deleteNodeBST(root, 1012, &delete_empl);
+	if (delete_empl.name != NULL)
+	{
+		printf("Extracted employee data: %d %s\n", delete_empl.id, delete_empl.name);
+		free(delete_empl.name);
+	}
+	else
+	{
+		printf("There is no employee having the specificed search key.\n");
+	}
+	printf("Content of the BST after deletion based on employee's id:\n");
+	BSTParse(root);
+
+	root = deallocateBST(root);
+	printf("Content of the BST aftre structure destroying/deallocation:\n");
+	BSTParse(root);
 	fclose(f);
 }
