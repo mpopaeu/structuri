@@ -87,6 +87,118 @@ NodABC* dezalocareABC(NodABC* nodABC)
 	return NULL;
 }
 
+NodABC* stergereNodCheie(NodABC* nodABC, char* cheie, Angajat* angajat_extras)
+{
+	if (nodABC != NULL)
+	{
+		if (strcmp(cheie, nodABC->ang.id) == -1)
+		{
+			// se continua cautarea in stanga nodului curent
+			nodABC->stanga = stergereNodCheie(nodABC->stanga, cheie, angajat_extras);
+		}
+		else
+		{
+			if (strcmp(cheie, nodABC->ang.id) == 1)
+			{
+				// se continua cautarea in dreapta nodului curent
+				nodABC->dreapta = stergereNodCheie(nodABC->dreapta, cheie, angajat_extras);
+			}
+			else
+			{
+				// nodul cu cheie cautata este eliminat din ABC
+				if (nodABC->stanga == NULL && nodABC->dreapta == NULL)
+				{
+					// nodul care se sterge fizic din ABC este nodABC
+					// nodul nodABC este frunza
+					*angajat_extras = nodABC->ang;
+
+					free(nodABC);
+					nodABC = NULL;
+				}
+				else
+				{
+					if (nodABC->stanga != NULL && nodABC->dreapta != NULL)
+					{
+						// nodul de sters nodABC are 2 descendenti
+						NodABC* nodCheieMax = nodABC->stanga; // nod cu cheie max din subarbore stanga
+						NodABC* parinteNodCheieMax = nodABC; // parinte nod cu cheie max din subarbore stanga
+
+						while (nodCheieMax->dreapta != NULL) 
+						{
+							parinteNodCheieMax = nodCheieMax;
+							nodCheieMax = nodCheieMax->dreapta;
+						}
+						 //interschimb datele din nod curent cu nod cu cheie maxima din subarborele stanga lui nodABC
+						Angajat temp = nodABC->ang;
+						nodABC->ang = nodCheieMax->ang;
+						nodCheieMax->ang = temp;
+
+						if (parinteNodCheieMax == nodABC)
+						{
+							// radacina sub-arborelui stanga este nod cu cheie maxim (nu exista desc dreapta din radacin sub-arbore stanga)
+							parinteNodCheieMax->stanga = nodCheieMax->stanga;
+						}
+						else
+						{
+							// actualizare legatura dreapta in parintele nodului cu cheie maxima
+							parinteNodCheieMax->dreapta = nodCheieMax->stanga;
+						}
+						
+						// nod cu cheie maxima este cel care se dezaloca fizic din ABC
+						*angajat_extras = nodCheieMax->ang;
+
+						free(nodCheieMax);
+					}
+					else
+					{
+						// nodABC are un singur descendent
+						NodABC* desc_unic = nodABC->stanga;
+						if (nodABC->dreapta != NULL)
+						{
+							desc_unic = nodABC->dreapta;
+						}
+
+						*angajat_extras = nodABC->ang;
+						free(nodABC);
+						nodABC = desc_unic;
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		// nodul cu cheie nu a fost identificat in ABC
+		angajat_extras->nume = NULL;
+	}
+	return nodABC;
+}
+
+// determinare nr de noduri
+unsigned short int nrNoduri(NodABC* nodABC)
+{
+	if (nodABC != NULL)
+	{
+		return 1 + nrNoduri(nodABC->stanga) + nrNoduri(nodABC->dreapta);
+	}
+
+	return 0;
+}
+
+// salvare/extragere noduri plasate pe un nivel specificat
+
+// determinare nr de noduri frunza
+
+// determinare nr de noduri frunza plasate pe un nivel specificat
+
+// determinare nivelul cu nr maxim de frunze
+
+// determinare succesiune de noduri plasate pe drumul de la radacina la un nod cu cheie specificata
+
+// determinare inaltime arbore binar de cautare
+
+// determinare nr de noduri care indeplinesc conditie cu privire la continut
+
 int main()
 {
 	NodABC* root = NULL; // root este adresa nod radacina ABC
@@ -135,6 +247,27 @@ int main()
 	fclose(f);
 
 	printf("Arbore binar de cautare dupa creare:\n");
+	InordineABC(root);
+
+	unsigned short int nr = nrNoduri(root);
+	printf("\nNr de noduri din ABC este %d\n", nr);
+
+	// stergere nod in functie de cheie
+	root = stergereNodCheie(root, "ID131", &angajat);
+	printf("\n//////// STERGERE NOD IN ABC PE BAZA DE CHEIE ///////\n");
+	if (angajat.nume != NULL)
+	{
+		printf("\nNodul cu angajat %s %s a fost eliminat din ABC", angajat.id, angajat.nume);
+		// dezalocari pentru angaja extras
+		free(angajat.functie);
+		free(angajat.nume);
+	}
+	else
+	{
+		printf("\nAngajatul cu cheia cautata nu exista in ABC");
+	}
+
+	printf("\n\nArbore binar de cautare dupa stergere nod pe baza de cheie:\n");
 	InordineABC(root);
 
 	root = dezalocareABC(root);

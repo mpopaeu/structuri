@@ -1,3 +1,6 @@
 Popescu Marin,ID13,29,4589.0,Analist
 Ionescu George Alexandru,ID06,38,6977.11,Paznic
 Vasilescu Marian,ID99,23,4998.01,Analist
+Alexandru Mircea,ID10,3,4558.61,Analist
+Popescu Valentin,ID04,8,7928.00,Analist
+Ionescu Cosmin,ID61,8,8892.05,Analist
