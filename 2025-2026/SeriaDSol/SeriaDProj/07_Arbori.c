@@ -114,7 +114,7 @@ struct NodTree*  dezalocareArbore(struct NodTree* r) {
 			struct NodTree* tmp = r->fiu;
 			while (tmp->frate) { // parsez restul de subarbori descendenti lui r 
 				struct NodTree* pfrate = tmp->frate->frate;
-				dezalocareArbore(tmp->frate);
+				tmp->frate = dezalocareArbore(tmp->frate);
 				tmp->frate = pfrate;
 			}
 		}
@@ -125,7 +125,7 @@ struct NodTree*  dezalocareArbore(struct NodTree* r) {
 		free(r);
 		r = NULL;
 
-		dezalocareArbore(pfiu); // parsez primul subarbore descendent lui r	
+		pfiu = dezalocareArbore(pfiu); // parsez primul subarbore descendent lui r	
 	}
 
 	return r;
@@ -144,21 +144,21 @@ void main() {
 	root = inserare(root, 7, 6);
 	root = inserare(root, 8, 7);
 
-	printf("\nArborele in traversare in preordine:\n\n");
+	printf("\nArborele in traversare in preordine dupa creare:\n");
 	preordine(root);
 	printf("\n\n");
 
 	root = inserare(root, 9, 7);
-	printf("\nArborele in traversare in preordine:\n\n");
+	printf("\nArborele in traversare in preordine dupa inserare cheie/nod suplimentar:\n");
 	preordine(root);
 	printf("\n\n");
 
-	printf("\nArborele in traversare in postordine:\n\n");
+	printf("\nArborele in traversare in postordine:\n");
 	postordine(root);
 	printf("\n\n");
 
 	root = dezalocareArbore(root);
-	printf("\nArborele in traversare in preordine:\n\n");
+	printf("\nArborele in traversare in preordine dupa dezalocare:\n");
 	preordine(root);
-	printf("\n\n");
+	printf("\n");
 }
