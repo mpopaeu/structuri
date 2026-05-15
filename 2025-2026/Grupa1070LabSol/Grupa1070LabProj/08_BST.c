@@ -22,25 +22,26 @@ struct NodeBST
 
 typedef struct NodeBST NodeBST;
 
-NodeBST* insertNodeBST(NodeBST *node, Employee data)
+NodeBST* insertNodeBST(NodeBST *node, Employee data, unsigned char * insert_flag)
 {
 	if (node != NULL)
 	{
 		if (strcmp(data.CNP, node->emp.CNP) == -1)
 		{
 			// data.CMP < node->emp.CNP
-			node->left = insertNodeBST(node->left, data);
+			node->left = insertNodeBST(node->left, data, insert_flag);
 		}
 		else
 		{
 			if (strcmp(data.CNP, node->emp.CNP) == 1)
 			{
 				// 1st arg "over" the 2nd argument
-				node->right = insertNodeBST(node->right, data);
+				node->right = insertNodeBST(node->right, data, insert_flag);
 			}
 			else
 			{
 				// the two strings are identical
+				*insert_flag = 0; // insertion does not take place because data has a CNP stored before in BST
 				return node; // the function execution is stopped because data.CNP exists in BST and cannot ve added to BST
 			}
 		}
@@ -54,11 +55,42 @@ NodeBST* insertNodeBST(NodeBST *node, Employee data)
 		newNode->left = NULL;
 		newNode->right = NULL;
 
+		*insert_flag = 1;
+
 		return newNode;
 	}
 
 	return node;
 }
+
+
+Employee* searchEmployeeBST(NodeBST* node, char* search_key) // search key is the employee's id (CNP)
+{
+	if (node != NULL)
+	{
+		if (strcmp(search_key, node->emp.CNP) == -1)
+		{
+			// search_key < node->emp.CNP
+			return searchEmployeeBST(node->left, search_key);
+		}
+		else
+		{
+			if (strcmp(search_key, node->emp.CNP) == 1)
+			{
+				// 1st arg "over" the 2nd argument
+				return searchEmployeeBST(node->right, search_key);
+			}
+			else
+			{
+				// the two strings are identical
+				return &node->emp; 
+			}
+		}
+	}
+
+	return NULL; // the employee date set with search_key as CNP does not exist in BST
+}
+
 
 void Inorder(NodeBST* node)
 {
@@ -71,6 +103,32 @@ void Inorder(NodeBST* node)
 		Inorder(node->right); // proces nodes on the right sub-tree
 	}
 }
+
+NodeBST* deleteBST(NodeBST* node)
+{
+	if (node != NULL)
+	{
+		node->left = deleteBST(node->left); // delete nodes on the left sub-tree
+		node->right = deleteBST(node->right); // delete nodes on the right sub-tree
+
+		free(node->emp.name); // deallocate employee's extension into heap mem
+		free(node);   // deallocate the node itself
+
+		node = NULL;
+	}
+
+	return node;
+}
+
+// no of leaves
+
+// height of the BST
+
+// nodes places on a certain level within the BST
+
+// count leaves over a certain level within the BST
+
+// no of emplyess having salary under average
 
 int main()
 {
@@ -100,15 +158,39 @@ int main()
 		strcpy(temp.emp_date, token); // copy string into byte array emp_date; no allocation needed before
 
 		token = strtok(NULL, sep_list);
-		temp.no_directs = atoi(token); // coversion text-to-binary (integer)
+		temp.no_directs = atoi(token); // conversion text-to-binary (integer)
 
 		// insert employee's data into BST
-		root = insertNodeBST(root, temp);
+		unsigned char insert_flag;
+		root = insertNodeBST(root, temp, &insert_flag);
+
+		if (insert_flag == 0)
+		{
+			printf("Insertion has not been done due to duplicate key as CNP: %s %s.\n", temp.CNP, temp.name);
+			free(temp.name); // to avoid mem leaks, temp being over-written by the next employee date set read from file
+		}
 	}
 
 	fclose(f);
 
+
 	printf("BST content after inorder parsing:\n");
+	Inorder(root);
+
+	Employee* pEmp = searchEmployeeBST(root, "1901224080650");
+	printf("\n//////////////// SEARCH BASED on key ///////////////\n");
+	if (pEmp != NULL)
+	{
+		printf("Employee has been found: %s %s\n", pEmp->CNP, pEmp->name);
+	}
+	else
+	{
+		printf("There is no employee with CNP provdided as argument\n");
+	}
+
+	root = deleteBST(root);
+	printf("\n//////////////// BST DEALLOCATION ///////////////\n");
+	printf("BST content after tree deallocation:\n");
 	Inorder(root);
 
 	return 0;
