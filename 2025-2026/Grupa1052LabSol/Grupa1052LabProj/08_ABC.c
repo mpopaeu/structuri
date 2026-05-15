@@ -79,6 +79,113 @@ void Inordine(NodABC* nod)
 	}
 }
 
+Angajat* cautareAngajatCheie(NodABC* nod, char* cheie_cnp)
+{
+	if (nod != NULL)
+	{
+		// se continua cautarea locului de inserat
+		if (strcmp(cheie_cnp, nod->angajat.CNP) == -1)
+		{
+			// CNP de inserat "mai mic" decat CNP existent in nod curent nod
+			return cautareAngajatCheie(nod->stanga, cheie_cnp);
+		}
+		else
+		{
+			if (strcmp(cheie_cnp, nod->angajat.CNP) == 1)
+			{
+				// CNP de inserat "mai mare" decat CNP existent in nod curent (param nod)
+				return cautareAngajatCheie(nod->dreapta, cheie_cnp);
+			}
+			else
+			{
+				// nodul cu cnp cautat este identificat ca param nod in ABC
+				return &nod->angajat;
+			}
+		}
+	}
+
+	return NULL;
+}
+
+void cautareAngajatiFunctie(NodABC* nod, char* functie_angajat)
+{
+	if (nod != NULL)
+	{
+		if (strcmp(functie_angajat, nod->angajat.functie) == 0)
+			printf("%s %s\n", nod->angajat.CNP, nod->angajat.nume);
+
+		cautareAngajatiFunctie(nod->stanga, functie_angajat);
+
+		cautareAngajatiFunctie(nod->dreapta, functie_angajat);
+	}
+}
+
+NodABC* dezalocareABC(NodABC* nod)
+{
+	if (nod != NULL)
+	{
+		nod->stanga = dezalocareABC(nod->stanga);
+
+		nod->dreapta = dezalocareABC(nod->dreapta);
+
+		free(nod->angajat.functie); // dezalocare extensie angajat in heap
+		free(nod->angajat.nume);	// dezalocare extensie angajat in heap
+		free(nod);		// dezalocare nod
+
+		nod = NULL;
+	}
+
+	return nod;
+}
+
+NodABC* stergereNodCheie(NodABC* nod, char* cheie_cnp, Angajat* pAngajat)
+{
+	if (nod != NULL)
+	{
+		if (strcmp(cheie_cnp, nod->angajat.CNP) == -1)
+			nod->stanga = stergereNodCheie(nod->stanga, cheie_cnp, pAngajat);
+		else
+		{
+			if (strcmp(cheie_cnp, nod->angajat.CNP) == 1)
+				nod->dreapta = stergereNodCheie(nod->dreapta, cheie_cnp, pAngajat);
+			else
+			{
+				// am gasit nodul de sters -> nod
+				NodABC* desc_stanga = nod->stanga;
+				NodABC* desc_dreapta = nod->dreapta;
+
+
+				NodABC* temp = desc_dreapta;
+
+				if (temp != NULL)
+				{
+					// exista subarbore dreapta
+					while (temp->stanga != NULL)
+						temp = temp->stanga;
+
+					// subarbore stanga legat la nodul cu cheie minima din subarbore dreapta
+					temp->stanga = desc_stanga;
+					temp = desc_dreapta;
+				}
+				else
+				{
+					temp = desc_stanga;
+				}
+
+				// dezalocare nod curent
+				//free(nod->angajat.functie);
+				//free(nod->angajat.nume);
+				*pAngajat = nod->angajat;
+				free(nod);
+
+				nod = temp;
+			}
+		}
+	}
+
+	return nod;
+}
+
 int main()
 {
 	NodABC* root = NULL; // root este punctul unic de acces la structura ABC
@@ -99,14 +206,14 @@ int main()
 		ang.salariu = (float)atof(token); // conversie text->float binar
 
 		token = strtok(NULL, seps); // continuare tokenizare din ultimul punct identificat pe baza separator
-		strcpy(ang.CNP, token); // copiere string in CNP (alocar static ca byte array)
+		strcpy(ang.CNP, token);     // copiere string in CNP (alocar static ca byte array)
 
 		token = strtok(NULL, seps); // continuare tokenizare din ultimul punct identificat pe baza separator
 		ang.functie = malloc(strlen(token) + 1); // alocare spatiu heap seg pentru functie
 		strcpy(ang.functie, token); // copierea functie in zona alocata (nu se aplica conversie la string)
 
-		token = strtok(NULL, seps);// continuare tokenizare din ultimul punct identificat pe baza separator
-		ang.vechime_ani = atoi(token); // conversie text->int binar
+		token = strtok(NULL, seps);     // continuare tokenizare din ultimul punct identificat pe baza separator
+		ang.vechime_ani = atoi(token);  // conversie text->int binar
 
 		// inserare angajat in ABC
 		unsigned char gasit;
@@ -114,7 +221,7 @@ int main()
 
 		if (gasit == 1)
 		{
-			// inserarea nu a avut loc pentru CNP duplicat in ang
+			// inserarea nu a avut loc pentru ca CNP duplicat in ang
 			free(ang.nume);
 			free(ang.functie);
 		}
@@ -123,6 +230,41 @@ int main()
 	fclose(f);
 
 	printf("ABC dupa creare:\n");
+	Inordine(root);
+
+	Angajat* pAngajat = cautareAngajatCheie(root, "1981123466710");
+	printf("\n//////// CAUTARE DUPA CHEIE ///////\n");
+	if (pAngajat != NULL)
+	{
+		printf("Angajat idenificat: %s %s\n", pAngajat->CNP, pAngajat->nume);
+	}
+	else
+	{
+		printf("Angajatul nu a fost identificat in ABC.\n");
+	}
+
+	
+	printf("\n//////// CAUTARE DUPA NON-CHEIE ///////\n");
+	cautareAngajatiFunctie(root, "specialist HR");
+
+	Angajat ang_extras;
+	ang_extras.nume = NULL;
+	root = stergereNodCheie(root, "1890223420897", &ang_extras);
+	printf("\n//////// ABC dupa STERGERE NOD pe baza de CHEIE ///////\n");
+	if (ang_extras.nume != NULL)
+	{
+		printf("Angajatul %s %s a fost eliminat din ABC\n", ang_extras.CNP, ang_extras.nume);
+		free(ang_extras.functie);
+		free(ang_extras.nume);
+	}
+	else
+	{
+		printf("Angajatul de sters nu exista in ABC.\n");
+	}
+	Inordine(root);
+	
+	root = dezalocareABC(root);
+	printf("\n//////// ABC dupa DEZALOCARE ///////\n");
 	Inordine(root);
 
 	return 0;
