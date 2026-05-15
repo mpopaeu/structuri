@@ -75,6 +75,112 @@ void Inordine(NodABC* nod)
 	}
 }
 
+void cautareNodABCNume(NodABC* nod, char* nume_client)
+{
+	if (nod != NULL)
+	{
+		if (strcmp(nume_client, nod->cl.nume) == 0)
+			printf("%d %s\n", nod->cl.id, nod->cl.nume);
+
+		cautareNodABCNume(nod->stanga, nume_client);
+		cautareNodABCNume(nod->dreapta, nume_client);
+	}
+}
+
+Client* cautareNodABC(NodABC* nod, unsigned int cheie_client)
+{
+	if (nod != NULL)
+	{
+		// se continua cautarea locului de inserat (daca exista)
+		if (cheie_client < nod->cl.id)
+		{
+			// se cauta locul de inserat pe stanga nodului curent
+			return cautareNodABC(nod->stanga, cheie_client);
+		}
+		else
+		{
+			if (cheie_client > nod->cl.id)
+			{
+				// se continua cautarea locului de inserat pe sub-arborele dreapta
+				return cautareNodABC(nod->dreapta, cheie_client);
+			}
+			else
+			{
+				// clientul este identificat
+				return &nod->cl;
+			}
+		}
+	}
+
+	return NULL;
+}
+
+NodABC* dezalocareABC(NodABC* nod)
+{
+	if (nod != NULL)
+	{
+		nod->stanga = dezalocareABC(nod->stanga);
+		nod->dreapta = dezalocareABC(nod->dreapta);
+
+		free(nod->cl.nume); // dezalocare extensie in heap a clientului din nodul curent
+		free(nod); // dezalocare nod in ABC
+
+		nod = NULL;
+	}
+
+	return nod;
+}
+
+NodABC* stergereNodCheie(NodABC* nod, unsigned int cheie_client)
+{
+	if (nod != NULL)
+	{
+		if (cheie_client < nod->cl.id)
+			nod->stanga = stergereNodCheie(nod->stanga, cheie_client);
+		else
+			if (cheie_client > nod->cl.id)
+				nod->dreapta = stergereNodCheie(nod->dreapta, cheie_client);
+			else
+			{
+				// nodul de sters este identificat
+				NodABC* subarbore_stanga = nod->stanga;
+				NodABC* subarbore_dreapta = nod->dreapta;
+
+				NodABC* temp = subarbore_stanga;
+				if (temp != NULL)
+				{
+					while (temp->dreapta != NULL)
+						temp = temp->dreapta;
+
+
+					// subarbore dreapta se ataseaza la subarbore stanga
+					temp->dreapta = subarbore_dreapta;
+				}
+				else
+				{
+					subarbore_stanga = subarbore_dreapta; // DOAR pentru a pastra return subarbore_stanga; (vezi mai jos)
+				}
+
+
+				// dezalocare nod
+				free(nod->cl.nume);
+				free(nod);
+
+				return subarbore_stanga;
+			}
+	}
+
+	return nod;
+}
+
+// determinare numar de noduri frunza din ABC
+
+// determinare noduri plasate pe drumul de la root la un nod in ABC
+
+// determinare noduri plasate pe acelasi nivel in ABC
+
+// modificare date in ABC pe baza criteriu definit
+
 int main()
 {
 	NodABC* root = NULL; // root este punctul de acces la structura ABC
@@ -89,7 +195,7 @@ int main()
 	{
 		Client client; // variabila temporara in care sunt pregatite datele clientului conform tipuri de date din structura
 		char* token = strtok(buffer, seps); // debut proces de tokenizare; buffer este bytearray care se sparge in tokeni separati de bytes conformseps
-		client.nume = malloc(strlen(token) + 1); // alocare heap seg pentru fix lungimes string nume client
+		client.nume = malloc(strlen(token) + 1); // alocare heap seg pentru fix lungime string nume client
 		strcpy(client.nume, token); //copiere string in heap seg tocmai alocat
 
 		token = strtok(NULL, seps); // argumentul NULL asigura continarea procesului de tokenizare de la ultima pozitie a separatorului
@@ -119,6 +225,32 @@ int main()
 	fclose(f);
 
 	printf("ABC dupa creare:\n");
+	Inordine(root);
+
+	Client* pClient = cautareNodABC(root, 8973);
+	printf("\n///////// CAUTARE DUPA CHEIE in ABC ///////////\n");
+	if (pClient != NULL)
+	{
+		printf("Client identificat in ABC: %d %s\n", pClient->id, pClient->nume);
+	}
+	else
+	{
+		printf("Clientul cautat dupa cheie nu este stocat in ABC.\n");
+	}
+
+	printf("\n///////// CAUTARE DUPA NON-CHEIE in ABC ///////////\n");
+	cautareNodABCNume(root, "Vasilescu Mircea");
+
+	root = stergereNodCheie(root, 386);
+	printf("\n///////// ABC dupa STERGERE PE BAZA DE CHEIE///////\n");
+	Inordine(root);
+
+	//root = dezalocareABC(root);
+	while (root != NULL)
+	{
+		root = stergereNodCheie(root, root->cl.id);
+	}
+	printf("\n///////// ABC dupa DEZALOCARE ///////////\n");
 	Inordine(root);
 
 	return 0;
