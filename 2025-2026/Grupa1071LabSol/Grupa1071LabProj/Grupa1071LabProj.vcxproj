@@ -139,10 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="07_BST.c" />
+    <ClCompile Include="08_Graph.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="EMployees.txt" />
+    <Text Include="Graph.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

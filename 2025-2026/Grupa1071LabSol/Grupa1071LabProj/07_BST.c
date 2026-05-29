@@ -147,6 +147,9 @@ BSTNode* deleteNodeBST(BSTNode * node, unsigned short int search_key, Employee* 
 	return node;
 }
 
+// function to delete the leaf nodes where the employee's age is over a threshold 
+// specified as input parameter
+
 int main()
 {
 	BSTNode* root = NULL; // root of the BST
