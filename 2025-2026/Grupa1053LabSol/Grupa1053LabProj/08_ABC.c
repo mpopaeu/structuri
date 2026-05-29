@@ -181,6 +181,12 @@ NodABC* stergereNodCheie(NodABC* nod, unsigned int cheie_client)
 
 // modificare date in ABC pe baza criteriu definit
 
+
+
+// functie pentru creare lista simpla cu drumul invers de la un nod catre radacina
+// nodul este identificat pe baza de id client
+// rezultatul este o lista simpla cu id clienti plasati pe drumul invers
+
 int main()
 {
 	NodABC* root = NULL; // root este punctul de acces la structura ABC

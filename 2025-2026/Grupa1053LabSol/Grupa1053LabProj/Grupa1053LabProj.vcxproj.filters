@@ -15,12 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="08_ABC.c">
+    <ClCompile Include="09_Graf_lista.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Clienti.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Graf.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
