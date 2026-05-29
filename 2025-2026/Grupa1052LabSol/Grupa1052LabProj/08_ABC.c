@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <memory.h>
 
-#define DIM_TABELA_HASH 59
-
 struct Angajat
 {
 	char* nume;					// 4 bytes
@@ -185,6 +183,11 @@ NodABC* stergereNodCheie(NodABC* nod, char* cheie_cnp, Angajat* pAngajat)
 
 	return nod;
 }
+
+// functie care creeaza un vector cu CNP angajati avand vechimea mai mica decat vechimea medie
+// a tuturor angajatilor stocati in arbore binar de cautare
+// rezultat: vector si dimensiune vector
+
 
 int main()
 {
