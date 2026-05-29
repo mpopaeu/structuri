@@ -199,6 +199,13 @@ unsigned short int nrNoduri(NodABC* nodABC)
 
 // determinare nr de noduri care indeplinesc conditie cu privire la continut
 
+
+
+
+// functie pentru construirea unui vector de angajati
+// plasati pe un nivel specificat ca parametru
+
+
 int main()
 {
 	NodABC* root = NULL; // root este adresa nod radacina ABC
