@@ -126,9 +126,22 @@ NodeBST* deleteBST(NodeBST* node)
 
 // nodes places on a certain level within the BST
 
-// count leaves over a certain level within the BST
+// count leaves on a certain level within the BST
 
-// no of emplyess having salary under average
+// no of employees having salary under average
+
+
+// function to create an array of employees CNPs placed on a tree level 
+// tree level is specified as input parameter
+// array and its size are outputs of the function
+char** CNP_array(NodeBST* node, unsigned char level, unsigned char* array_size)
+{
+	// count the employees on level
+	
+	// alocate the array, if the case
+	
+	// fill in the array
+}
 
 int main()
 {

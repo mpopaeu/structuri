@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="08_BST.c">
+    <ClCompile Include="09_Graph_List.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -23,5 +23,6 @@
     <Text Include="Employees.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Graph.txt" />
   </ItemGroup>
 </Project>
