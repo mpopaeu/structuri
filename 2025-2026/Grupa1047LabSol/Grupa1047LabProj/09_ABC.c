@@ -193,6 +193,12 @@ NodABC* stergereNodCheie(NodABC* nodCurent, unsigned int cheie_client, Client * 
 
 // determinare nr clienti cu valoarea comenzilor sub un prag specificat ca parametru
 
+
+
+
+// functie pentru crearea unei liste simple cu clientii plasati pe drumul invers de la un nod
+// identificat pe baza de id client spre radacina arbore
+
 int main()
 {
 	NodABC* root = NULL; // adresa nod radacina; pointer null inseamna structura ABC empty

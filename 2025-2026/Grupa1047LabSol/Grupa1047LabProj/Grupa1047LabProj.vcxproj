@@ -139,10 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="09_ABC.c" />
+    <ClCompile Include="10_Graf_lista.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Clienti.txt" />
+    <Text Include="Graf.txt" />
     <Text Include="HeapKeys.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
